@@ -11,7 +11,7 @@ public class PostRequestDto {
     private String title;
     private String content;
     private String category;
-    private String imgUrl;
-
+//    private String imgUrl;
+//    private MultipartFile file;
 
 }

@@ -15,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,12 +29,17 @@ public class PostService {
 
     private final LikesRepository likesRepository;
 
+    private final S3Uploader s3Uploader;
+
     //작성
     @Transactional
-    public ResponseEntity<?> createPost(PostRequestDto requestDto) {
+    public ResponseEntity<?> createPost(MultipartFile file, Post posts) throws IOException {
         User user = SecurityUtil.getCurrentUser();
-
-        Post post = postRepository.saveAndFlush(new Post(requestDto, user));
+        String imgUrl = null;
+        if(!file.isEmpty()){
+            imgUrl = s3Uploader.upload(file, "files");
+        }
+        Post post = postRepository.saveAndFlush(new Post(posts, user, imgUrl));
 
         return new ResponseEntity<>(new PostResponseDto(post), HttpStatus.OK);
     }
