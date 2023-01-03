@@ -8,4 +8,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByOrderByCreatedAt();
 
+    //게시글 검색
+    List<Post> findAllByTitleContainingOrContentContainingOrderByCreatedAtDesc(String keyword, String keyword1);
+
 }

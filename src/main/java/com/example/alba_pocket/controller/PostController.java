@@ -46,6 +46,9 @@ public class PostController {
         return postService.deletePost(postId);
     }
 
-
-
+    //게시글 검색
+    @GetMapping("/search")
+    public ResponseEntity<?>  searchPost(@RequestParam String keyword) {
+        return postService.searchPost(keyword);
+    }
 }
