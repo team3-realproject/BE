@@ -1,6 +1,7 @@
 package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.MsgResponseDto;
+import com.example.alba_pocket.dto.PostReadResponseDto;
 import com.example.alba_pocket.dto.PostRequestDto;
 import com.example.alba_pocket.dto.PostResponseDto;
 import com.example.alba_pocket.entity.Post;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,5 +94,20 @@ public class PostService {
         return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.DELETE_POST), HttpStatus.OK);
     }
 
+    //게시글 검색
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> searchPost(String keyword) {
+        List<Post> postList = postRepository.findAllByTitleContainingOrContentContainingOrderByCreatedAtDesc(keyword, keyword);
 
+        List<PostReadResponseDto> postReadResponseDtoList = new ArrayList<>();
+
+        if(postList.isEmpty()) {
+            return new ResponseEntity<>(new MsgResponseDto("게시글이 없습니다."), HttpStatus.OK);
+        }
+        for (Post post : postList) {
+            PostReadResponseDto postReadResponseDto = new PostReadResponseDto(post);
+            postReadResponseDtoList.add(postReadResponseDto);
+        }
+        return new ResponseEntity<>(postReadResponseDtoList, HttpStatus.OK);
+    }
 }
