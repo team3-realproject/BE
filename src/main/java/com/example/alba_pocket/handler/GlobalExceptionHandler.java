@@ -1,7 +1,9 @@
 package com.example.alba_pocket.handler;
 
 import com.example.alba_pocket.dto.ErrorResponseDto;
+import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.errorcode.StatusCode;
+import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
@@ -46,52 +48,52 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         .msg(e.getMessage())
                         .build());
     }
-//    // IllegalArgumentException 에러 핸들링
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException e) {
-//        log.warn("handleIllegalArgument", e);
-//        StatusCode statusCode = CommonStatusCode.INVALID_PARAMETER;
-//        return handleExceptionInternal(statusCode, e.getMessage());
-//    }
-//
-//    // MethodArgumentNotValid 에러 핸들링
-//    @Override
-//    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-//            MethodArgumentNotValidException e,
-//            HttpHeaders headers,
-//            HttpStatus status,
-//            WebRequest request) {
-//        log.warn("handleMethodArgumentNotValid", e);
-//        String errorFieldName = e.getBindingResult().getFieldError().getField();
-//        StatusCode statusCode = CommonStatusCode.INVALID_PARAMETER;
-//        if(errorFieldName.equals("username")){
-//            statusCode = UserStatusCode.WRONG_USERNAME_PATTERN;
-//        }else if(errorFieldName.equals("password")){
-//            statusCode = UserStatusCode.WRONG_PASSWORD_PATTERN;
-//        }
-//        return handleExceptionInternal(statusCode);
-//    }
-//
-//    // ConstraintViolationException 에러 핸들링
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException e) {
-//        log.warn("handleConstraintViolation", e);
-//        StatusCode statusCode = CommonStatusCode.INVALID_PARAMETER;
-//        String interpolatedMessage = e.getMessage().split("interpolatedMessage=\'")[1].split("\', propertyPath")[0];
-//        System.out.println(e.getMessage());
-//        return handleExceptionInternal(statusCode, interpolatedMessage);
-//    }
-//
-//
-//
-//    // 그외 에러들 핸들링
-//    @ExceptionHandler({Exception.class})
-//    public ResponseEntity<Object> handleAllException(Exception ex) {
-//        log.warn(">>>>>>>>>handleAllException", ex);
-//        ex.printStackTrace();
-//        StatusCode statusCode = CommonStatusCode.INTERNAL_SERVER_ERROR;
-//        return handleExceptionInternal(statusCode);
-//    }
+    // IllegalArgumentException 에러 핸들링
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException e) {
+        log.warn("handleIllegalArgument", e);
+        StatusCode statusCode = CommonStatusCode.INVALID_PARAMETER;
+        return handleExceptionInternal(statusCode, e.getMessage());
+    }
+
+    // MethodArgumentNotValid 에러 핸들링
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException e,
+            HttpHeaders headers,
+            HttpStatus status,
+            WebRequest request) {
+        log.warn("handleMethodArgumentNotValid", e);
+        String errorFieldName = e.getBindingResult().getFieldError().getField();
+        StatusCode statusCode = CommonStatusCode.INVALID_PARAMETER;
+        if(errorFieldName.equals("username")){
+            statusCode = UserStatusCode.WRONG_USERNAME_PATTERN;
+        }else if(errorFieldName.equals("password")){
+            statusCode = UserStatusCode.WRONG_PASSWORD_PATTERN;
+        }
+        return handleExceptionInternal(statusCode);
+    }
+
+    // ConstraintViolationException 에러 핸들링
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException e) {
+        log.warn("handleConstraintViolation", e);
+        StatusCode statusCode = CommonStatusCode.INVALID_PARAMETER;
+        String interpolatedMessage = e.getMessage().split("interpolatedMessage=\'")[1].split("\', propertyPath")[0];
+        System.out.println(e.getMessage());
+        return handleExceptionInternal(statusCode, interpolatedMessage);
+    }
+
+
+
+    // 그외 에러들 핸들링
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<Object> handleAllException(Exception ex) {
+        log.warn(">>>>>>>>>handleAllException", ex);
+        ex.printStackTrace();
+        StatusCode statusCode = CommonStatusCode.INTERNAL_SERVER_ERROR;
+        return handleExceptionInternal(statusCode);
+    }
 
     // ErrorCode 만 있는 에러 ResponseEntity 생성
     private ResponseEntity<Object> handleExceptionInternal(StatusCode statusCode) {
