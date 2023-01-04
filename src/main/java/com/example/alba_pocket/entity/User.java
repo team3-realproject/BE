@@ -1,6 +1,7 @@
 package com.example.alba_pocket.entity;
 
 import com.example.alba_pocket.dto.SignupRequestDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -35,5 +36,13 @@ public class User extends Timestamped{
     public void updateUser(String imgUrl, String nickname) {
         this.profileImage=imgUrl;
         this.nickname=nickname;
+    }
+
+    @Builder
+    public User(String kakaoEmail , String nickname, String password, String profileImage) {
+        this.userId = kakaoEmail;
+        this.nickname = nickname;
+        this.password = password;
+        this.profileImage = profileImage;
     }
 }
