@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @RequiredArgsConstructor
-public class Likes {
+public class CommentLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,17 +17,15 @@ public class Likes {
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    @JoinColumn(name = "comment_id", nullable = false)
+    private Comment comment;
 
     @Column
     private boolean isLikePost;
 
-
-
-    public Likes(User user, Post post) {
+    public CommentLikes(User user, Comment comment) {
         this.userId = user.getId();
-        this.post = post;
+        this.comment = comment;
         this.isLikePost = true;
     }
 }

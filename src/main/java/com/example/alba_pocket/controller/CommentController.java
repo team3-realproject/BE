@@ -1,10 +1,13 @@
 package com.example.alba_pocket.controller;
 
 import com.example.alba_pocket.dto.CommentRequestDto;
+import com.example.alba_pocket.dto.CommentResponseDto;
 import com.example.alba_pocket.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -17,6 +20,10 @@ public class CommentController {
     public ResponseEntity<?> createComment(@PathVariable Long postId, @RequestBody CommentRequestDto requestDto){
 
         return commentService.createComment(postId, requestDto);
+    }
+    @GetMapping("{postId}")
+    public List<CommentResponseDto> getComments(@PathVariable Long postId){
+        return commentService.getComments(postId);
     }
 
     @PutMapping("/{commentId}")

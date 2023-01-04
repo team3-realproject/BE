@@ -46,6 +46,12 @@ public class PostController {
         return postService.deletePost(postId);
     }
 
+    @GetMapping("/category")
+    public List<PostResponseDto> categoryGetPosts(@RequestParam String keyword){
+        return postService.categoryGetPosts(keyword);
+    }
+
+
     //게시글 검색
     @GetMapping("/search")
     public ResponseEntity<?>  searchPost(@RequestParam String keyword) {

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,16 +22,23 @@ public class Comment extends Timestamped{
     @Column
     private Long userId;
 
-    @Column
-    private Long postId;
-
     @Transient
     private String nickname;
 
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn (name = "post_id")
+    private Post post;
 
-    public Comment(User user, Long postId, CommentRequestDto requestDto) {
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OrderBy("id asc")
+    List<CommentLikes> commentLikes = new ArrayList<>();
+
+
+
+
+    public Comment(User user, Post post, CommentRequestDto requestDto) {
         this.userId = user.getId();
-        this.postId = postId;
+        this.post = post;
         this.comment = requestDto.getComment();
         this.nickname = user.getNickname();
     }
