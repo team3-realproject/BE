@@ -24,11 +24,16 @@ public class User extends Timestamped{
     private String nickname;
 
     @Column
-    private String profileImage;
+    private String profileImage="https://wooo96bucket.s3.ap-northeast-2.amazonaws.com/static/Default_pfp.jpg";
 
     public User(SignupRequestDto requestDto, String password) {
         this.userId = requestDto.getUserId();
         this.password = password;
         this.nickname = requestDto.getNickname();
+    }
+
+    public void updateUser(String imgUrl, String nickname) {
+        this.profileImage=imgUrl;
+        this.nickname=nickname;
     }
 }
