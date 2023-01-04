@@ -49,35 +49,37 @@ public class PostService {
     }
     //전체글조회
     @Transactional(readOnly = true)
-    public List<PostResponseDto> getPosts() {
+    public ResponseEntity<?> getPosts() {
         User user = SecurityUtil.getCurrentUser();
         List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
-        return posts.stream().map(post -> {
+        return new ResponseEntity<>(posts.stream().map(post -> {
             boolean isLike = false;
             if(user != null){
                 isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
             }
             int likeCount = likesRepository.countByPostId(post.getId());
             return new PostResponseDto(post, isLike, likeCount);
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList()), HttpStatus.OK);
     }
     //카테고리검색
-    public List<PostResponseDto> categoryGetPosts(String category) {
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> categoryGetPosts(String category) {
         User user = SecurityUtil.getCurrentUser();
         List<Post> posts = postRepository.findAllByCategoryOrderByCreatedAtDesc(category);
-        return posts.stream().map(post -> {
+        return new ResponseEntity<>(posts.stream().map(post -> {
             boolean isLike = false;
             if(user != null) {
-                    isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
+                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
             }
             int likeCount = likesRepository.countByPostId(post.getId());
             return new PostResponseDto(post, isLike, likeCount);
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList()), HttpStatus.OK);
     }
 
 
 
     //상세조회
+    @Transactional(readOnly = true)
     public ResponseEntity<?> getPost(Long postId) {
         User user = SecurityUtil.getCurrentUser();
         Post post = postRepository.findById(postId).orElseThrow(
