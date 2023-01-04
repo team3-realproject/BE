@@ -51,7 +51,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public List<PostResponseDto> getPosts() {
         User user = SecurityUtil.getCurrentUser();
-        List<Post> posts = postRepository.findAllByOrderByCreatedAt();
+        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
         return posts.stream().map(post -> {
             boolean isLike = false;
             if(user != null){
@@ -64,7 +64,7 @@ public class PostService {
     //카테고리검색
     public List<PostResponseDto> categoryGetPosts(String category) {
         User user = SecurityUtil.getCurrentUser();
-        List<Post> posts = postRepository.findAllByCategory(category);
+        List<Post> posts = postRepository.findAllByCategoryOrderByCreatedAtDesc(category);
         return posts.stream().map(post -> {
             boolean isLike = false;
             if(user != null) {

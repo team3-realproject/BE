@@ -28,10 +28,10 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-
     private final PostRepository postRepository;
-
     private final CommentLikesRepository commentLikesRepository;
+
+    //댓글작성
     @Transactional
     public ResponseEntity<?> createComment(Long postId, CommentRequestDto requestDto) {
         User user = SecurityUtil.getCurrentUser();
@@ -42,6 +42,8 @@ public class CommentService {
         commentRepository.saveAndFlush(save);
         return new ResponseEntity<>(new CommentResponseDto(save), HttpStatus.OK);
     }
+
+    //댓글수정
     @Transactional
     public ResponseEntity<?> updateComment(Long commentId, CommentRequestDto requestDto) {
         User user = SecurityUtil.getCurrentUser();
@@ -54,6 +56,8 @@ public class CommentService {
         comment.update(requestDto, user);
         return new ResponseEntity<>(new CommentResponseDto(comment), HttpStatus.OK);
     }
+
+    //댓글삭제
     @Transactional
     public ResponseEntity<?> deleteComment(Long commentId) {
         User user = SecurityUtil.getCurrentUser();
@@ -67,9 +71,10 @@ public class CommentService {
         return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.DELETE_COMMENT), HttpStatus.OK);
     }
 
+    //댓글조회
     public List<CommentResponseDto> getComments(Long postId) {
         User user = SecurityUtil.getCurrentUser();
-        List<Comment> comments = commentRepository.findAllByPostId(postId);
+        List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId);
         return comments.stream().map(comment -> {
             boolean isLike = false;
             if(user != null) {
