@@ -1,11 +1,11 @@
 package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.MsgResponseDto;
-import com.example.alba_pocket.entity.Likes;
-import com.example.alba_pocket.entity.Post;
-import com.example.alba_pocket.entity.User;
+import com.example.alba_pocket.entity.*;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
+import com.example.alba_pocket.repository.CommentLikesRepository;
+import com.example.alba_pocket.repository.CommentRepository;
 import com.example.alba_pocket.repository.LikesRepository;
 import com.example.alba_pocket.repository.PostRepository;
 import com.example.alba_pocket.security.SecurityUtil;
@@ -23,6 +23,10 @@ public class LikesService {
 
     private final PostRepository postRepository;
 
+    private final CommentRepository commentRepository;
+
+    private final CommentLikesRepository commentLikesRepository;
+
     @Transactional
     public ResponseEntity<?> postLike(Long postId) {
         User user = SecurityUtil.getCurrentUser();
@@ -39,6 +43,25 @@ public class LikesService {
             likesRepository.deleteById(like.getId());
             return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.POST_LIKE_CANCEL), HttpStatus.OK);
         }
+
+    }
+    @Transactional
+    public ResponseEntity<?> commentLike(Long commentId) {
+        User user = SecurityUtil.getCurrentUser();
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new RestApiException(CommonStatusCode.NO_COMMENT)
+        );
+        CommentLikes commentLikes = commentLikesRepository.findByUserIdAndCommentId(user.getId(), comment.getId()).orElse(new CommentLikes());
+
+        if(commentLikes.getId() == null){
+            CommentLikes commentLike = new CommentLikes(user, comment);
+            commentLikesRepository.save(commentLike);
+            return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.COMMENT_LIKE), HttpStatus.OK);
+        } else {
+            commentLikesRepository.deleteById(commentLikes.getId());
+            return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.COMMENT_LIKE_CANCEL), HttpStatus.OK);
+        }
+
 
     }
 }

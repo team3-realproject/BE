@@ -15,9 +15,14 @@ public class LikesController {
 
     private final LikesService likesService;
 
-    @PostMapping("posts/{postId}/like")
+    @PostMapping("/posts/{postId}/like")
     public ResponseEntity<?> postLike(@PathVariable Long postId){
         return likesService.postLike(postId);
+    }
+
+    @PostMapping("/comments/{commentId}/like")
+    public ResponseEntity<?> commentLike(@PathVariable Long commentId){
+        return likesService.commentLike(commentId);
     }
 
 }

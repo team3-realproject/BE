@@ -1,6 +1,7 @@
 package com.example.alba_pocket.dto;
 
 import com.example.alba_pocket.entity.Comment;
+import com.example.alba_pocket.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,5 +24,14 @@ public class CommentResponseDto {
         this.commentLikeNum = 0;
         this.isLikeComment = false;
         this.createAt = save.getCreatedAt();
+    }
+
+    public CommentResponseDto(Comment comment, boolean isLike, int likeCount, User author) {
+        this.commentId = comment.getId();
+        this.comment = comment.getComment();
+        this.nickname = author.getNickname();
+        this.commentLikeNum = likeCount;
+        this.isLikeComment = isLike;
+        this.createAt = comment.getCreatedAt();
     }
 }

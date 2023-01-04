@@ -45,7 +45,6 @@ public class PostService {
             imgUrl = s3Uploader.upload(file, "files");
         }
         Post post = postRepository.saveAndFlush(new Post(posts, user, imgUrl));
-
         return new ResponseEntity<>(new PostResponseDto(post), HttpStatus.OK);
     }
     //전체글조회
@@ -62,6 +61,22 @@ public class PostService {
             return new PostResponseDto(post, isLike, likeCount);
         }).collect(Collectors.toList());
     }
+    //카테고리검색
+    public List<PostResponseDto> categoryGetPosts(String category) {
+        User user = SecurityUtil.getCurrentUser();
+        List<Post> posts = postRepository.findAllByCategory(category);
+        return posts.stream().map(post -> {
+            boolean isLike = false;
+            if(user != null) {
+                    isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
+            }
+            int likeCount = likesRepository.countByPostId(post.getId());
+            return new PostResponseDto(post, isLike, likeCount);
+        }).collect(Collectors.toList());
+    }
+
+
+
     //상세조회
     public ResponseEntity<?> getPost(Long postId) {
         User user = SecurityUtil.getCurrentUser();
@@ -120,4 +135,5 @@ public class PostService {
         }
         return new ResponseEntity<>(postReadResponseDtoList, HttpStatus.OK);
     }
+
 }
