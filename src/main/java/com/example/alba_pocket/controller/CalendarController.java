@@ -18,4 +18,9 @@ public class CalendarController {
         return calendarService.createCalendar(workplaceId, requestDto);
     }
 
+    @GetMapping
+    public ResponseEntity<?> getCalendar(){
+        return calendarService.getCalendar();
+    }
+
 }

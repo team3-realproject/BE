@@ -33,4 +33,5 @@ public class CalendarResponseDto {
         this.payOrigin = calendar.getPayOrigin();
         this.pay = pay;
     }
+
 }
