@@ -38,13 +38,13 @@ public class PostService {
 
     //작성
     @Transactional
-    public ResponseEntity<?> createPost(MultipartFile file, Post posts) throws IOException {
+    public ResponseEntity<?> createPost(MultipartFile file, PostRequestDto requestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
         String imgUrl = null;
         if(!file.isEmpty()){
             imgUrl = s3Uploader.upload(file, "files");
         }
-        Post post = postRepository.saveAndFlush(new Post(posts, user, imgUrl));
+        Post post = postRepository.saveAndFlush(new Post(requestDto, user, imgUrl));
         return new ResponseEntity<>(new PostResponseDto(post), HttpStatus.OK);
     }
     //전체글조회

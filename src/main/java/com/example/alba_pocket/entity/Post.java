@@ -42,11 +42,11 @@ public class Post extends Timestamped{
     List<Likes> likes = new ArrayList<>();
 
 
-    public Post(Post posts, User user, String imgUrl) {
-        this.title = posts.getTitle();
-        this.content = posts.getContent();
+    public Post(PostRequestDto requestDto, User user, String imgUrl) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
         this.imgUrl = imgUrl;
-        this.category = posts.getCategory();
+        this.category = requestDto.getCategory();
         this.user = user;
     }
 

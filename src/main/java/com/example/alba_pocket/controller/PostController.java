@@ -1,14 +1,12 @@
 package com.example.alba_pocket.controller;
 
 import com.example.alba_pocket.dto.PostRequestDto;
-import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
@@ -19,10 +17,9 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<?> createPost(HttpServletRequest request,
-                                        @RequestPart(value = "file") MultipartFile file,
-                                        Post post) throws IOException {
-        return postService.createPost(file, post);
+    public ResponseEntity<?> createPost(@RequestPart(value = "file") MultipartFile file,
+                                        @RequestPart(value = "data") PostRequestDto requestDto) throws IOException {
+        return postService.createPost(file, requestDto);
     }
 
     @GetMapping
