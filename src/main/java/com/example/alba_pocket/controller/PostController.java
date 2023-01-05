@@ -1,7 +1,6 @@
 package com.example.alba_pocket.controller;
 
 import com.example.alba_pocket.dto.PostRequestDto;
-import com.example.alba_pocket.dto.PostResponseDto;
 import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -28,7 +26,7 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostResponseDto> getPosts(){
+    public ResponseEntity<?> getPosts(){
         return postService.getPosts();
     }
     @GetMapping("/{postId}")
@@ -47,7 +45,7 @@ public class PostController {
     }
 
     @GetMapping("/category")
-    public List<PostResponseDto> categoryGetPosts(@RequestParam String keyword){
+    public ResponseEntity<?> categoryGetPosts(@RequestParam String keyword){
         return postService.categoryGetPosts(keyword);
     }
 
