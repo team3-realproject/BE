@@ -13,6 +13,7 @@ import java.util.List;
 public class PostReadResponseDto {
     private Long postId;
     private String profileImage;
+    private String nickname;
 
     private String title;
 
@@ -29,6 +30,7 @@ public class PostReadResponseDto {
     public PostReadResponseDto(Post post) {
         this.postId = post.getId();
         this.profileImage = post.getUser().getProfileImage();
+        this.nickname = post.getUser().getNickname();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.imgUrl = post.getImgUrl();
@@ -42,6 +44,7 @@ public class PostReadResponseDto {
     public PostReadResponseDto(Post post, boolean isLike, int likeCount) {
         this.postId = post.getId();
         this.profileImage = post.getUser().getProfileImage();
+        this.nickname = post.getUser().getNickname();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.imgUrl = post.getImgUrl();
