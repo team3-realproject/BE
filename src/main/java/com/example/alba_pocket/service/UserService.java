@@ -33,10 +33,10 @@ public class UserService {
     @Transactional
     public ResponseEntity<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
         User user = userRepository.findByUserId(requestDto.getUserId()).orElseThrow(
-                () -> new IllegalArgumentException("유저정보없음")
+                () -> new IllegalArgumentException("가입된 이메일 주소가 아닙니다.")
         );
         if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
-            throw new IllegalArgumentException("비밀번호가 다릅니다.");
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserId()));
 
@@ -49,7 +49,7 @@ public class UserService {
     @Transactional
     public ResponseEntity<?> userIdCheck(UserIdCheckDto userIdCheckDto) {
         if(userRepository.existsByUserId(userIdCheckDto.getUserId())) {
-            throw new IllegalArgumentException("중복된 ID입니다.");
+            throw new IllegalArgumentException("이미 가입된 이메일 주소입니다.");
         } else {
             return new ResponseEntity<>(new MsgResponseDto("사용 가능한 ID 입니다."), HttpStatus.OK);
         }
@@ -58,7 +58,7 @@ public class UserService {
     @Transactional
     public ResponseEntity<?> nicknameCheck(NickNameCheckDto nickNameCheckDto) {
         if(userRepository.existsByNickname(nickNameCheckDto.getNickname())) {
-            throw new IllegalArgumentException("중복된 닉네임입니다.");
+            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
         } else {
             return new ResponseEntity<>(new MsgResponseDto("사용 가능한 닉네임 입니다."), HttpStatus.OK);
         }
