@@ -15,7 +15,7 @@ public enum UserStatusCode implements StatusCode{
 
     WRONG_USERID_PATTERN("USERID는 이메일 형식으로 작성되어야 합니다.", HttpStatus.BAD_REQUEST.value()),
     WRONG_NICKNAME_PATTERN("닉네임은 최소 5자 이상, 10자 이하이며 알파벳 대소문자(A-Za~z), 숫자(0~9)로 구성되어야 합니다.", HttpStatus.BAD_REQUEST.value()),
-    WRONG_PASSWORD_PATTERN("비밀번호는 최소 8자 이상, 20자 이하이며 알파벳 대소문자(a~z, A~Z), 숫자(0~9), 특수문자로 구성되어야 합니다.", HttpStatus.BAD_REQUEST.value()),
+    WRONG_PASSWORD_PATTERN("비밀번호는 최소 8자 이상, 20자 이하이며 알파벳 대소문자(a~z, A~Z), 숫자(0~9), 특수문자가 포함되어야 합니다.", HttpStatus.BAD_REQUEST.value()),
     WRONG_PASSWORD("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST.value()),
     NO_USER("회원을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST.value()),
     DELETE_USER("탈퇴한 사용자 입니다.", HttpStatus.BAD_REQUEST.value()),
