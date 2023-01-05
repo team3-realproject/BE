@@ -66,10 +66,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.warn("handleMethodArgumentNotValid", e);
         String errorFieldName = e.getBindingResult().getFieldError().getField();
         StatusCode statusCode = CommonStatusCode.INVALID_PARAMETER;
-        if(errorFieldName.equals("username")){
-            statusCode = UserStatusCode.WRONG_USERNAME_PATTERN;
+        if(errorFieldName.equals("userId")){
+            statusCode = UserStatusCode.WRONG_USERID_PATTERN;
         }else if(errorFieldName.equals("password")){
             statusCode = UserStatusCode.WRONG_PASSWORD_PATTERN;
+        }else if(errorFieldName.equals("nickname")){
+            statusCode = UserStatusCode.WRONG_NICKNAME_PATTERN;
         }
         return handleExceptionInternal(statusCode);
     }
@@ -83,7 +85,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         System.out.println(e.getMessage());
         return handleExceptionInternal(statusCode, interpolatedMessage);
     }
-
 
 
     // 그외 에러들 핸들링
