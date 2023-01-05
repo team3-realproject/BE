@@ -1,8 +1,6 @@
 package com.example.alba_pocket.service;
 
-import com.example.alba_pocket.dto.LoginRequestDto;
-import com.example.alba_pocket.dto.MsgResponseDto;
-import com.example.alba_pocket.dto.SignupRequestDto;
+import com.example.alba_pocket.dto.*;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.jwt.JwtUtil;
 import com.example.alba_pocket.repository.UserRepository;
@@ -47,4 +45,23 @@ public class UserService {
 
 
     }
+
+    @Transactional
+    public ResponseEntity<?> userIdCheck(UserIdCheckDto userIdCheckDto) {
+        if(userRepository.existsByUserId(userIdCheckDto.getUserId())) {
+            throw new IllegalArgumentException("중복된 ID입니다.");
+        } else {
+            return new ResponseEntity<>(new MsgResponseDto("사용 가능한 ID 입니다."), HttpStatus.OK);
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<?> nicknameCheck(NickNameCheckDto nickNameCheckDto) {
+        if(userRepository.existsByNickname(nickNameCheckDto.getNickname())) {
+            throw new IllegalArgumentException("중복된 닉네임입니다.");
+        } else {
+            return new ResponseEntity<>(new MsgResponseDto("사용 가능한 닉네임 입니다."), HttpStatus.OK);
+        }
+    }
+
 }
