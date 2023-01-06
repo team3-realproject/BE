@@ -40,7 +40,7 @@ public class UserController {
         return userService.login(requestDto, response);
     }
 
-    @PostMapping("/kakao/callback")
+    @GetMapping("/kakao/callback")
     public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         return kakaoService.kakaoLogin(code, response);
 
