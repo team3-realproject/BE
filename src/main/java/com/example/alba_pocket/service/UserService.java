@@ -42,7 +42,6 @@ public class UserService {
 
         return new ResponseEntity<>(new LoginResponseDto(user.getNickname()), HttpStatus.OK);
 
-        
 
 
     }
