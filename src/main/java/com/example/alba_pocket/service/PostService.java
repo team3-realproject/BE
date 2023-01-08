@@ -121,7 +121,7 @@ public class PostService {
         return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.DELETE_POST), HttpStatus.OK);
     }
 
-    
+
 
     //게시글 검색
     @Transactional(readOnly = true)

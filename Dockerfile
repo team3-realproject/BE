@@ -1,4 +1,4 @@
-FROM java:11
+FROM adoptopenjdk/openjdk11
 LABEL maintainer="woooo96_project"
 VOLUME /home/ubuntu
 EXPOSE 8080
