@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
 public class CalendarRequestDto {
 
-//    @JsonFormat(pattern = "HH:mm")
-    private int time;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime time;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate workDay;

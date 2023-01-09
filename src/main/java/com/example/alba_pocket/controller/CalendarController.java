@@ -23,4 +23,9 @@ public class CalendarController {
         return calendarService.getCalendar();
     }
 
+    @GetMapping("/wngb")
+    public ResponseEntity<?> wngb(){
+        return null;
+    }
+
 }

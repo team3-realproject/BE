@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -17,8 +18,8 @@ public class Calendar {
     private Long id;
     //일한시간
     @Column
-//    @JsonFormat(pattern = "HH:mm")
-    private int time;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime time;
     //일한날짜
     @Column
     @JsonFormat(pattern = "yyyy-MM-dd")
