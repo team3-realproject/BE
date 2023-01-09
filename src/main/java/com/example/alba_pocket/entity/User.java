@@ -38,6 +38,16 @@ public class User extends Timestamped{
         this.nickname=nickname;
     }
 
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateProfileImage(String imgUrl) {
+        this.profileImage = imgUrl;
+    }
+
+
     @Builder
     public User(String kakaoEmail , String nickname, String password, String profileImage) {
         this.userId = kakaoEmail;
@@ -45,4 +55,5 @@ public class User extends Timestamped{
         this.password = password;
         this.profileImage = profileImage;
     }
+
 }
