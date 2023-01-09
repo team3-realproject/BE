@@ -50,7 +50,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new RestApiException(CommonStatusCode.NO_COMMENT)
         );
-        if(!comment.getUser().getUserId().equals(user.getId())){
+        if(!comment.getUser().getId().equals(user.getId())) {
             throw new RestApiException(CommonStatusCode.INVALID_USER_UPDATE);
         }
         comment.update(requestDto, user);
@@ -64,7 +64,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new RestApiException(CommonStatusCode.NO_COMMENT)
         );
-        if(!comment.getUser().getUserId().equals(user.getId())){
+        if(!comment.getUser().getId().equals(user.getId())) {
             throw new RestApiException(CommonStatusCode.INVALID_USER_UPDATE);
         }
         commentRepository.deleteById(commentId);
