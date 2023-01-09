@@ -52,14 +52,12 @@ public class CalendarService {
         return new ResponseEntity<>(new CalendarResponseDto(calendar, pay), HttpStatus.OK);
     }
 
+    //시급계산
     @Transactional
     public int Pay(LocalTime time, int payOrigin) {
         int hour = Integer.parseInt(time.format(DateTimeFormatter.ofPattern("HH")));
         int minute = Integer.parseInt(time.format(DateTimeFormatter.ofPattern("mm")));
-        log.info("시간단위 ------------------------" + String.valueOf(hour));
-        log.info("분단위 ------------------------" + String.valueOf(minute));
-        int a = 60 / minute;
-        int b = payOrigin / a;
+        int calculateMinutes = payOrigin / (60 / minute);
 //        LocalDate today = LocalDate.parse("2023-01-06");
 //        var startWeekDay = today.with(DayOfWeek.MONDAY);
 //        var dates = startWeekDay.datesUntil(startWeekDay.plusWeeks(1)).collect(Collectors.toList());
@@ -77,11 +75,11 @@ public class CalendarService {
 //            System.out.println("주휴수당!!!");
 //        }
 
-        return (hour * payOrigin) + b;
+        return (hour * payOrigin) + calculateMinutes;
     }
 
+    //주휴수당대상인지판별
     public StatutoryLeisurePayResponseDto StatutoryLeisurePayTime(Long workplaceId) {
-
         LocalDate today = LocalDate.parse("2023-01-06");
         var startWeekDay = today.with(DayOfWeek.MONDAY);
         var dates = startWeekDay.datesUntil(startWeekDay.plusWeeks(1)).collect(Collectors.toList());
@@ -98,6 +96,7 @@ public class CalendarService {
         return new StatutoryLeisurePayResponseDto(result, local);
     }
 
+    //주휴수당계산
     public int StatutoryLeisurePay(LocalTime totalTime, double payOrigin) {
         int hour = Integer.parseInt(totalTime.format(DateTimeFormatter.ofPattern("HH")));
         double minute = Integer.parseInt(totalTime.format(DateTimeFormatter.ofPattern("mm"))) / 60;
@@ -116,14 +115,15 @@ public class CalendarService {
 
         workPlaces.forEach(workPlace -> {
             StatutoryLeisurePayResponseDto statutoryLeisurePay = StatutoryLeisurePayTime(workPlace.getId());
+            //주휴수당대상인지확인
             if (statutoryLeisurePay.isResult()) {
                 AtomicInteger Origin = new AtomicInteger();
                 List<Calendar> calendarList = calendarRepository.findAllByUserIdAndAndWorkPlaceId(user.getId(), workPlace.getId());
-                calendarList.stream().forEach(calendar -> {
+                calendarList.forEach(calendar -> {
                     Origin.addAndGet(calendar.getPayOrigin());
                 });
                 double payOrigin = Integer.parseInt(String.valueOf(Origin)) / calendarList.size();
-                System.out.println("----------------------" + payOrigin);
+                log.info("----------------------" + payOrigin);
                 log.info("true일때 주휴수당 o ---------------------------------------------------");
                 int i = StatutoryLeisurePay(statutoryLeisurePay.getLocalTime(), payOrigin);
                 log.info("총주휴수당--------------------------------------------" + i);
