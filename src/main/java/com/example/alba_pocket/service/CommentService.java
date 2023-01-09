@@ -50,7 +50,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new RestApiException(CommonStatusCode.NO_COMMENT)
         );
-        if(!comment.getUserId().equals(user.getId())){
+        if(!comment.getUser().getUserId().equals(user.getId())){
             throw new RestApiException(CommonStatusCode.INVALID_USER_UPDATE);
         }
         comment.update(requestDto, user);
@@ -64,7 +64,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new RestApiException(CommonStatusCode.NO_COMMENT)
         );
-        if(!comment.getUserId().equals(user.getId())){
+        if(!comment.getUser().getUserId().equals(user.getId())){
             throw new RestApiException(CommonStatusCode.INVALID_USER_UPDATE);
         }
         commentRepository.deleteById(commentId);
@@ -80,7 +80,7 @@ public class CommentService {
             if(user != null) {
                 isLike = commentLikesRepository.existsByUserIdAndCommentId(user.getId(), comment.getId());
             }
-            User author = userRepository.findById(comment.getUserId()).orElseThrow(
+            User author = userRepository.findById(comment.getUser().getId()).orElseThrow(
                     () -> new RestApiException(UserStatusCode.NO_USER)
             );
             int likeCount = commentLikesRepository.countByCommentId(comment.getId());

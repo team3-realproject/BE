@@ -2,6 +2,8 @@ package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.*;
 import com.example.alba_pocket.entity.User;
+import com.example.alba_pocket.errorcode.UserStatusCode;
+import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.jwt.JwtUtil;
 import com.example.alba_pocket.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +35,14 @@ public class UserService {
     @Transactional
     public ResponseEntity<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
         User user = userRepository.findByUserId(requestDto.getUserId()).orElseThrow(
-                () -> new IllegalArgumentException("가입된 이메일 주소가 아닙니다.")
+                () -> new RestApiException(UserStatusCode.NOT_FOUND_USERID)
         );
         if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new RestApiException(UserStatusCode.PASSWORD_CHECK);
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserId()));
 
-        return new ResponseEntity<>(new LoginResponseDto(user.getNickname()), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponseDto(user.getUserId()), HttpStatus.OK);
 
 
 
@@ -49,7 +51,7 @@ public class UserService {
     @Transactional
     public ResponseEntity<?> userIdCheck(UserIdCheckDto userIdCheckDto) {
         if(userRepository.existsByUserId(userIdCheckDto.getUserId())) {
-            throw new IllegalArgumentException("이미 가입된 이메일 주소입니다.");
+            throw new RestApiException(UserStatusCode.OVERLAPPED_USERID);
         } else {
             return new ResponseEntity<>(new MsgResponseDto("사용 가능한 ID 입니다."), HttpStatus.OK);
         }
@@ -58,7 +60,7 @@ public class UserService {
     @Transactional
     public ResponseEntity<?> nicknameCheck(NickNameCheckDto nickNameCheckDto) {
         if(userRepository.existsByNickname(nickNameCheckDto.getNickname())) {
-            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
+            throw new RestApiException(UserStatusCode.OVERLAPPED_NICKNAME);
         } else {
             return new ResponseEntity<>(new MsgResponseDto("사용 가능한 닉네임 입니다."), HttpStatus.OK);
         }

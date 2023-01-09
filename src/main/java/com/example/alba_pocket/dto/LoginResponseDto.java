@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginResponseDto {
 
-    String nickname;
+    String userId;
 
-    public LoginResponseDto(String nickname) {
-        this.nickname = nickname;
+    public LoginResponseDto(String userId) {
+        this.userId = userId;
     }
 }
