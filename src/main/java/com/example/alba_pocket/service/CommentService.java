@@ -70,7 +70,6 @@ public class CommentService {
         commentRepository.deleteById(commentId);
         return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.DELETE_COMMENT), HttpStatus.OK);
     }
-
     
     //댓글조회
     public List<CommentResponseDto> getComments(Long postId) {
