@@ -124,20 +124,20 @@ public class PostService {
 
 
     //게시글 검색
-    @Transactional(readOnly = true)
-    public ResponseEntity<?> searchPost(String keyword) {
-        List<Post> postList = postRepository.findAllByTitleContainingOrContentContainingOrderByCreatedAtDesc(keyword, keyword);
-
-        List<PostReadResponseDto> postReadResponseDtoList = new ArrayList<>();
-
-        if(postList.isEmpty()) {
-            return new ResponseEntity<>(new MsgResponseDto("게시글이 없습니다."), HttpStatus.OK);
-        }
-        for (Post post : postList) {
-            PostReadResponseDto postReadResponseDto = new PostReadResponseDto(post);
-            postReadResponseDtoList.add(postReadResponseDto);
-        }
-        return new ResponseEntity<>(postReadResponseDtoList, HttpStatus.OK);
-    }
+//    @Transactional(readOnly = true)
+//    public ResponseEntity<?> searchPost(String keyword) {
+//        List<Post> postList = postRepository.findAllByTitleContainingOrContentContainingOrderByCreatedAtDesc(keyword, keyword);
+//
+//        List<PostReadResponseDto> postReadResponseDtoList = new ArrayList<>();
+//
+//        if(postList.isEmpty()) {
+//            return new ResponseEntity<>(new MsgResponseDto("게시글이 없습니다."), HttpStatus.OK);
+//        }
+//        for (Post post : postList) {
+//            PostReadResponseDto postReadResponseDto = new PostReadResponseDto(post);
+//            postReadResponseDtoList.add(postReadResponseDto);
+//        }
+//        return new ResponseEntity<>(postReadResponseDtoList, HttpStatus.OK);
+//    }
 
 }

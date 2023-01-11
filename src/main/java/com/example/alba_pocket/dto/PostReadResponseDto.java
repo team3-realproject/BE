@@ -1,6 +1,7 @@
 package com.example.alba_pocket.dto;
 
 import com.example.alba_pocket.entity.Post;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +28,7 @@ public class PostReadResponseDto {
 
     private List<PostResponseDto> postList = new ArrayList<>();
 
+    @QueryProjection //(1) : QPostReadResponseDto 만들어 주는 어노테이션
     public PostReadResponseDto(Post post) {
         this.postId = post.getId();
         this.profileImage = post.getUser().getProfileImage();
@@ -41,6 +43,7 @@ public class PostReadResponseDto {
         this.modifiedAt = post.getModifiedAt();
     }
 
+    @QueryProjection
     public PostReadResponseDto(Post post, boolean isLike, int likeCount) {
         this.postId = post.getId();
         this.profileImage = post.getUser().getProfileImage();
