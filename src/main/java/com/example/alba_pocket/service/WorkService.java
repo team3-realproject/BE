@@ -45,7 +45,16 @@ public class WorkService {
     }
 
     @Transactional
-    public ResponseEntity<?> updateMyWorkplace(Long placeId, WorkPlaceRequestDto workPlaceRequestDto) {
+    public ResponseEntity<?> getSelectWorkplace(Long placeId) {
+        Work work = workRepository.findById(placeId).orElseThrow(
+                () -> new RestApiException(CommonStatusCode.NO_WORKPLACE)
+        );
+        return new ResponseEntity<>(new WorkResponseDto(work), HttpStatus.OK);
+    }
+
+
+    @Transactional
+    public ResponseEntity<?> updateMyWorkplace(Long placeId, WorkRequestDto workRequestDto) {
         User user = SecurityUtil.getCurrentUser();
         Work work = workRepository.findById(placeId).orElseThrow(
                 () -> new RestApiException(CommonStatusCode.NO_WORKPLACE)
@@ -55,7 +64,7 @@ public class WorkService {
             throw new RestApiException(CommonStatusCode.INVALID_USER_UPDATE);
         }
 
-        work.updateWorkPlace(workPlaceRequestDto);
+        work.updateWorkPlace(workRequestDto);
         return new ResponseEntity<>(new WorkResponseDto(work), HttpStatus.OK);
     }
 
@@ -74,5 +83,7 @@ public class WorkService {
 
         return new ResponseEntity<>(new MsgResponseDto("근무지를 삭제하였습니다."), HttpStatus.OK);
     }
+
+
 }
 

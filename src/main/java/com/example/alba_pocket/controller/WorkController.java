@@ -24,9 +24,14 @@ public class WorkController {
         return workService.getMyWorkplace();
     }
 
+    @GetMapping("/{placeId}")
+    public ResponseEntity<?> getSelectWorkplace(@PathVariable Long placeId) {
+        return workService.getSelectWorkplace(placeId);
+    }
+
     @PutMapping("/{placeId}")
-    public ResponseEntity<?> updateMyWorkplace(@PathVariable Long placeId, @RequestBody WorkPlaceRequestDto workPlaceRequestDto) {
-        return workService.updateMyWorkplace(placeId, workPlaceRequestDto);
+    public ResponseEntity<?> updateMyWorkplace(@PathVariable Long placeId, @RequestBody WorkRequestDto workRequestDto) {
+        return workService.updateMyWorkplace(placeId, workRequestDto);
     }
 
     @DeleteMapping("/{placeId}")

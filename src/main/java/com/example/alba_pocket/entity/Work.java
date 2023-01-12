@@ -36,8 +36,9 @@ public class Work {
     }
 
 
-    public void updateWorkPlace(WorkPlaceRequestDto workPlaceRequestDto) {
-        this.placeName = workPlaceRequestDto.getPlaceName();
-        this.salaryDay = workPlaceRequestDto.getSalaryDay();
+    public void updateWorkPlace(WorkRequestDto workRequestDto) {
+        this.placeName = workRequestDto.getPlaceName();
+        this.placeColor = workRequestDto.getPlaceColor();
+        this.salaryDay = workRequestDto.getSalaryDay();
     }
 }
