@@ -1,7 +1,6 @@
 package com.example.alba_pocket.dto;
 
 import com.example.alba_pocket.entity.Post;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

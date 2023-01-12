@@ -1,7 +1,7 @@
 package com.example.alba_pocket.repository;
 
-import com.example.alba_pocket.dto.PostReadResponseDto;
-import com.example.alba_pocket.dto.QPostReadResponseDto;
+
+import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.model.PostSearchKeyword;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.example.alba_pocket.entity.QPost.post;
-import static com.example.alba_pocket.entity.QUser.user;
+
 
 @Repository
 @RequiredArgsConstructor
@@ -20,18 +20,9 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
     private final JPAQueryFactory queryFactory;
 
-    public List<PostReadResponseDto> search(PostSearchKeyword keyword)  {
+    public  List<Post> search(PostSearchKeyword keyword)  {
         return queryFactory
-                .select(new QPostReadResponseDto(
-                        post.id,
-                        user.profileImage,
-                        user.userId,
-                        user.nickname,
-                        post.title,
-                        post.content,
-                        post.imgUrl,
-                        post.category))
-                .from(post)
+                .selectFrom(post)
                 .where(      //where절의 특징으로 콤마(,)를 사용하면 and 조건으로 처리 된다. 만약 null이면 해당 조건은 제외 된다.
                         titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
                 )

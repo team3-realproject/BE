@@ -1,7 +1,6 @@
 package com.example.alba_pocket.controller;
 
 import com.example.alba_pocket.dto.PostRequestDto;
-import com.example.alba_pocket.dto.PostResponseDto;
 import com.example.alba_pocket.model.PostSearchKeyword;
 import com.example.alba_pocket.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
