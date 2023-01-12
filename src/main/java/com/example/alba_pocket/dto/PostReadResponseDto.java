@@ -14,48 +14,36 @@ import java.util.List;
 public class PostReadResponseDto {
     private Long postId;
     private String profileImage;
+    private String userId;
     private String nickname;
-
     private String title;
-
     private String content;
     private String imgUrl;
-    private int postLikeNum;
-    private boolean isLikePost;
     private String category;
-    private LocalDateTime createAt;
-    private LocalDateTime modifiedAt;
 
     private List<PostResponseDto> postList = new ArrayList<>();
 
-    @QueryProjection //(1) : QPostReadResponseDto 만들어 주는 어노테이션
-    public PostReadResponseDto(Post post) {
-        this.postId = post.getId();
-        this.profileImage = post.getUser().getProfileImage();
-        this.nickname = post.getUser().getNickname();
-        this.title = post.getTitle();
-        this.content = post.getContent();
-        this.imgUrl = post.getImgUrl();
-        this.postLikeNum = 0;
-        this.isLikePost = false;
-        this.category = post.getCategory();
-        this.createAt = post.getCreatedAt();
-        this.modifiedAt = post.getModifiedAt();
+    @QueryProjection
+    public PostReadResponseDto(Long postId, String profileImage, String userId, String nickname, String title, String content, String imgUrl, String category) {
+        this.postId = postId;
+        this.profileImage = profileImage;
+        this.userId = userId;
+        this.nickname = nickname;
+        this.title = title;
+        this.content = content;
+        this.imgUrl = imgUrl;
+        this.category = category;
     }
 
-    @QueryProjection
-    public PostReadResponseDto(Post post, boolean isLike, int likeCount) {
-        this.postId = post.getId();
-        this.profileImage = post.getUser().getProfileImage();
-        this.nickname = post.getUser().getNickname();
-        this.title = post.getTitle();
-        this.content = post.getContent();
-        this.imgUrl = post.getImgUrl();
-        this.postLikeNum = likeCount;
-        this.isLikePost = isLike;
-        this.category = post.getCategory();;
-        this.createAt = post.getCreatedAt();
-        this.modifiedAt = post.getModifiedAt();
-    }
-    
+
+//    public PostReadResponseDto(Post post, boolean isLike, int likeCount) {
+//        this.postId = post.getId();
+//        this.profileImage = post.getUser().getProfileImage();
+//        this.nickname = post.getUser().getNickname();
+//        this.title = post.getTitle();
+//        this.content = post.getContent();
+//        this.imgUrl = post.getImgUrl();
+//        this.category = post.getCategory();;
+//    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.alba_pocket.dto;
 
 import com.example.alba_pocket.entity.Post;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,7 @@ public class PostResponseDto {
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
 
+
     public PostResponseDto(Post post) {
         this.postId = post.getId();
         this.profileImage = post.getUser().getProfileImage();
@@ -36,6 +38,7 @@ public class PostResponseDto {
         this.createAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
     }
+
 
     public PostResponseDto(Post post, boolean isLike, int likeCount) {
         this.postId = post.getId();

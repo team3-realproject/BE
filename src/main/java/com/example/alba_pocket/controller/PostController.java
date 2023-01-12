@@ -2,8 +2,7 @@ package com.example.alba_pocket.controller;
 
 import com.example.alba_pocket.dto.PostRequestDto;
 import com.example.alba_pocket.dto.PostResponseDto;
-import com.example.alba_pocket.model.PostSearchCondition;
-import com.example.alba_pocket.repository.PostCustomRepository;
+import com.example.alba_pocket.model.PostSearchKeyword;
 import com.example.alba_pocket.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-    private final PostCustomRepository postCustomRepository;
+
 
     @PostMapping
     public ResponseEntity<?> createPost(@RequestPart(value = "file") MultipartFile file,
@@ -54,7 +53,7 @@ public class PostController {
 
     //게시글 검색
     @GetMapping("/search")
-    public List<PostResponseDto> searchPost(PostSearchCondition condition) {
-        return postService.searchPost(condition);
+    public ResponseEntity<?> searchPost(PostSearchKeyword keyword) {
+        return postService.searchPost(keyword);
     }
 }

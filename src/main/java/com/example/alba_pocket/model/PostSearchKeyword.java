@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostSearchCondition {
+public class PostSearchKeyword {
 
-    private String title;
-    private String content;
+    private String keyword;
 }
