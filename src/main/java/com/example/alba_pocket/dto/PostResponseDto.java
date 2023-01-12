@@ -22,6 +22,7 @@ public class PostResponseDto {
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
 
+
     public PostResponseDto(Post post) {
         this.postId = post.getId();
         this.profileImage = post.getUser().getProfileImage();
@@ -36,6 +37,7 @@ public class PostResponseDto {
         this.createAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
     }
+
 
     public PostResponseDto(Post post, boolean isLike, int likeCount) {
         this.postId = post.getId();

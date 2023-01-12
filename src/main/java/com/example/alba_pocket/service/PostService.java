@@ -1,15 +1,16 @@
 package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.MsgResponseDto;
-import com.example.alba_pocket.dto.PostReadResponseDto;
 import com.example.alba_pocket.dto.PostRequestDto;
 import com.example.alba_pocket.dto.PostResponseDto;
 import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
+import com.example.alba_pocket.model.PostSearchKeyword;
 import com.example.alba_pocket.repository.LikesRepository;
 import com.example.alba_pocket.repository.PostRepository;
+import com.example.alba_pocket.repository.PostRepositoryImpl;
 import com.example.alba_pocket.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,11 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.io.IOException;
-
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +33,8 @@ public class PostService {
     private final LikesRepository likesRepository;
 
     private final S3Uploader s3Uploader;
+
+    private final PostRepositoryImpl postRepositoryImpl;
 
     //작성
     @Transactional
@@ -125,19 +125,15 @@ public class PostService {
 
     //게시글 검색
     @Transactional(readOnly = true)
-    public ResponseEntity<?> searchPost(String keyword) {
-        List<Post> postList = postRepository.findAllByTitleContainingOrContentContainingOrderByCreatedAtDesc(keyword, keyword);
+    public ResponseEntity<?> searchPost(PostSearchKeyword keyword) {
+        List<Post> postList = postRepositoryImpl.search(keyword);
+        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
 
-        List<PostReadResponseDto> postReadResponseDtoList = new ArrayList<>();
-
-        if(postList.isEmpty()) {
-            return new ResponseEntity<>(new MsgResponseDto("게시글이 없습니다."), HttpStatus.OK);
-        }
         for (Post post : postList) {
-            PostReadResponseDto postReadResponseDto = new PostReadResponseDto(post);
-            postReadResponseDtoList.add(postReadResponseDto);
+            PostResponseDto postResponseDto = new PostResponseDto(post);
+            postResponseDtoList.add(postResponseDto);
         }
-        return new ResponseEntity<>(postReadResponseDtoList, HttpStatus.OK);
+        return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
     }
-
 }
+
