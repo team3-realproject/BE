@@ -45,8 +45,9 @@ public class CalendarResponseDto {
         this.hourlyWage = String.valueOf(calendar.getHourlyWage());
         this.dayWage = String.valueOf(pay);
         this.year = String.valueOf(calendar.getWorkDay().getYear());
-        this.month = String.valueOf(calendar.getWorkDay().getMonthValue());
-        this.date = String.valueOf(calendar.getWorkDay().getDayOfMonth());
+        this.month = String.valueOf(calendar.getWorkDay().getMonthValue()).length() == 1 ? "0" + calendar.getWorkDay().getMonthValue() : String.valueOf(calendar.getWorkDay().getMonthValue());
+        this.date = String.valueOf(calendar.getWorkDay().getDayOfMonth()).length() == 1 ? "0" + calendar.getWorkDay().getDayOfMonth() : String.valueOf(calendar.getWorkDay().getDayOfMonth());
+
     }
 
     @Getter
@@ -59,11 +60,12 @@ public class CalendarResponseDto {
         private String bonus;
 
         private String color;
+
         public BonusResponseDto(int bonus, LocalDate sunday, Work work) {
             this.bonusName = "주휴수당(" + work.getPlaceName() + ")";
             this.year = String.valueOf(sunday.getYear());
-            this.month = String.valueOf(sunday.getMonthValue());
-            this.date = String.valueOf(sunday.getDayOfMonth());
+            this.month = String.valueOf(sunday.getMonthValue()).length() == 1 ? "0" + sunday.getMonthValue() : String.valueOf(sunday.getMonthValue());
+            this.date = String.valueOf(sunday.getDayOfMonth()).length() == 1 ? "0" + sunday.getDayOfMonth() : String.valueOf(sunday.getDayOfMonth());
             this.bonus = String.valueOf(bonus);
             this.color = work.getPlaceColor();
         }
@@ -75,6 +77,7 @@ public class CalendarResponseDto {
         private boolean result;
         private LocalTime totalTime;
         private LocalDate sunday;
+
         public StatutoryLeisurePayResponseDto(boolean result, LocalTime local, LocalDate sun) {
             this.result = result;
             this.totalTime = local;
@@ -91,11 +94,10 @@ public class CalendarResponseDto {
 
         public totalPayResponseDto(int totalPay, LocalDate early) {
             this.year = String.valueOf(early.getYear());
-            this.month = String.valueOf(early.getMonthValue());
+            this.month = String.valueOf(early.getMonthValue()).length() == 1 ? "0" + early.getMonthValue() : String.valueOf(early.getMonthValue());
             this.total = String.valueOf(totalPay);
         }
     }
-
 
 
 }
