@@ -51,7 +51,7 @@ public class PostController {
 
     //게시글 검색
     @GetMapping("/search")
-    public ResponseEntity<?> searchPost(PostSearchKeyword keyword) {
+    public ResponseEntity<?> searchPost(@RequestParam PostSearchKeyword keyword) {
         return postService.searchPost(keyword);
     }
 }

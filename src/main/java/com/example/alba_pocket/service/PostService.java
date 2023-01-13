@@ -126,8 +126,12 @@ public class PostService {
     //게시글 검색
     @Transactional(readOnly = true)
     public ResponseEntity<?> searchPost(PostSearchKeyword keyword) {
-        List<Post> postList = postRepositoryImpl.search(keyword);
         List<PostResponseDto> postResponseDtoList = new ArrayList<>();
+        if(keyword.getKeyword()=="") {
+            return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
+        }
+        List<Post> postList = postRepositoryImpl.search(keyword);
+
 
         for (Post post : postList) {
             PostResponseDto postResponseDto = new PostResponseDto(post);
