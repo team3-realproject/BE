@@ -13,60 +13,58 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class CalendarResponseDto {
     private Long todoId;
-    private int year;
-    private int month;
-    private int date;
+    private String year;
+    private String month;
+    private String date;
     //근무지명
     private String placeName;
     //컬러
     private String color;
 
     //근무시간
-    @JsonFormat(pattern = "HH:mm")
-    private LocalTime workingTime;
+    private String workingTime;
 
     //시작시간
-    @JsonFormat(pattern = "HH:mm")
-    private LocalTime startTime;
+    private String startTime;
 
     //끝나는시간
     @JsonFormat(pattern = "HH:mm")
-    private LocalTime endTime;
+    private String endTime;
     //시급
-    private int hourlyWage;
+    private String hourlyWage;
     //정산금액
-    private int dayWage;
+    private String dayWage;
 
     public CalendarResponseDto(Calendar calendar, int pay) {
         this.todoId = calendar.getId();
         this.placeName = calendar.getWork().getPlaceName();
         this.color = calendar.getWork().getPlaceColor();
-        this.workingTime = calendar.getWorkingTime();
-        this.startTime = calendar.getStartTime();
-        this.endTime = calendar.getEndTime();
-        this.hourlyWage = calendar.getHourlyWage();
-        this.dayWage = pay;
-        this.year = calendar.getWorkDay().getYear();
-        this.month = calendar.getWorkDay().getMonthValue();
-        this.date = calendar.getWorkDay().getDayOfMonth();
+        this.workingTime = String.valueOf(calendar.getWorkingTime());
+        this.startTime = String.valueOf(calendar.getStartTime());
+        this.endTime = String.valueOf(calendar.getEndTime());
+        this.hourlyWage = String.valueOf(calendar.getHourlyWage());
+        this.dayWage = String.valueOf(pay);
+        this.year = String.valueOf(calendar.getWorkDay().getYear());
+        this.month = String.valueOf(calendar.getWorkDay().getMonthValue());
+        this.date = String.valueOf(calendar.getWorkDay().getDayOfMonth());
     }
 
     @Getter
     @NoArgsConstructor
     public static class BonusResponseDto {
         private String bonusName;
-        private int year;
-        private int month;
-        private int date;
-        private int bonus;
+        private String year;
+        private String month;
+        private String date;
+        private String bonus;
 
         private String color;
         public BonusResponseDto(int bonus, LocalDate sunday, Work work) {
             this.bonusName = "주휴수당(" + work.getPlaceName() + ")";
-            this.year = sunday.getYear();
-            this.month = sunday.getMonthValue();
-            this.date = sunday.getDayOfMonth();
-            this.bonus = bonus;
+            this.year = String.valueOf(sunday.getYear());
+            this.month = String.valueOf(sunday.getMonthValue());
+            this.date = String.valueOf(sunday.getDayOfMonth());
+            this.bonus = String.valueOf(bonus);
             this.color = work.getPlaceColor();
         }
     }
@@ -87,14 +85,14 @@ public class CalendarResponseDto {
     @Getter
     @NoArgsConstructor
     public static class totalPayResponseDto {
-        private int year;
-        private int month;
-        private int total;
+        private String year;
+        private String month;
+        private String total;
 
         public totalPayResponseDto(int totalPay, LocalDate early) {
-            this.year = early.getYear();
-            this.month = early.getMonthValue();
-            this.total = totalPay;
+            this.year = String.valueOf(early.getYear());
+            this.month = String.valueOf(early.getMonthValue());
+            this.total = String.valueOf(totalPay);
         }
     }
 
