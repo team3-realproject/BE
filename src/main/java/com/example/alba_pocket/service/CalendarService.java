@@ -5,11 +5,11 @@ import com.example.alba_pocket.dto.CalendarResponseDto;
 import com.example.alba_pocket.dto.MsgResponseDto;
 import com.example.alba_pocket.entity.Calendar;
 import com.example.alba_pocket.entity.User;
-import com.example.alba_pocket.entity.WorkPlace;
+import com.example.alba_pocket.entity.Work;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.repository.CalendarRepository;
-import com.example.alba_pocket.repository.WorkPlaceRepository;
+import com.example.alba_pocket.repository.WorkRepository;
 import com.example.alba_pocket.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CalendarService {
 
-    private final WorkPlaceRepository workPlaceRepository;
+
+    private final WorkRepository workRepository;
 
     private final CalendarRepository calendarRepository;
 
@@ -41,16 +42,16 @@ public class CalendarService {
     @Transactional
     public ResponseEntity<?> createCalendar(Long placeId, CalendarRequestDto requestDto) {
         User user = SecurityUtil.getCurrentUser();
-        WorkPlace workPlace = workPlaceRepository.findById(placeId).orElseThrow(
+        Work work = workRepository.findById(placeId).orElseThrow(
                 () -> new IllegalArgumentException("알바정보없음")
         );
-        if (!user.getId().equals(workPlace.getUser().getId())) {
+        if (!user.getId().equals(work.getUser().getId())) {
             throw new IllegalArgumentException("본인아님");
         }
         requestDto.getWorkDay().forEach(workDay -> {
             LocalDate workDate = LocalDate.parse(workDay.getWorkday(), DateTimeFormatter.ofPattern("yyyyMMdd"));
             LocalTime workingTime = requestDto.getEndTime().minusHours(requestDto.getStartTime().getHour()).minusMinutes(requestDto.getStartTime().getMinute());
-            Calendar calendar = new Calendar(workPlace, requestDto, user, workingTime, workDate);
+            Calendar calendar = new Calendar(work, requestDto, user, workingTime, workDate);
             calendarRepository.saveAndFlush(calendar);
         });
         return new ResponseEntity<>(new MsgResponseDto("근무등록완료"), HttpStatus.OK);
@@ -108,9 +109,9 @@ public class CalendarService {
         System.out.println("==============" + early);
         User user = SecurityUtil.getCurrentUser();
         //직장정보
-        List<WorkPlace> workPlaces = workPlaceRepository.findAllByUserId(user.getId());
+        List<Work> works = workRepository.findAllByUserId(user.getId());
         List<CalendarResponseDto.BonusResponseDto> BonusResponseDto = new ArrayList<>();
-        workPlaces.forEach(workPlace -> {
+        works.forEach(work -> {
             LocalDate today = early;
             List<CalendarResponseDto.StatutoryLeisurePayResponseDto> statutoryLeisurePayResponseDto = new ArrayList<>();
             AtomicInteger i = new AtomicInteger();
@@ -119,7 +120,7 @@ public class CalendarService {
                 var dates = startWeekDay.datesUntil(startWeekDay.plusWeeks(1)).collect(Collectors.toList());
                 AtomicReference<LocalTime> totalTime = new AtomicReference<>(LocalTime.parse(LocalTime.parse("00:00").format(DateTimeFormatter.ofPattern("HH:mm"))));
                 dates.stream().map(date -> {
-                    Calendar calendar = calendarRepository.findByWorkDayAndAndWorkPlaceId(date, workPlace.getId()).orElse(new Calendar());
+                    Calendar calendar = calendarRepository.findByWorkDayAndAndWorkId(date, work.getId()).orElse(new Calendar());
                     if (calendar.getWorkingTime() != null) {
                         totalTime.set(totalTime.get().plusHours(calendar.getWorkingTime().getHour()).plusMinutes(calendar.getWorkingTime().getMinute()));
                     }
@@ -137,7 +138,7 @@ public class CalendarService {
                 if (list.isResult()) {
                     AtomicInteger Origin = new AtomicInteger();
                     //int i = 0;
-                    List<Calendar> calendarList = calendarRepository.findAllByUserIdAndAndWorkPlaceId(user.getId(), workPlace.getId());
+                    List<Calendar> calendarList = calendarRepository.findAllByUserIdAndAndWorkId(user.getId(), work.getId());
                     calendarList.forEach(calendar -> {
                         Origin.addAndGet(calendar.getHourlyWage());
                     });
@@ -147,11 +148,10 @@ public class CalendarService {
                     i.set(StatutoryLeisurePay(list.getTotalTime(), payOrigin));
                     log.info("총주휴수당--------------------------------------------" + i);
                     int bonus = Integer.parseInt(i.toString());
-                    BonusResponseDto.add(new CalendarResponseDto.BonusResponseDto(bonus, list.getSunday(), workPlace));
+                    BonusResponseDto.add(new CalendarResponseDto.BonusResponseDto(bonus, list.getSunday(), work));
 
                 }
             });
-//            var sunday = today.with(DayOfWeek.SUNDAY);
         });
         return new ResponseEntity<>(BonusResponseDto, HttpStatus.OK);
     }

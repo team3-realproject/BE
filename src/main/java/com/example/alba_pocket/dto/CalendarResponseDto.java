@@ -1,7 +1,7 @@
 package com.example.alba_pocket.dto;
 
 import com.example.alba_pocket.entity.Calendar;
-import com.example.alba_pocket.entity.WorkPlace;
+import com.example.alba_pocket.entity.Work;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,8 +39,8 @@ public class CalendarResponseDto {
 
     public CalendarResponseDto(Calendar calendar, int pay) {
         this.todoId = calendar.getId();
-        this.placeName = calendar.getWorkPlace().getPlaceName();
-        this.color = calendar.getWorkPlace().getPlaceColor();
+        this.placeName = calendar.getWork().getPlaceName();
+        this.color = calendar.getWork().getPlaceColor();
         this.workingTime = calendar.getWorkingTime();
         this.startTime = calendar.getStartTime();
         this.endTime = calendar.getEndTime();
@@ -61,13 +61,13 @@ public class CalendarResponseDto {
         private int bonus;
 
         private String color;
-        public BonusResponseDto(int bonus, LocalDate sunday, WorkPlace workPlace) {
-            this.bonusName = "주휴수당(" + workPlace.getPlaceName() + ")";
+        public BonusResponseDto(int bonus, LocalDate sunday, Work work) {
+            this.bonusName = "주휴수당(" + work.getPlaceName() + ")";
             this.year = sunday.getYear();
             this.month = sunday.getMonthValue();
             this.date = sunday.getDayOfMonth();
             this.bonus = bonus;
-            this.color = workPlace.getPlaceColor();
+            this.color = work.getPlaceColor();
         }
     }
 

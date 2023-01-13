@@ -37,15 +37,15 @@ public class Calendar {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private WorkPlace workPlace;
+    private Work work;
 
-    public Calendar(WorkPlace workPlace, CalendarRequestDto requestDto, User user, LocalTime workingTime, LocalDate workDay) {
+    public Calendar(Work work, CalendarRequestDto requestDto, User user, LocalTime workingTime, LocalDate workDay) {
         this.workingTime = workingTime;
         this.startTime = requestDto.getStartTime();
         this.endTime = requestDto.getEndTime();
         this.workDay = workDay;
         this.hourlyWage = requestDto.getHourlyWage();
         this.user = user;
-        this.workPlace = workPlace;
+        this.work = work;
     }
 }

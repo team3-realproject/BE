@@ -1,6 +1,5 @@
 package com.example.alba_pocket.entity;
 
-import com.example.alba_pocket.dto.WorkPlaceRequestDto;
 import com.example.alba_pocket.dto.WorkRequestDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

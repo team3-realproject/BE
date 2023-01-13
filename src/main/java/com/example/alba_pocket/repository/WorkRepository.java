@@ -10,5 +10,7 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
 
     List<Work> findByUser(User user);
 
+    List<Work> findAllByUserId(Long user_id);
+
     boolean existsById(Long id);
 }
