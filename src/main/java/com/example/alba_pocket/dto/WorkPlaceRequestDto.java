@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class WorkPlaceRequestDto {
 
     private String placeName;
+
     private int salaryDay;
     private String placeColor;
 

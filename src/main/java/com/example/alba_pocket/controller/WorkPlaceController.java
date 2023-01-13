@@ -23,9 +23,5 @@ public class WorkPlaceController {
         return workPlaceService.getWorkPlace();
     }
 
-//    @PutMapping("/placeId")
-//    public ResponseEntity<?> updateWorkPlace(@RequestBody WorkPlaceRequestDto requestDto, @PathVariable Long placeId){
-//        return workPlaceService.updateWorkPlace(requestDto, placeId);
-//    }
 
 }

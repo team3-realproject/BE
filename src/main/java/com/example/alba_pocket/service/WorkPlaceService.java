@@ -34,11 +34,6 @@ public class WorkPlaceService {
         return new ResponseEntity<>(new WorkPlaceResponseDto(workPlace), HttpStatus.OK);
     }
 
-//    public ResponseEntity<?> updateWorkPlace(WorkPlaceRequestDto requestDto, Long placeId) {
-//        User user = SecurityUtil.getCurrentUser();
-//        return null;
-//    }
-
     public ResponseEntity<?> getWorkPlace() {
         User user = SecurityUtil.getCurrentUser();
         List<WorkPlace> workPlaces = workPlaceRepository.findAllByUserId(user.getId());
