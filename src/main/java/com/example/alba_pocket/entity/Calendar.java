@@ -19,13 +19,19 @@ public class Calendar {
     //일한시간
     @Column
     @JsonFormat(pattern = "HH:mm")
-    private LocalTime time;
+    private LocalTime workingTime;
+    @Column
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime startTime;
+    @Column
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime endTime;
     //일한날짜
     @Column
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate workDay;
     //시급
-    private int payOrigin;
+    private int hourlyWage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -33,10 +39,12 @@ public class Calendar {
     @ManyToOne(fetch = FetchType.LAZY)
     private WorkPlace workPlace;
 
-    public Calendar(WorkPlace workPlace, CalendarRequestDto requestDto, User user) {
-        this.time = requestDto.getTime();
-        this.workDay = requestDto.getWorkDay();
-        this.payOrigin = requestDto.getPayOrigin();
+    public Calendar(WorkPlace workPlace, CalendarRequestDto requestDto, User user, LocalTime workingTime, LocalDate workDay) {
+        this.workingTime = workingTime;
+        this.startTime = requestDto.getStartTime();
+        this.endTime = requestDto.getEndTime();
+        this.workDay = workDay;
+        this.hourlyWage = requestDto.getHourlyWage();
         this.user = user;
         this.workPlace = workPlace;
     }

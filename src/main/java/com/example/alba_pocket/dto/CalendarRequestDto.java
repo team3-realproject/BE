@@ -4,20 +4,30 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class CalendarRequestDto {
 
     @JsonFormat(pattern = "HH:mm")
-    private LocalTime time;
+    private LocalTime startTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate workDay;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime endTime;
+    private List<CalendarRequestDto.WorkDay> workDay;
+    private int year;
+    private int month;
+    private int date;
+    private int hourlyWage;
 
-    private int payOrigin;
+    @Getter
+    @NoArgsConstructor
+    public static class WorkDay {
+        private String workday;
+    }
+
 
 
 }

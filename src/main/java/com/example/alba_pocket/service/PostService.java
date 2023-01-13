@@ -50,7 +50,7 @@ public class PostService {
     //전체글조회
     @Transactional(readOnly = true)
     public ResponseEntity<?> getPosts() {
-        User user = SecurityUtil.getCurrentUser();
+        User user = SecurityUtil.getCurrentUser();//로그인한유전데 로그인안했으면 null
         List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
         return new ResponseEntity<>(posts.stream().map(post -> {
             boolean isLike = false;
