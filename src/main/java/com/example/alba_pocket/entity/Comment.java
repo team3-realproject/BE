@@ -19,8 +19,8 @@ public class Comment extends Timestamped{
     @Column
     private String comment;
 
-    @Column
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     @Transient
     private String nickname;
@@ -37,7 +37,7 @@ public class Comment extends Timestamped{
 
 
     public Comment(User user, Post post, CommentRequestDto requestDto) {
-        this.userId = user.getId();
+        this.user = user;
         this.post = post;
         this.comment = requestDto.getComment();
         this.nickname = user.getNickname();

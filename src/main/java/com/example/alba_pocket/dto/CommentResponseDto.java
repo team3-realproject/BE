@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class CommentResponseDto {
     private Long commentId;
     private String comment;
+    private String userId;
     private String nickname;
     private int commentLikeNum;
     private boolean isLikeComment;
@@ -20,6 +21,7 @@ public class CommentResponseDto {
     public CommentResponseDto(Comment save) {
         this.commentId = save.getId();
         this.comment = save.getComment();
+        this.userId = save.getUser().getUserId();
         this.nickname = save.getNickname();
         this.commentLikeNum = 0;
         this.isLikeComment = false;
@@ -29,6 +31,7 @@ public class CommentResponseDto {
     public CommentResponseDto(Comment comment, boolean isLike, int likeCount, User author) {
         this.commentId = comment.getId();
         this.comment = comment.getComment();
+        this.userId = comment.getUser().getUserId();
         this.nickname = author.getNickname();
         this.commentLikeNum = likeCount;
         this.isLikeComment = isLike;

@@ -1,16 +1,11 @@
 package com.example.alba_pocket.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 
 @Getter
-@NoArgsConstructor
-public class WorkPlaceRequestDto {
+public class WorkRequestDto {
 
     private String placeName;
-
-    private int salaryDay;
     private String placeColor;
-
+    private int salaryDay;
 }

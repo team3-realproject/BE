@@ -1,6 +1,7 @@
 package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.KakaoUserInfoDto;
+import com.example.alba_pocket.dto.LoginResponseDto;
 import com.example.alba_pocket.dto.MsgResponseDto;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.jwt.JwtUtil;
@@ -67,7 +68,7 @@ public class KakaoService {
 //
 //        UserInfoDto userInfoDto = new UserInfoDto(member,notificationNum);
 
-        return new ResponseEntity<>(new MsgResponseDto("로그인성공"), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponseDto(user.getUserId()), HttpStatus.OK);
     }
 
     private void forceLoginUser(User user) {

@@ -54,7 +54,14 @@ public class MyPageService {
         if(!file.isEmpty()){
             imgUrl = s3Uploader.upload(file, "files");
         }
-        user.updateUser(imgUrl, data.getNickname());
+        if (imgUrl==null) {
+            user.updateNickname(data.getNickname());
+        } else if (data.getNickname()==null) {
+            user.updateProfileImage(imgUrl);
+        } else if (imgUrl!=null && data.getNickname()!=null) {
+            user.updateUser(imgUrl, data.getNickname());
+        } else { }
+
         userRepository.saveAndFlush(user);
 
         return new ResponseEntity<>(new MsgResponseDto("회원정보가 수정되었습니다."), HttpStatus.OK);
