@@ -8,7 +8,6 @@ public class WorkPlaceRequestDto {
 
     private String placeName;
 
-//    @JsonFormat(pattern = "dd")
     private int salaryDay;
 
     private String placeColor;
