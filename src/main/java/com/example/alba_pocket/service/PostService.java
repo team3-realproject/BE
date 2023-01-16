@@ -13,6 +13,9 @@ import com.example.alba_pocket.repository.PostRepository;
 import com.example.alba_pocket.repository.PostRepositoryImpl;
 import com.example.alba_pocket.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -125,15 +128,16 @@ public class PostService {
 
     //게시글 검색
     @Transactional(readOnly = true)
-    public ResponseEntity<?> searchPost(PostSearchKeyword keyword) {
+    public ResponseEntity<?> searchPost(PostSearchKeyword keyword, int page, int size) {
         List<PostResponseDto> postResponseDtoList = new ArrayList<>();
         if(keyword.getKeyword()=="") {
             return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
         }
-        List<Post> postList = postRepositoryImpl.search(keyword);
 
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Post> postPage = postRepositoryImpl.searchPage(keyword, pageable);
 
-        for (Post post : postList) {
+        for(Post post : postPage) {
             PostResponseDto postResponseDto = new PostResponseDto(post);
             postResponseDtoList.add(postResponseDto);
         }
