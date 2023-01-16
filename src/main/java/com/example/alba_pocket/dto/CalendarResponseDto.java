@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
@@ -75,13 +74,15 @@ public class CalendarResponseDto {
     @NoArgsConstructor
     public static class StatutoryLeisurePayResponseDto {
         private boolean result;
-        private LocalTime totalTime;
+        private int hour;
+        private int minute;
         private LocalDate sunday;
 
-        public StatutoryLeisurePayResponseDto(boolean result, LocalTime local, LocalDate sun) {
+        public StatutoryLeisurePayResponseDto(boolean result, int hour, int minute, LocalDate sunday) {
             this.result = result;
-            this.totalTime = local;
-            this.sunday = sun;
+            this.hour = hour;
+            this.minute = minute;
+            this.sunday = sunday;
         }
     }
 
