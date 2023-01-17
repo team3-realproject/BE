@@ -13,10 +13,12 @@ import com.example.alba_pocket.repository.PostRepository;
 import com.example.alba_pocket.repository.PostRepositoryImpl;
 import com.example.alba_pocket.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Page;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -55,18 +57,6 @@ public class PostService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getPosts(int page, int size) {
         User user = SecurityUtil.getCurrentUser();
-//        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
-//        return new ResponseEntity<>(posts.stream().map(post -> {
-//            boolean isLike = false;
-//            if(user != null){
-//                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
-//            }
-//            int likeCount = likesRepository.countByPostId(post.getId());
-//            return new PostResponseDto(post, isLike, likeCount);
-//        }).collect(Collectors.toList()), HttpStatus.OK);
-
-//        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
-
         Pageable pageable = PageRequest.of(page, size);
         Slice<PostResponseDto> postResponseDtos = postRepositoryImpl.scrollPost(pageable, user);
         return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
@@ -135,11 +125,16 @@ public class PostService {
 
     //게시글 검색
     @Transactional(readOnly = true)
-    public ResponseEntity<?> searchPost(PostSearchKeyword keyword) {
-        List<Post> postList = postRepositoryImpl.search(keyword);
+    public ResponseEntity<?> searchPost(PostSearchKeyword keyword, int page, int size) {
         List<PostResponseDto> postResponseDtoList = new ArrayList<>();
+        if(keyword.getKeyword()=="") {
+            return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
+        }
 
-        for (Post post : postList) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Post> postPage = postRepositoryImpl.searchPage(keyword, pageable);
+
+        for(Post post : postPage) {
             PostResponseDto postResponseDto = new PostResponseDto(post);
             postResponseDtoList.add(postResponseDto);
         }
