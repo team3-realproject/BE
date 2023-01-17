@@ -30,8 +30,12 @@ public class CalendarController {
     //주휴수당
     @GetMapping("/calendar/bonus/{month}")
     public ResponseEntity<?> bonus(@PathVariable String month){
-
         return calendarService.bonus(month);
+    }
+    //주휴수당 일별겟요청
+    @GetMapping("calendar/day/bonus/{day}")
+    public ResponseEntity<?> dayBonus(@PathVariable String day){
+        return calendarService.dayBonus(day);
     }
     //월 총합 급여
     @GetMapping("/calendar/total/{month}")
@@ -44,6 +48,8 @@ public class CalendarController {
     public ResponseEntity<?> deleteDay(@PathVariable Long todoId){
         return calendarService.deleteDay(todoId);
     }
+
+
 
 
 
