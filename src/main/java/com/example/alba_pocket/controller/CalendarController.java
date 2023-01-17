@@ -33,7 +33,7 @@ public class CalendarController {
         return calendarService.bonus(month);
     }
     //주휴수당 일별겟요청
-    @GetMapping("calendar/day/bonus/{day}")
+    @GetMapping("/calendar/day/bonus/{day}")
     public ResponseEntity<?> dayBonus(@PathVariable String day){
         return calendarService.dayBonus(day);
     }
