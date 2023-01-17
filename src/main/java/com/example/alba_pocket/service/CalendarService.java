@@ -18,9 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +71,7 @@ public class CalendarService {
             return new CalendarResponseDto(calendar, pay);
         }).collect(Collectors.toList()), HttpStatus.OK);
     }
+
     //근무달력조회(일별)
     public ResponseEntity<?> dayCalendar(String day) {
         User user = SecurityUtil.getCurrentUser();
@@ -114,23 +113,38 @@ public class CalendarService {
         works.forEach(work -> {
             LocalDate today = early;
             List<CalendarResponseDto.StatutoryLeisurePayResponseDto> statutoryLeisurePayResponseDto = new ArrayList<>();
-            AtomicInteger i = new AtomicInteger();
             while (today.isBefore(early.plusMonths(1))) {
                 var startWeekDay = today.with(DayOfWeek.MONDAY);
                 var dates = startWeekDay.datesUntil(startWeekDay.plusWeeks(1)).collect(Collectors.toList());
                 AtomicReference<LocalTime> totalTime = new AtomicReference<>(LocalTime.parse(LocalTime.parse("00:00").format(DateTimeFormatter.ofPattern("HH:mm"))));
+                AtomicInteger atomicHour = new AtomicInteger();
+                AtomicInteger atomicMinute = new AtomicInteger();
                 dates.stream().map(date -> {
                     Calendar calendar = calendarRepository.findByWorkDayAndAndWorkId(date, work.getId()).orElse(new Calendar());
                     if (calendar.getWorkingTime() != null) {
-                        totalTime.set(totalTime.get().plusHours(calendar.getWorkingTime().getHour()).plusMinutes(calendar.getWorkingTime().getMinute()));
+//                        totalTime.set(totalTime.get().plusHours(calendar.getWorkingTime().getHour()).plusMinutes(calendar.getWorkingTime().getMinute()));
+                        atomicHour.set(Integer.parseInt(String.valueOf(atomicHour)) + calendar.getWorkingTime().getHour());
+                        atomicMinute.set(Integer.parseInt(String.valueOf(atomicMinute)) + calendar.getWorkingTime().getMinute());
                     }
                     return totalTime;
                 }).collect(Collectors.toList());
-
+                log.info(String.valueOf(today));
+                log.info("----------");
+                int hour = Integer.parseInt(String.valueOf(atomicHour));
+                int minute = Integer.parseInt(String.valueOf(atomicMinute));
+                int plusHour = minute / 60;
+                minute = minute % 60;
+                hour += plusHour;
+                log.info(String.valueOf(hour));
+                log.info("----------");
+                log.info(String.valueOf(minute));
+                log.info("----------");
+                boolean result = hour >= 15;
+                log.info(String.valueOf(result));
                 LocalTime total = LocalTime.parse(totalTime.toString());
-                boolean result = total.equals(LocalTime.parse(LocalTime.parse("15:00").format(DateTimeFormatter.ofPattern("HH:mm")))) || total.isAfter(LocalTime.parse(LocalTime.parse("15:00").format(DateTimeFormatter.ofPattern("HH:mm"))));
-                var sun = today.with(DayOfWeek.SUNDAY);
-                statutoryLeisurePayResponseDto.add(new CalendarResponseDto.StatutoryLeisurePayResponseDto(result, total, sun));
+//                boolean result = total.equals(LocalTime.parse(LocalTime.parse("15:00").format(DateTimeFormatter.ofPattern("HH:mm")))) || total.isAfter(LocalTime.parse(LocalTime.parse("15:00").format(DateTimeFormatter.ofPattern("HH:mm"))));
+                var sunday = today.with(DayOfWeek.SUNDAY);
+                statutoryLeisurePayResponseDto.add(new CalendarResponseDto.StatutoryLeisurePayResponseDto(result, hour, minute, sunday));
                 today = today.plusDays(7);
             }
 
@@ -139,15 +153,14 @@ public class CalendarService {
                     AtomicInteger Origin = new AtomicInteger();
                     //int i = 0;
                     List<Calendar> calendarList = calendarRepository.findAllByUserIdAndAndWorkId(user.getId(), work.getId());
+                    double size = calendarList.size();
                     calendarList.forEach(calendar -> {
                         Origin.addAndGet(calendar.getHourlyWage());
                     });
-                    double payOrigin = Integer.parseInt(String.valueOf(Origin)) / calendarList.size();
+                    double payOrigin = Integer.parseInt(String.valueOf(Origin)) / size;
                     log.info("----------------------" + payOrigin);
-                    log.info("true일때 주휴수당 o ---------------------------------------------------");
-                    i.set(StatutoryLeisurePay(list.getTotalTime(), payOrigin));
-                    log.info("총주휴수당--------------------------------------------" + i);
-                    int bonus = Integer.parseInt(i.toString());
+                    int bonus = StatutoryLeisurePay(list.getHour(), list.getMinute(), payOrigin);
+                    log.info("총주휴수당--------------------------------------------" + bonus);
                     BonusResponseDto.add(new CalendarResponseDto.BonusResponseDto(bonus, list.getSunday(), work));
 
                 }
@@ -159,15 +172,24 @@ public class CalendarService {
 
     //주휴수당계산
     @Transactional
-    public int StatutoryLeisurePay(LocalTime totalTime, double payOrigin) {
-        int hour = Integer.parseInt(totalTime.format(DateTimeFormatter.ofPattern("HH")));
-        double minute = Integer.parseInt(totalTime.format(DateTimeFormatter.ofPattern("mm"))) / 60;
-        double total = hour + minute;
+    public int StatutoryLeisurePay(int hour, int minute,  double payOrigin) {
+        double minute1 = minute / 60.0;
+        double total = hour + minute1;
         log.info("토탈시간----" + total);
-
-
         return (int) (total * payOrigin) / 5;
     }
+
+//    //주휴수당계산
+//    @Transactional
+//    public int StatutoryLeisurePay(LocalTime totalTime, double payOrigin) {
+//        int hour = Integer.parseInt(totalTime.format(DateTimeFormatter.ofPattern("HH")));
+//        double minute = Integer.parseInt(totalTime.format(DateTimeFormatter.ofPattern("mm"))) / 60.0;
+//        System.out.println(totalTime);
+//        System.out.println("주휴계산" + minute);
+//        double total = hour + minute;
+//        log.info("토탈시간----" + total);
+//        return (int) (total * payOrigin) / 5;
+//    }
 
     public ResponseEntity<?> getTotalPay(String month) {
         log.info(month);
@@ -188,7 +210,7 @@ public class CalendarService {
     public ResponseEntity<?> deleteDay(Long todoId) {
         Calendar calendar = calendarRepository.findById(todoId).orElse(new Calendar());
         User user = SecurityUtil.getCurrentUser();
-        if(!calendar.getUser().getId().equals(user.getId())){
+        if (!calendar.getUser().getId().equals(user.getId())) {
             throw new RestApiException(CommonStatusCode.INVALID_USER_DELETE);
         }
         calendarRepository.deleteById(todoId);
