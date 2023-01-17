@@ -1,9 +1,6 @@
 package com.example.alba_pocket.service;
 
-import com.example.alba_pocket.dto.MsgResponseDto;
-import com.example.alba_pocket.dto.MypageReqeustDto;
-import com.example.alba_pocket.dto.MypageResponseDto;
-import com.example.alba_pocket.dto.PostResponseDto;
+import com.example.alba_pocket.dto.*;
 import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.repository.LikesRepository;
@@ -47,23 +44,46 @@ public class MyPageService {
         return new ResponseEntity<>(mypageResponseDto, HttpStatus.OK);
     }
 
+//    @Transactional
+//    public ResponseEntity<?> updateMypage(MultipartFile file, MypageReqeustDto data) throws IOException {
+//        User user = SecurityUtil.getCurrentUser();
+//        String imgUrl = null;
+//        if(!file.isEmpty()){
+//            imgUrl = s3Uploader.upload(file, "files");
+//        }
+//        if (imgUrl==null) {
+//            user.updateNickname(data.getNickname());
+//        } else if (data.getNickname()==null) {
+//            user.updateProfileImage(imgUrl);
+//        } else if (imgUrl!=null && data.getNickname()!=null) {
+//            user.updateUser(imgUrl, data.getNickname());
+//        } else { }
+//
+//        userRepository.saveAndFlush(user);
+//
+//        return new ResponseEntity<>(new MsgResponseDto("회원정보가 수정되었습니다."), HttpStatus.OK);
+//    }
+
     @Transactional
-    public ResponseEntity<?> updateMypage(MultipartFile file, MypageReqeustDto data) throws IOException {
+    public ResponseEntity<?> updateMypage(MypageAttributeRequestDto mypageAttributeRequestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
         String imgUrl = null;
-        if(!file.isEmpty()){
-            imgUrl = s3Uploader.upload(file, "files");
+        if(mypageAttributeRequestDto.getFile()!=null){
+            imgUrl = s3Uploader.upload(mypageAttributeRequestDto.getFile(), "files");
         }
+
         if (imgUrl==null) {
-            user.updateNickname(data.getNickname());
-        } else if (data.getNickname()==null) {
+            user.updateNickname(mypageAttributeRequestDto.getNickname());
+        } else if (mypageAttributeRequestDto.getNickname()==null) {
             user.updateProfileImage(imgUrl);
-        } else if (imgUrl!=null && data.getNickname()!=null) {
-            user.updateUser(imgUrl, data.getNickname());
+        } else if (imgUrl!=null && mypageAttributeRequestDto.getNickname()!=null) {
+            user.updateUser(imgUrl, mypageAttributeRequestDto.getNickname());
         } else { }
 
         userRepository.saveAndFlush(user);
 
         return new ResponseEntity<>(new MsgResponseDto("회원정보가 수정되었습니다."), HttpStatus.OK);
     }
+
+
 }

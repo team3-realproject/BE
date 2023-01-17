@@ -1,5 +1,6 @@
 package com.example.alba_pocket.controller;
 
+import com.example.alba_pocket.dto.MypageAttributeRequestDto;
 import com.example.alba_pocket.dto.MypageReqeustDto;
 import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.User;
@@ -26,10 +27,14 @@ public class MyPageController {
         return myPageService.getMypage();
     }
 
-    @PutMapping(value = "/mypage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> updateMypage(@RequestPart(value = "file") MultipartFile file,
-                                          @RequestPart MypageReqeustDto data) throws IOException {
-    return myPageService.updateMypage(file, data);
+//    @PutMapping(value = "/mypage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+//    public ResponseEntity<?> updateMypage(@RequestPart(value = "file") MultipartFile file,
+//                                          @RequestPart MypageReqeustDto data) throws IOException {
+//    return myPageService.updateMypage(file, data);
+
+    @PutMapping("/mypage")
+    public ResponseEntity<?> updateMypage(@ModelAttribute MypageAttributeRequestDto mypageAttributeRequestDto) throws IOException{
+        return myPageService.updateMypage(mypageAttributeRequestDto);
 
     }
 
