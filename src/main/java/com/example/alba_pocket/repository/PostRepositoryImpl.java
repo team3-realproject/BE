@@ -1,14 +1,19 @@
 package com.example.alba_pocket.repository;
 
 
+import com.example.alba_pocket.dto.PostResponseDto;
 import com.example.alba_pocket.entity.Post;
+import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.model.PostSearchKeyword;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.alba_pocket.entity.QPost.post;
@@ -19,6 +24,7 @@ import static com.example.alba_pocket.entity.QPost.post;
 public class PostRepositoryImpl implements PostCustomRepository{
 
     private final JPAQueryFactory queryFactory;
+    private final LikesRepository likesRepository;
 
     public  List<Post> search(PostSearchKeyword keyword)  {
         return queryFactory
@@ -36,5 +42,33 @@ public class PostRepositoryImpl implements PostCustomRepository{
     }
     private BooleanExpression contentContains(String content) {
         return StringUtils.hasText(content) ? post.content.contains(content) : null;
+    }
+
+
+    @Override
+    public Slice<PostResponseDto> scrollPost(Pageable pageable, User user) {
+        List<Post> result = queryFactory
+                .selectFrom(post)
+                .orderBy(post.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        List<PostResponseDto> postList = new ArrayList<>();
+        for (Post findPost : result) {
+            boolean isLike = false;
+            if(user != null){
+                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), findPost.getId());
+            }
+            int likeCount = likesRepository.countByPostId(findPost.getId());
+            postList.add(new PostResponseDto(findPost, isLike, likeCount));
+        }
+        boolean hasNext = false;
+        if(result.size() > pageable.getPageSize()) {
+            postList.remove(pageable.getPageSize());
+            hasNext=true;
+        }
+
+        return new SliceImpl<>(postList, pageable, hasNext);
     }
 }
