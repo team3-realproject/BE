@@ -3,30 +3,22 @@ package com.example.alba_pocket.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@Setter
 public class CalendarRequestDto {
 
     @JsonFormat(pattern = "HH:mm")
     private LocalTime startTime;
-
     @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;
-    private List<CalendarRequestDto.WorkDay> workDay;
-    private int year;
-    private int month;
-    private int date;
+    private String[] workDay;
     private int hourlyWage;
 
-    @Getter
-    @NoArgsConstructor
-    public static class WorkDay {
-        private String workday;
-    }
 
 
 
