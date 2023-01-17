@@ -14,6 +14,8 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
 
     Optional<Calendar> findByWorkDayAndAndWorkId(LocalDate localDate, Long workplaceId);
 
+    List<Calendar> findAllByWorkDayAndAndWorkId(LocalDate localDate, Long workplaceId);
+
     List<Calendar> findAllByUserIdAndAndWorkId(Long userId, Long workplaceId);
 
     @Query(value = "select * from calendar where user_id = :user_id and work_day between :startDay AND :endDay", nativeQuery = true)
