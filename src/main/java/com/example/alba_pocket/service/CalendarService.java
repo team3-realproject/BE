@@ -299,8 +299,26 @@ public class CalendarService {
         return new ResponseEntity<>(new MsgResponseDto("근무지를 삭제하였습니다."), HttpStatus.OK);
     }
 
+    //수정겟요청
+    public ResponseEntity<?> getUpdateCalendar(Long todoId) {
+        User user = SecurityUtil.getCurrentUser();
+        Calendar calendar = calendarRepository.findById(todoId).orElseThrow(
+                ()-> new IllegalArgumentException("없는 근무입니다.")
+        );
 
 
-
-
+        return new ResponseEntity<>(new CalendarResponseDto.updateGetResponseDto(calendar), HttpStatus.OK);
+    }
+    //수정
+    @Transactional
+    public ResponseEntity<?> updateCalendar(Long todoId, CalendarRequestDto requestDto) {
+        User user = SecurityUtil.getCurrentUser();
+        Calendar calendar = calendarRepository.findById(todoId).orElse(new Calendar());
+        if (!calendar.getUser().getId().equals(user.getId())) {
+            throw new RestApiException(CommonStatusCode.INVALID_USER_UPDATE);
+        }
+        LocalTime workingTime = requestDto.getEndTime().minusHours(requestDto.getStartTime().getHour()).minusMinutes(requestDto.getStartTime().getMinute());
+        calendar.update(requestDto, workingTime);
+        return new ResponseEntity<>("수정완료", HttpStatus.OK);
+    }
 }

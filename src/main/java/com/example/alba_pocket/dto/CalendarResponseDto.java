@@ -168,5 +168,22 @@ public class CalendarResponseDto {
         }
     }
 
+    @Getter
+    @NoArgsConstructor
+    public static class updateGetResponseDto {
+        private String hourlyWage;
+        private String startTime;
+        private String endTime;
+        private String workDay;
+
+
+        public updateGetResponseDto(Calendar calendar) {
+            this.startTime = String.valueOf(calendar.getStartTime());
+            this.endTime = String.valueOf(calendar.getEndTime());
+            this.hourlyWage = String.valueOf(calendar.getHourlyWage());
+            this.workDay = String.valueOf(calendar.getWorkDay());
+        }
+    }
+
 
 }

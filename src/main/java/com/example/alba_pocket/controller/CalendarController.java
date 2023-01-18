@@ -48,9 +48,16 @@ public class CalendarController {
     public ResponseEntity<?> deleteDay(@PathVariable Long todoId){
         return calendarService.deleteDay(todoId);
     }
-
-
-
+    //수정겟요청
+    @GetMapping("/work/{todoId}")
+    public ResponseEntity<?> getUpdateCalendar(@PathVariable Long todoId){
+        return calendarService.getUpdateCalendar(todoId);
+    }
+    //수정
+    @PutMapping("/work/{todoId}")
+    public ResponseEntity<?> updateCalendar(@PathVariable Long todoId, @RequestBody CalendarRequestDto requestDto){
+        return calendarService.updateCalendar(todoId, requestDto);
+    }
 
 
 }

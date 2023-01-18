@@ -48,4 +48,13 @@ public class Calendar {
         this.user = user;
         this.work = work;
     }
+
+    public void update(CalendarRequestDto requestDto, LocalTime workingTime) {
+        this.startTime = requestDto.getStartTime();
+        this.endTime = requestDto.getEndTime();
+        this.hourlyWage = requestDto.getHourlyWage();
+        this.workingTime = workingTime;
+    }
+
+
 }
