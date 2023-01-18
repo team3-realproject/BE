@@ -106,11 +106,13 @@ public class CalendarService {
             AtomicInteger atomicHour = new AtomicInteger();
             AtomicInteger atomicMinute = new AtomicInteger();
             dates.forEach(date ->{
-                Calendar calendar = calendarRepository.findByWorkDayAndAndWorkId(date, work.getId()).orElse(new Calendar());
-                if (calendar.getWorkingTime() != null) {
-                    atomicHour.set(Integer.parseInt(String.valueOf(atomicHour)) + calendar.getWorkingTime().getHour());
-                    atomicMinute.set(Integer.parseInt(String.valueOf(atomicMinute)) + calendar.getWorkingTime().getMinute());
-                }
+                List<Calendar> calendars = calendarRepository.findAllByWorkDayAndAndWorkId(date, work.getId());
+                calendars.forEach(calendar -> {
+                    if (calendar.getWorkingTime() != null) {
+                        atomicHour.set(Integer.parseInt(String.valueOf(atomicHour)) + calendar.getWorkingTime().getHour());
+                        atomicMinute.set(Integer.parseInt(String.valueOf(atomicMinute)) + calendar.getWorkingTime().getMinute());
+                    }
+                });
             });
             int hour = Integer.parseInt(String.valueOf(atomicHour));
             int minute = Integer.parseInt(String.valueOf(atomicMinute));
@@ -149,11 +151,13 @@ public class CalendarService {
                 AtomicInteger atomicHour = new AtomicInteger();
                 AtomicInteger atomicMinute = new AtomicInteger();
                 dates.forEach(date ->{
-                    Calendar calendar = calendarRepository.findByWorkDayAndAndWorkId(date, work.getId()).orElse(new Calendar());
-                    if (calendar.getWorkingTime() != null) {
-                        atomicHour.set(Integer.parseInt(String.valueOf(atomicHour)) + calendar.getWorkingTime().getHour());
-                        atomicMinute.set(Integer.parseInt(String.valueOf(atomicMinute)) + calendar.getWorkingTime().getMinute());
-                    }
+                    List<Calendar> calendars = calendarRepository.findAllByWorkDayAndAndWorkId(date, work.getId());
+                    calendars.forEach(calendar -> {
+                        if (calendar.getWorkingTime() != null) {
+                            atomicHour.set(Integer.parseInt(String.valueOf(atomicHour)) + calendar.getWorkingTime().getHour());
+                            atomicMinute.set(Integer.parseInt(String.valueOf(atomicMinute)) + calendar.getWorkingTime().getMinute());
+                        }
+                    });
                 });
                 int hour = Integer.parseInt(String.valueOf(atomicHour));
                 int minute = Integer.parseInt(String.valueOf(atomicMinute));
