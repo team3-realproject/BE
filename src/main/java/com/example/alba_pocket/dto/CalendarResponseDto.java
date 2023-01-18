@@ -175,13 +175,26 @@ public class CalendarResponseDto {
         private String startTime;
         private String endTime;
         private String workDay;
-
-
         public updateGetResponseDto(Calendar calendar) {
             this.startTime = String.valueOf(calendar.getStartTime());
             this.endTime = String.valueOf(calendar.getEndTime());
             this.hourlyWage = String.valueOf(calendar.getHourlyWage());
             this.workDay = String.valueOf(calendar.getWorkDay());
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class WorkTotalPayResponseDto {
+        private Long placeId;
+        private String totalWage;
+        private String year;
+        private String month;
+        public WorkTotalPayResponseDto(Long placeId, LocalDate startDay, int totalWage) {
+            this.placeId = placeId;
+            this.totalWage = String.valueOf(totalWage);
+            this.year = String.valueOf(startDay.getYear());
+            this.month = String.valueOf(startDay.getMonthValue()).length() == 1 ? "0" + startDay.getMonthValue() : String.valueOf(startDay.getMonthValue());
         }
     }
 
