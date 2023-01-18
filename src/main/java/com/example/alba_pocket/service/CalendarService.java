@@ -325,4 +325,23 @@ public class CalendarService {
         calendar.update(requestDto, workingTime);
         return new ResponseEntity<>("수정완료", HttpStatus.OK);
     }
+
+    @Transactional
+    public ResponseEntity<?> workTotalPay(Long placeId) {
+        User user = SecurityUtil.getCurrentUser();
+        LocalDate early = LocalDate.now();
+        LocalDate startDay = early.withDayOfMonth(1);
+        LocalDate endDay = early.withDayOfMonth(early.lengthOfMonth());
+
+        List<Calendar> calendars = calendarRepository.workTotalPay(user.getId(), placeId, startDay, endDay);
+
+        System.out.println(calendars.size());
+        AtomicInteger total = new AtomicInteger();
+        calendars.forEach(calendar -> {
+            total.addAndGet(Pay(calendar.getWorkingTime(), calendar.getHourlyWage()));
+        });
+        int totalWage = Integer.parseInt(String.valueOf(total));
+
+        return new ResponseEntity<>(new CalendarResponseDto.WorkTotalPayResponseDto(placeId, startDay, totalWage), HttpStatus.OK);
+    }
 }

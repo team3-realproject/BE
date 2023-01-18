@@ -59,5 +59,9 @@ public class CalendarController {
         return calendarService.updateCalendar(todoId, requestDto);
     }
 
+    @GetMapping("/work/total/{placeId}")
+    public ResponseEntity<?> workTotalPay(@PathVariable Long placeId){
+        return calendarService.workTotalPay(placeId);
+    }
 
 }
