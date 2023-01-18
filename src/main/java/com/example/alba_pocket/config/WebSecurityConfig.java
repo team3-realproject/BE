@@ -37,6 +37,8 @@ public class WebSecurityConfig {
         http.cors();
         // CSRF 설정
         http.csrf().disable();
+        http.csrf().disable().headers().frameOptions().sameOrigin();
+
 
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -62,6 +64,7 @@ public class WebSecurityConfig {
         // 서버에서 응답하는 리소스에 접근 가능한 출처를 명시
         // Access-Control-Allow-Origin
         config.addAllowedOrigin("http://localhost:3000/");
+        config.addAllowedOrigin("ws://localhost:8080/ws/chat");
 //        config.addAllowedOrigin("https://instargram-clone-coding.vercel.app");
 
         // 특정 헤더를 클라이언트 측에서 꺼내어 사용할 수 있게 지정
