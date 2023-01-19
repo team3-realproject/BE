@@ -30,6 +30,7 @@ public class CommentResponseDto {
         this.profileImage = save.getUser().getProfileImage();
     }
 
+    
     public CommentResponseDto(Comment comment, boolean isLike, int likeCount, User author) {
         this.commentId = comment.getId();
         this.comment = comment.getComment();
