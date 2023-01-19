@@ -49,6 +49,7 @@ public class CalendarService {
         if (!user.getId().equals(work.getUser().getId())) {
             throw new IllegalArgumentException("본인아님");
         }
+
         List<String> workDays = Arrays.asList(requestDto.getWorkDay());
         workDays.forEach(workDay -> {
             LocalDate workDate = LocalDate.parse(workDay, DateTimeFormatter.ofPattern("yyyyMMdd"));

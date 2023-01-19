@@ -17,6 +17,7 @@ public class CommentResponseDto {
     private int commentLikeNum;
     private boolean isLikeComment;
     private LocalDateTime createAt;
+    private String profileImage;
 
     public CommentResponseDto(Comment save) {
         this.commentId = save.getId();
@@ -26,6 +27,7 @@ public class CommentResponseDto {
         this.commentLikeNum = 0;
         this.isLikeComment = false;
         this.createAt = save.getCreatedAt();
+        this.profileImage = save.getUser().getProfileImage();
     }
 
     public CommentResponseDto(Comment comment, boolean isLike, int likeCount, User author) {
@@ -36,5 +38,6 @@ public class CommentResponseDto {
         this.commentLikeNum = likeCount;
         this.isLikeComment = isLike;
         this.createAt = comment.getCreatedAt();
+        this.profileImage = author.getProfileImage();
     }
 }
