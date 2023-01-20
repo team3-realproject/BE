@@ -301,7 +301,7 @@ public class CalendarService {
             throw new RestApiException(CommonStatusCode.INVALID_USER_DELETE);
         }
         calendarRepository.deleteById(todoId);
-        return new ResponseEntity<>(new MsgResponseDto("근무지를 삭제하였습니다."), HttpStatus.OK);
+        return new ResponseEntity<>(new MsgResponseDto("근무를 삭제하였습니다."), HttpStatus.OK);
     }
 
     //수정겟요청

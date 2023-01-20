@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +28,10 @@ public class Work {
 
     @ManyToOne(fetch = FetchType.LAZY)
     User user;
+
+    @OneToMany(mappedBy = "work", cascade = CascadeType.REMOVE)
+    List<Calendar> calendar = new ArrayList<>();
+
 
     public Work(WorkRequestDto workRequestDto, User user) {
         this.placeName = workRequestDto.getPlaceName();
