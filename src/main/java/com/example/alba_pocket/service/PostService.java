@@ -8,6 +8,7 @@ import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.model.PostSearchKeyword;
+import com.example.alba_pocket.repository.CommentRepository;
 import com.example.alba_pocket.repository.LikesRepository;
 import com.example.alba_pocket.repository.PostRepository;
 import com.example.alba_pocket.repository.PostRepositoryImpl;
@@ -41,6 +42,7 @@ public class PostService {
     private final S3Uploader s3Uploader;
 
     private final PostRepositoryImpl postRepositoryImpl;
+    private final CommentRepository commentRepository;
 
     //작성
     @Transactional
@@ -62,7 +64,7 @@ public class PostService {
         return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
     }
 
-    //    무한스크롤 전체글조회
+    //    무한스크롤 게시글 카테고리별 조회
     @Transactional(readOnly = true)
     public ResponseEntity<?> categoryGetPosts(int page, int size, String category) {
         User user = SecurityUtil.getCurrentUser();
@@ -84,7 +86,8 @@ public class PostService {
             isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
         }
         int likeCount = likesRepository.countByPostId(post.getId());
-        return new ResponseEntity<>(new PostResponseDto(post, isLike, likeCount), HttpStatus.OK);
+        int commentCount = commentRepository.countByPostId(post.getId());
+        return new ResponseEntity<>(new PostResponseDto(post, isLike, likeCount, commentCount), HttpStatus.OK);
     }
     //수정
     @Transactional
@@ -100,7 +103,8 @@ public class PostService {
         post.update(requestDto);
         boolean isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
         int likeCount = likesRepository.countByPostId(post.getId());
-        return new ResponseEntity<>(new PostResponseDto(post, isLike, likeCount), HttpStatus.OK);
+        int commentCount = commentRepository.countByPostId(post.getId());
+        return new ResponseEntity<>(new PostResponseDto(post, isLike, likeCount, commentCount), HttpStatus.OK);
     }
     //삭제
     public ResponseEntity<?> deletePost(Long postId) {

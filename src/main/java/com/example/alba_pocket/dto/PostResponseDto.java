@@ -19,6 +19,7 @@ public class PostResponseDto {
     private int postLikeNum;
     private boolean isLikePost;
     private String category;
+    private int commentCount;
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
 
@@ -39,7 +40,7 @@ public class PostResponseDto {
     }
 
 
-    public PostResponseDto(Post post, boolean isLike, int likeCount) {
+    public PostResponseDto(Post post, boolean isLike, int likeCount, int commentCount) {
         this.postId = post.getId();
         this.profileImage = post.getUser().getProfileImage();
         this.userId = post.getUser().getUserId();
@@ -50,6 +51,7 @@ public class PostResponseDto {
         this.postLikeNum = likeCount;
         this.isLikePost = isLike;
         this.category = post.getCategory();
+        this.commentCount = commentCount;
         this.createAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
     }

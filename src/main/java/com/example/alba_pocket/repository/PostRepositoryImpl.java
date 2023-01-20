@@ -31,6 +31,7 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
     private final JPAQueryFactory queryFactory;
     private final LikesRepository likesRepository;
+    private final CommentRepository commentRepository;
 
 //    public  List<Post> search(PostSearchKeyword keyword)  {
 //        return queryFactory
@@ -68,7 +69,8 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 isLike = likesRepository.existsByUserIdAndPostId(user.getId(), findPost.getId());
             }
             int likeCount = likesRepository.countByPostId(findPost.getId());
-            postList.add(new PostResponseDto(findPost, isLike, likeCount));
+            int commentCount = commentRepository.countByPostId(findPost.getId());
+            postList.add(new PostResponseDto(findPost, isLike, likeCount, commentCount));
         }
         boolean hasNext = false;
         if (result.size() > pageable.getPageSize()) {
@@ -96,7 +98,8 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 isLike = likesRepository.existsByUserIdAndPostId(user.getId(), findPost.getId());
             }
             int likeCount = likesRepository.countByPostId(findPost.getId());
-            postList.add(new PostResponseDto(findPost, isLike, likeCount));
+            int commentCount = commentRepository.countByPostId(findPost.getId());
+            postList.add(new PostResponseDto(findPost, isLike, likeCount, commentCount));
         }
         boolean hasNext = false;
         if (result.size() > pageable.getPageSize()) {
