@@ -62,37 +62,14 @@ public class PostService {
         return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
     }
 
-//    //전체글조회
-//    @Transactional(readOnly = true)
-//    public ResponseEntity<?> getPosts() {
-//        User user = SecurityUtil.getCurrentUser();//로그인한유전데 로그인안했으면 null
-//        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
-//        return new ResponseEntity<>(posts.stream().map(post -> {
-//            boolean isLike = false;
-//            if(user != null){
-//                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
-//            }
-//            int likeCount = likesRepository.countByPostId(post.getId());
-//            return new PostResponseDto(post, isLike, likeCount);
-//        }).collect(Collectors.toList()), HttpStatus.OK);
-//    }
-
-
-    //카테고리검색
+    //    무한스크롤 전체글조회
     @Transactional(readOnly = true)
-    public ResponseEntity<?> categoryGetPosts(String category) {
+    public ResponseEntity<?> categoryGetPosts(int page, int size, String category) {
         User user = SecurityUtil.getCurrentUser();
-        List<Post> posts = postRepository.findAllByCategoryOrderByCreatedAtDesc(category);
-        return new ResponseEntity<>(posts.stream().map(post -> {
-            boolean isLike = false;
-            if(user != null) {
-                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
-            }
-            int likeCount = likesRepository.countByPostId(post.getId());
-            return new PostResponseDto(post, isLike, likeCount);
-        }).collect(Collectors.toList()), HttpStatus.OK);
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<PostResponseDto> postResponseDtos = postRepositoryImpl.scrollCategoryPost(pageable, user, category);
+        return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
     }
-
 
 
     //상세조회

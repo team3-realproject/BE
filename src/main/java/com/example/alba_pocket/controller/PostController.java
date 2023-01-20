@@ -46,8 +46,8 @@ public class PostController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<?> categoryGetPosts(@RequestParam String keyword){
-        return postService.categoryGetPosts(keyword);
+    public ResponseEntity<?> categoryGetPosts(@RequestParam int page, @RequestParam int size, @RequestParam String category){
+        return postService.categoryGetPosts(page, size, category);
     }
 
 

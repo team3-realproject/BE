@@ -78,6 +78,35 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
         return new SliceImpl<>(postList, pageable, hasNext);
     }
+
+    @Override
+    public Slice<PostResponseDto> scrollCategoryPost(Pageable pageable, User user, String category) {
+        List<Post> result = queryFactory
+                .selectFrom(post)
+                .where(post.category.eq(category))
+                .orderBy(post.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        List<PostResponseDto> postList = new ArrayList<>();
+        for (Post findPost : result) {
+            boolean isLike = false;
+            if (user != null) {
+                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), findPost.getId());
+            }
+            int likeCount = likesRepository.countByPostId(findPost.getId());
+            postList.add(new PostResponseDto(findPost, isLike, likeCount));
+        }
+        boolean hasNext = false;
+        if (result.size() > pageable.getPageSize()) {
+            postList.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(postList, pageable, hasNext);
+    }
+
     @Override
     public Page<Post> searchPage(PostSearchKeyword keyword, Pageable pageable) {
         List<Post> content = queryFactory // 페이징을 사용한 데이터 조회
