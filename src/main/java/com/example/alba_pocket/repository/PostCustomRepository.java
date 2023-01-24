@@ -20,7 +20,6 @@ public interface PostCustomRepository {
 
     Slice<PostResponseDto> scrollCategoryPost(Pageable pageable, User user, String category);
 
-    List<Post> search(PostSearchKeyword keyword);
-//    Page<Post> searchPage(PostSearchKeyword keyword, Pageable pageable);
+    Page<PostResponseDto> searchPage(PostSearchKeyword keyword, Pageable pageable);
 
 }

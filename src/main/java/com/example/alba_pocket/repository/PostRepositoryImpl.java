@@ -33,14 +33,14 @@ public class PostRepositoryImpl implements PostCustomRepository{
     private final LikesRepository likesRepository;
     private final CommentRepository commentRepository;
 
-    public  List<Post> search(PostSearchKeyword keyword)  {
-        return queryFactory
-                .selectFrom(post)
-                .where(      //where절의 특징으로 콤마(,)를 사용하면 and 조건으로 처리 된다. 만약 null이면 해당 조건은 제외 된다.
-                        titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
-                )
-                .fetch();
-    }
+//    public  List<Post> search(PostSearchKeyword keyword)  {
+//        return queryFactory
+//                .selectFrom(post)
+//                .where(      //where절의 특징으로 콤마(,)를 사용하면 and 조건으로 처리 된다. 만약 null이면 해당 조건은 제외 된다.
+//                        titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
+//                )
+//                .fetch();
+//    }
 
     //  BooleanExpression은 and, or 을 조합해서 새로운 BooleanExpression을 만들 수 있다.
    //  또한, 결과 값이 null일 경우 무시하기 때문에 npe를 방지할 수 있다
@@ -110,26 +110,31 @@ public class PostRepositoryImpl implements PostCustomRepository{
         return new SliceImpl<>(postList, pageable, hasNext);
     }
 
-//    @Override
-//    public Page<Post> searchPage(PostSearchKeyword keyword, Pageable pageable) {
-//        List<Post> content = queryFactory // 페이징을 사용한 데이터 조회
-//                .selectFrom(post)
-//                .where(
-//                        titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
-//                )
-//                .orderBy(post.createdAt.desc())
-//                .offset(pageable.getOffset()) //페이지 offset(0부터 시작)
-//                .limit(pageable.getPageSize()) //페이지 limit(페이지 사이즈)
-//                .fetch();
-//
-//        Long count = queryFactory //count 조회
-//                .select(post.count())
-//                .from(post)
-//                .where(
-//                        titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
-//                )
-//                .fetchOne();
-//
-//        return new PageImpl<>(content, pageable, count); //페이징과 관련된 정보 반환
-//    }
+    @Override
+    public Page<PostResponseDto> searchPage(PostSearchKeyword keyword, Pageable pageable) {
+        List<Post> content = queryFactory // 페이징을 사용한 데이터 조회
+                .selectFrom(post)
+                .where(
+                        titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
+                )
+                .orderBy(post.createdAt.desc())
+                .offset(pageable.getOffset()) //페이지 offset(0부터 시작)
+                .limit(pageable.getPageSize()) //페이지 limit(페이지 사이즈)
+                .fetch();
+
+        List<PostResponseDto> postList = new ArrayList<>();
+        for ( Post post : content) {
+            postList.add(new PostResponseDto(post));
+        }
+
+        Long count = queryFactory //count 조회
+                .select(post.count())
+                .from(post)
+                .where(
+                        titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
+                )
+                .fetchOne();
+
+        return new PageImpl<>(postList, pageable, count); //페이징과 관련된 정보 반환
+    }
 }

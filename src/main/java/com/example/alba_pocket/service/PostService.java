@@ -121,40 +121,19 @@ public class PostService {
 
 
 
-//    //게시글 검색
-//    @Transactional(readOnly = true)
-//    public ResponseEntity<?> searchPost(PostSearchKeyword keyword, int page, int size) {
-//        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
-//        if(keyword.getKeyword()=="") {
-//            return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
-//        }
-//
-//        Pageable pageable = PageRequest.of(page,size);
-//        Page<Post> postPage = postRepositoryImpl.searchPage(keyword, pageable);
-//
-//        for(Post post : postPage) {
-//            PostResponseDto postResponseDto = new PostResponseDto(post);
-//            postResponseDtoList.add(postResponseDto);
-//        }
-//        return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
-//    }
-
-
     //게시글 검색
     @Transactional(readOnly = true)
-    public ResponseEntity<?> search(PostSearchKeyword keyword) {
+    public ResponseEntity<?> searchPost(PostSearchKeyword keyword, int page, int size) {
         List<PostResponseDto> postResponseDtoList = new ArrayList<>();
         if(keyword.getKeyword()=="") {
             return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
         }
 
-        List<Post> postPage = postRepositoryImpl.search(keyword);
+        Pageable pageable = PageRequest.of(page,size);
+        Page<PostResponseDto> postPage = postRepositoryImpl.searchPage(keyword, pageable);
 
-        for(Post post : postPage) {
-            PostResponseDto postResponseDto = new PostResponseDto(post);
-            postResponseDtoList.add(postResponseDto);
-        }
-        return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
+        return new ResponseEntity<>(postPage, HttpStatus.OK);
     }
+
 }
 

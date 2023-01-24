@@ -52,13 +52,8 @@ public class PostController {
 
 
     //게시글 검색
-//    @GetMapping("/search")
-//    public ResponseEntity<?> searchPost(@RequestParam PostSearchKeyword keyword, @RequestParam int page, @RequestParam int size) {
-//        return postService.searchPost(keyword, page, size);
-//    }
-
     @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam PostSearchKeyword keyword) {
-        return postService.search(keyword);
+    public ResponseEntity<?> searchPost(@RequestParam PostSearchKeyword keyword, @RequestParam int page, @RequestParam int size) {
+        return postService.searchPost(keyword, page-1, size);
     }
 }
