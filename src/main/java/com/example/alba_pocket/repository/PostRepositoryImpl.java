@@ -130,7 +130,6 @@ public class PostRepositoryImpl implements PostCustomRepository{
             int likeCount = likesRepository.countByPostId(post.getId());
             int commentCount = commentRepository.countByPostId(post.getId());
             postList.add(new PostResponseDto(post, isLike, likeCount, commentCount));
-            postList.add(new PostResponseDto(post));
         }
 
         Long count = queryFactory //count 조회
