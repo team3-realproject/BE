@@ -128,9 +128,9 @@ public class PostService {
         if(keyword.getKeyword()=="") {
             return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
         }
-
+        User user = SecurityUtil.getCurrentUser();
         Pageable pageable = PageRequest.of(page,size);
-        Page<PostResponseDto> postPage = postRepositoryImpl.searchPage(keyword, pageable);
+        Page<PostResponseDto> postPage = postRepositoryImpl.searchPage(keyword, pageable, user);
 
         return new ResponseEntity<>(postPage, HttpStatus.OK);
     }
