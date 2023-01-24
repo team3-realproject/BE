@@ -111,7 +111,7 @@ public class PostRepositoryImpl implements PostCustomRepository{
     }
 
     @Override
-    public Page<PostResponseDto> searchPage(PostSearchKeyword keyword, Pageable pageable) {
+    public Page<PostResponseDto> searchPage(PostSearchKeyword keyword, Pageable pageable, User user) {
         List<Post> content = queryFactory // 페이징을 사용한 데이터 조회
                 .selectFrom(post)
                 .where(
@@ -124,6 +124,12 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
         List<PostResponseDto> postList = new ArrayList<>();
         for ( Post post : content) {
+            boolean isLike = false;
+            if(user!=null)
+                isLike = likesRepository.existsByUserIdAndPostId(user.getId(),post.getId());
+            int likeCount = likesRepository.countByPostId(post.getId());
+            int commentCount = commentRepository.countByPostId(post.getId());
+            postList.add(new PostResponseDto(post, isLike, likeCount, commentCount));
             postList.add(new PostResponseDto(post));
         }
 
