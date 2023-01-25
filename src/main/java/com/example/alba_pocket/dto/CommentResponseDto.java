@@ -31,14 +31,14 @@ public class CommentResponseDto {
     }
 
     
-    public CommentResponseDto(Comment comment, boolean isLike, int likeCount, User author) {
+    public CommentResponseDto(Comment comment, boolean isLike, int likeCount) {
         this.commentId = comment.getId();
         this.comment = comment.getComment();
         this.userId = comment.getUser().getUserId();
-        this.nickname = author.getNickname();
+        this.nickname = comment.getUser().getNickname();
         this.commentLikeNum = likeCount;
         this.isLikeComment = isLike;
         this.createAt = comment.getCreatedAt();
-        this.profileImage = author.getProfileImage();
+        this.profileImage = comment.getUser().getProfileImage();
     }
 }
