@@ -4,10 +4,8 @@ import com.example.alba_pocket.dto.PostRequestDto;
 import com.example.alba_pocket.model.PostSearchKeyword;
 import com.example.alba_pocket.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -20,15 +18,15 @@ public class PostController {
 
 
     @PostMapping
-    public ResponseEntity<?> createPost(@RequestPart(value = "file") MultipartFile file,
-                                        @RequestPart(value = "data") PostRequestDto requestDto) throws IOException {
-        return postService.createPost(file, requestDto);
+    public ResponseEntity<?> createPost(@ModelAttribute PostRequestDto requestDto) throws IOException {
+        return postService.createPost(requestDto);
     }
 
 //    @GetMapping
 //    public ResponseEntity<?> getPosts(){ return postService.getPosts(); }
     @GetMapping
-    public ResponseEntity<?> getPosts(@RequestParam int page, @RequestParam int size){ return postService.getPosts(page-1, size); }
+    public ResponseEntity<?> getPosts(@RequestParam int page, @RequestParam int size) {
+        return postService.getPosts(page-1, size); }
 
     @GetMapping("/{postId}")
     public ResponseEntity<?> getPost(@PathVariable Long postId){
@@ -36,7 +34,7 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto){
+    public ResponseEntity<?> updatePost(@PathVariable Long postId, @ModelAttribute PostRequestDto requestDto) throws IOException {
         return postService.updatePost(postId, requestDto);
     }
 

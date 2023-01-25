@@ -38,10 +38,21 @@ public class MyPageController {
         return myPageService.updateMypage(mypageAttributeRequestDto);
 
     }
+    @GetMapping("/mypage/like")
+    public ResponseEntity<?> likeMypage(@RequestParam int page, @RequestParam int size) {
+        return myPageService.likeMypage( page-1, size);
+    }
+
 
     @DeleteMapping("/mypage/comments")
     public ResponseEntity<?> deleteMypageComments(@RequestBody MypageDeleteRequestDto mypageDeleteRequestDto) {
         return myPageService.deleteMyPageComments(mypageDeleteRequestDto);
+    }
+
+
+    @GetMapping("/mypage/comments")
+    public ResponseEntity<?> commentMypage(@RequestParam int page, @RequestParam int size) {
+        return myPageService.commentMypage(page-1, size);
     }
 
 }
