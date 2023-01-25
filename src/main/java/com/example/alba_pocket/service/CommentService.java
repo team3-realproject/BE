@@ -81,11 +81,9 @@ public class CommentService {
             if(user != null) {
                 isLike = commentLikesRepository.existsByUserIdAndCommentId(user.getId(), comment.getId());
             }
-            User author = userRepository.findById(comment.getUser().getId()).orElseThrow(
-                    () -> new RestApiException(UserStatusCode.NO_USER)
-            );
+
             int likeCount = commentLikesRepository.countByCommentId(comment.getId());
-            return new CommentResponseDto(comment, isLike, likeCount, author);
+            return new CommentResponseDto(comment, isLike, likeCount);
         }).collect(Collectors.toList());
 
 

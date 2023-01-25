@@ -2,6 +2,7 @@ package com.example.alba_pocket.repository;
 
 
 import com.example.alba_pocket.dto.CommentResponseDto;
+import com.example.alba_pocket.dto.MypageCommentResponseDto;
 import com.example.alba_pocket.dto.PostResponseDto;
 import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.User;
@@ -38,6 +39,10 @@ public class PostRepositoryImpl implements PostCustomRepository{
     private final JPAQueryFactory queryFactory;
     private final LikesRepository likesRepository;
     private final CommentRepository commentRepository;
+
+    private final CommentLikesRepository commentLikesRepository;
+
+
 
 //    public  List<Post> search(PostSearchKeyword keyword)  {
 //        return queryFactory
@@ -186,39 +191,30 @@ public class PostRepositoryImpl implements PostCustomRepository{
     }
 
 
-    public Page<PostResponseDto> myCommentPostPage(User user, Pageable pageable) {
-        List<Long> commentPosts = queryFactory
-                .select(comment1.post.id)
-                .from(comment1)
+    public Page<MypageCommentResponseDto> myCommentPostPage(User user, Pageable pageable) {
+        List<Comment> userCommentPosts = queryFactory
+                .selectFrom(comment1)
                 .where(
-                        comment1.user.eq(user)
-                )
-                .orderBy(comment1.createdAt.desc())
-                .fetch();
-
-        List<Post> userCommentPosts = queryFactory
-                .selectFrom(post)
-                .where(
-                        post.id.in(commentPosts)
+                        comment1.user.id.eq(user.getId())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        List<PostResponseDto> postList = new ArrayList<>();
-        for ( Post post : userCommentPosts) {
-            int likeCount = likesRepository.countByPostId(post.getId());
-            int commentCount = commentRepository.countByPostId(post.getId());
-            postList.add(new PostResponseDto(post, true, likeCount, commentCount));
+        List<MypageCommentResponseDto> commentList = new ArrayList<>();
+        for ( Comment comment : userCommentPosts) {
+            int likeCount = commentLikesRepository.countByCommentId(comment.getId());
+            boolean isLikeComment = commentLikesRepository.existsByUserIdAndCommentId(user.getId(), comment.getId());
+            commentList.add(new MypageCommentResponseDto(comment, isLikeComment,likeCount) );
         }
 
         Long count = queryFactory //count 조회
-                .select(post.count())
-                .from(post)
+                .select(comment1.count())
+                .from(comment1)
                 .where(
-                        post.id.in(commentPosts)
+                        comment1.user.id.eq(user.getId())
                 )
                 .fetchOne();
-        return new PageImpl<>(postList, pageable, count);
+        return new PageImpl<>(commentList, pageable, count);
     }
 }

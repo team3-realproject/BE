@@ -103,7 +103,7 @@ public class MyPageService {
     public ResponseEntity<?> commentMypage(int page, int size) {
         User user = SecurityUtil.getCurrentUser();
         Pageable pageable = PageRequest.of(page, size);
-        Page<PostResponseDto> commentPage = postRepositoryImpl.myCommentPostPage(user, pageable);
+        Page<MypageCommentResponseDto> commentPage = postRepositoryImpl.myCommentPostPage(user, pageable);
         return new ResponseEntity<>(commentPage, HttpStatus.OK);
     }
 }

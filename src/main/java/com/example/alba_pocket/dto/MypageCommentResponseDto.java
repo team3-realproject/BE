@@ -1,15 +1,13 @@
 package com.example.alba_pocket.dto;
 
 import com.example.alba_pocket.entity.Comment;
-import com.example.alba_pocket.entity.User;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
-public class CommentResponseDto {
+public class MypageCommentResponseDto {
+    private String title;
     private Long commentId;
     private String comment;
     private String userId;
@@ -19,19 +17,9 @@ public class CommentResponseDto {
     private LocalDateTime createAt;
     private String profileImage;
 
-    public CommentResponseDto(Comment save) {
-        this.commentId = save.getId();
-        this.comment = save.getComment();
-        this.userId = save.getUser().getUserId();
-        this.nickname = save.getNickname();
-        this.commentLikeNum = 0;
-        this.isLikeComment = false;
-        this.createAt = save.getCreatedAt();
-        this.profileImage = save.getUser().getProfileImage();
-    }
 
-    
-    public CommentResponseDto(Comment comment, boolean isLike, int likeCount) {
+    public MypageCommentResponseDto(Comment comment, boolean isLike, int likeCount) {
+        this.title = comment.getPost().getTitle();
         this.commentId = comment.getId();
         this.comment = comment.getComment();
         this.userId = comment.getUser().getUserId();
