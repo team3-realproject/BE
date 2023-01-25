@@ -14,22 +14,18 @@ import com.example.alba_pocket.repository.PostRepository;
 import com.example.alba_pocket.repository.PostRepositoryImpl;
 import com.example.alba_pocket.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Page;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,11 +42,11 @@ public class PostService {
 
     //작성
     @Transactional
-    public ResponseEntity<?> createPost(MultipartFile file, PostRequestDto requestDto) throws IOException {
+    public ResponseEntity<?> createPost(PostRequestDto requestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
         String imgUrl = null;
-        if(!file.isEmpty()){
-            imgUrl = s3Uploader.upload(file, "files");
+        if(!requestDto.getFile().isEmpty()){
+            imgUrl = s3Uploader.upload(requestDto.getFile(), "files");
         }
         Post post = postRepository.saveAndFlush(new Post(requestDto, user, imgUrl));
         return new ResponseEntity<>(new PostResponseDto(post), HttpStatus.OK);
@@ -91,16 +87,21 @@ public class PostService {
     }
     //수정
     @Transactional
-    public ResponseEntity<?> updatePost(Long postId, PostRequestDto requestDto) {
+    public ResponseEntity<?> updatePost(Long postId, PostRequestDto requestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new RestApiException(CommonStatusCode.NO_ARTICLE)
         );
-
         if(!post.getUser().getUserId().equals(user.getUserId())){
             throw new RestApiException(CommonStatusCode.INVALID_USER_UPDATE);
         }
-        post.update(requestDto);
+        String imgUrl = null;
+        if(requestDto.getFile()!=null){
+            imgUrl = s3Uploader.upload(requestDto.getFile(), "files");
+        }
+
+
+        post.update(requestDto, imgUrl);
         boolean isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
         int likeCount = likesRepository.countByPostId(post.getId());
         int commentCount = commentRepository.countByPostId(post.getId());
