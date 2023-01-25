@@ -53,9 +53,10 @@ public class Post extends Timestamped{
 
 
 
-    public void update(PostRequestDto requestDto) {
+    public void update(PostRequestDto requestDto, String imgUrl) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
+        this.imgUrl = imgUrl;
     }
 }

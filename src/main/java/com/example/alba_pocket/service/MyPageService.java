@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -54,7 +53,6 @@ public class MyPageService {
         if(mypageAttributeRequestDto.getFile()!=null){
             imgUrl = s3Uploader.upload(mypageAttributeRequestDto.getFile(), "files");
         }
-
         if (imgUrl==null) {
             user.updateNickname(mypageAttributeRequestDto.getNickname());
         } else if (mypageAttributeRequestDto.getNickname()==null) {
