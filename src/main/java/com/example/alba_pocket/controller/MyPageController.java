@@ -1,6 +1,7 @@
 package com.example.alba_pocket.controller;
 
 import com.example.alba_pocket.dto.MypageAttributeRequestDto;
+import com.example.alba_pocket.dto.MypageDeleteRequestDto;
 import com.example.alba_pocket.dto.MypageReqeustDto;
 import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.User;
@@ -36,6 +37,11 @@ public class MyPageController {
     public ResponseEntity<?> updateMypage(@ModelAttribute MypageAttributeRequestDto mypageAttributeRequestDto) throws IOException{
         return myPageService.updateMypage(mypageAttributeRequestDto);
 
+    }
+
+    @DeleteMapping("/mypage/comments")
+    public ResponseEntity<?> deleteMypageComments(@RequestBody MypageDeleteRequestDto mypageDeleteRequestDto) {
+        return myPageService.deleteMyPageComments(mypageDeleteRequestDto);
     }
 
 }

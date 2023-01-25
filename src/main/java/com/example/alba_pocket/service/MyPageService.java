@@ -1,8 +1,11 @@
 package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.*;
+import com.example.alba_pocket.entity.Comment;
 import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.User;
+import com.example.alba_pocket.errorcode.CommonStatusCode;
+import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.repository.CommentRepository;
 import com.example.alba_pocket.repository.LikesRepository;
 import com.example.alba_pocket.repository.PostRepository;
@@ -69,4 +72,20 @@ public class MyPageService {
     }
 
 
+    @Transactional
+    public ResponseEntity<?> deleteMyPageComments(MypageDeleteRequestDto mypageDeleteRequestDto) {
+        User user = SecurityUtil.getCurrentUser();
+        for(Long commentId : mypageDeleteRequestDto.getCommentIdList()) {
+            Comment comment = commentRepository.findById(commentId).orElseThrow(
+                    () -> new RestApiException(CommonStatusCode.NO_COMMENT)
+            );
+            if(comment.getUser().getUserId()==user.getUserId()) {
+                commentRepository.deleteById(commentId);
+            } else {
+                throw new RestApiException(CommonStatusCode.INVALID_USER_DELETE);
+            }
+
+        }
+        return new ResponseEntity<>(new MsgResponseDto("댓글 삭제가 완료되었습니다."), HttpStatus.OK);
+    }
 }
