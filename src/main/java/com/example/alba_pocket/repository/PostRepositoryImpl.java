@@ -1,9 +1,12 @@
 package com.example.alba_pocket.repository;
 
 
+import com.example.alba_pocket.dto.CommentResponseDto;
 import com.example.alba_pocket.dto.PostResponseDto;
 import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.User;
+import com.example.alba_pocket.entity.Likes;
+import com.example.alba_pocket.entity.Comment;
 import com.example.alba_pocket.model.PostSearchKeyword;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -22,7 +25,10 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.alba_pocket.entity.QComment.comment1;
 import static com.example.alba_pocket.entity.QPost.post;
+import static com.example.alba_pocket.entity.QLikes.likes;
+
 
 
 @Repository
@@ -130,7 +136,6 @@ public class PostRepositoryImpl implements PostCustomRepository{
             int likeCount = likesRepository.countByPostId(post.getId());
             int commentCount = commentRepository.countByPostId(post.getId());
             postList.add(new PostResponseDto(post, isLike, likeCount, commentCount));
-            postList.add(new PostResponseDto(post));
         }
 
         Long count = queryFactory //count 조회
@@ -142,5 +147,78 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 .fetchOne();
 
         return new PageImpl<>(postList, pageable, count); //페이징과 관련된 정보 반환
+    }
+
+    public Page<PostResponseDto> myLikePostPage(User user, Pageable pageable) {
+        List<Long>  likePosts= queryFactory
+                .select(likes.post.id)
+                .from(likes)
+                .where(
+                        likes.userId.eq(user.getId())
+                )
+                .orderBy(likes.id.desc())
+                .fetch();
+
+        List<Post> userLikePosts = queryFactory
+                .selectFrom(post)
+                .where(
+                        post.id.in(likePosts)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<PostResponseDto> postList = new ArrayList<>();
+        for ( Post post : userLikePosts) {
+        int likeCount = likesRepository.countByPostId(post.getId());
+        int commentCount = commentRepository.countByPostId(post.getId());
+        postList.add(new PostResponseDto(post, true, likeCount, commentCount));
+        }
+
+        Long count = queryFactory //count 조회
+                .select(post.count())
+                .from(post)
+                .where(
+                       post.id.in(likePosts)
+                )
+                .fetchOne();
+        return new PageImpl<>(postList, pageable, count);
+    }
+
+
+    public Page<PostResponseDto> myCommentPostPage(User user, Pageable pageable) {
+        List<Long> commentPosts = queryFactory
+                .select(comment1.post.id)
+                .from(comment1)
+                .where(
+                        comment1.user.eq(user)
+                )
+                .orderBy(comment1.createdAt.desc())
+                .fetch();
+
+        List<Post> userCommentPosts = queryFactory
+                .selectFrom(post)
+                .where(
+                        post.id.in(commentPosts)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<PostResponseDto> postList = new ArrayList<>();
+        for ( Post post : userCommentPosts) {
+            int likeCount = likesRepository.countByPostId(post.getId());
+            int commentCount = commentRepository.countByPostId(post.getId());
+            postList.add(new PostResponseDto(post, true, likeCount, commentCount));
+        }
+
+        Long count = queryFactory //count 조회
+                .select(post.count())
+                .from(post)
+                .where(
+                        post.id.in(commentPosts)
+                )
+                .fetchOne();
+        return new PageImpl<>(postList, pageable, count);
     }
 }

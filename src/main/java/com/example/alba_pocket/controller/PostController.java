@@ -28,7 +28,8 @@ public class PostController {
 //    @GetMapping
 //    public ResponseEntity<?> getPosts(){ return postService.getPosts(); }
     @GetMapping
-    public ResponseEntity<?> getPosts(@RequestParam int page, @RequestParam int size){ return postService.getPosts(page-1, size); }
+    public ResponseEntity<?> getPosts(@RequestParam int page, @RequestParam int size) {
+        return postService.getPosts(page-1, size); }
 
     @GetMapping("/{postId}")
     public ResponseEntity<?> getPost(@PathVariable Long postId){
