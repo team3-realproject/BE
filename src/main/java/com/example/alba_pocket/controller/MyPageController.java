@@ -37,5 +37,13 @@ public class MyPageController {
         return myPageService.updateMypage(mypageAttributeRequestDto);
 
     }
+    @GetMapping("/mypage/like")
+    public ResponseEntity<?> likeMypage(@RequestParam int page, @RequestParam int size) {
+        return myPageService.likeMypage( page-1, size);
+    }
 
+    @GetMapping("/mypage/comment")
+    public ResponseEntity<?> commentMypage(@RequestParam int page, @RequestParam int size) {
+        return myPageService.commentMypage(page-1, size);
+    }
 }
