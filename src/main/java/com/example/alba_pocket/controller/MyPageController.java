@@ -24,14 +24,9 @@ public class MyPageController {
     private final MyPageService myPageService;
 
     @GetMapping("/mypage")
-    public ResponseEntity<?> getMypage() {
-        return myPageService.getMypage();
+    public ResponseEntity<?> getMypage(@RequestParam int page, @RequestParam int size) {
+        return myPageService.getMypage(page-1, size);
     }
-
-//    @PutMapping(value = "/mypage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-//    public ResponseEntity<?> updateMypage(@RequestPart(value = "file") MultipartFile file,
-//                                          @RequestPart MypageReqeustDto data) throws IOException {
-//    return myPageService.updateMypage(file, data);
 
     @PutMapping("/mypage")
     public ResponseEntity<?> updateMypage(@ModelAttribute MypageAttributeRequestDto mypageAttributeRequestDto) throws IOException{
