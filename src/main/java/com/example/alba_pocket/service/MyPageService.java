@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -36,19 +37,12 @@ public class MyPageService {
 
 
     @Transactional
-    public ResponseEntity<?> getMypage() {
+    public ResponseEntity<?> getMypage(int page, int size) {
         User user = SecurityUtil.getCurrentUser();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PostResponseDto> getMypage = postRepositoryImpl.getMyPage(user, pageable);
         MypageResponseDto mypageResponseDto = new MypageResponseDto(user);
-        List<Post> posts = postRepository.findByUserOrderByCreatedAt(user);
-        for (Post post : posts) {
-            boolean isLike = false;
-            if(user != null){
-                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
-            }
-            int likeCount = likesRepository.countByPostId(post.getId());
-            int commentCount = commentRepository.countByPostId(post.getId());
-            mypageResponseDto.addPost(new PostResponseDto(post, isLike, likeCount, commentCount));
-        }
+        mypageResponseDto.addPost(getMypage);
 
         return new ResponseEntity<>(mypageResponseDto, HttpStatus.OK);
     }

@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 @Getter
 public class MypageCommentResponseDto {
     private String title;
+
+    private Long postId;
     private Long commentId;
     private String comment;
     private String userId;
@@ -20,6 +22,7 @@ public class MypageCommentResponseDto {
 
     public MypageCommentResponseDto(Comment comment, boolean isLike, int likeCount) {
         this.title = comment.getPost().getTitle();
+        this.postId = comment.getPost().getId();
         this.commentId = comment.getId();
         this.comment = comment.getComment();
         this.userId = comment.getUser().getUserId();
