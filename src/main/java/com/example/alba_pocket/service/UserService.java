@@ -2,6 +2,7 @@ package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.*;
 import com.example.alba_pocket.entity.User;
+import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.jwt.JwtUtil;
@@ -26,6 +27,13 @@ public class UserService {
     @Transactional
     public ResponseEntity<?> signup(SignupRequestDto requestDto) {
         String password = passwordEncoder.encode(requestDto.getPassword());
+        if(userRepository.existsByUserId(requestDto.getUserId())) {
+            throw new RestApiException(UserStatusCode.OVERLAPPED_USERID);
+        }
+        if(userRepository.existsByNickname(requestDto.getNickname())) {
+            throw new RestApiException(UserStatusCode.OVERLAPPED_NICKNAME);
+        }
+
         User user = new User(requestDto, password);
         userRepository.saveAndFlush(user);
 
