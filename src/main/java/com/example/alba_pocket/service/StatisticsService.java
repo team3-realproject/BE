@@ -66,7 +66,9 @@ public class StatisticsService {
         List<LocalDate> earlys = new ArrayList<>();
         for (int i = 4; i >= 0; i--) {
             earlys.add(LocalDate.now().minusMonths(i));
-            statisticsMonthResponseDto.addCategory(LocalDate.now().minusMonths(i).getYear()+"-"+LocalDate.now().minusMonths(i).getMonthValue());
+            String year = String.valueOf(LocalDate.now().minusMonths(i).getYear());
+            String month =  LocalDate.now().minusMonths(i).getMonthValue()<10 ? "0"+LocalDate.now().minusMonths(i).getMonthValue() : ""+LocalDate.now().minusMonths(i).getMonthValue();
+            statisticsMonthResponseDto.addCategory(year+"-"+month);
         }
 
         for (Work work : workList) {
