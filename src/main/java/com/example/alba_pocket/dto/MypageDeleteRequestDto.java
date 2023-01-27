@@ -7,10 +7,6 @@ import lombok.Setter;
 @Getter
 public class MypageDeleteRequestDto {
 
-    private Data data;
+    private Long[] commentIdList;
 
-    @Getter
-    public static class Data{
-        private Long[] commentIdList;
-    }
 }

@@ -79,7 +79,7 @@ public class MyPageService {
     @Transactional
     public ResponseEntity<?> deleteMyPageComments(MypageDeleteRequestDto mypageDeleteRequestDto) {
         User user = SecurityUtil.getCurrentUser();
-        for (Long commentId : mypageDeleteRequestDto.getData().getCommentIdList()) {
+        for (Long commentId : mypageDeleteRequestDto.getCommentIdList()) {
             Comment comment = commentRepository.findById(commentId).orElseThrow(
                     () -> new RestApiException(CommonStatusCode.NO_COMMENT)
             );

@@ -75,7 +75,7 @@ public class CommentService {
     //댓글조회
     public List<CommentResponseDto> getComments(Long postId) {
         User user = SecurityUtil.getCurrentUser();
-        List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId);
+        List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtAsc(postId);
         return comments.stream().map(comment -> {
             boolean isLike = false;
             if(user != null) {

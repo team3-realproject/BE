@@ -11,7 +11,9 @@ import com.example.alba_pocket.entity.Likes;
 import com.example.alba_pocket.entity.Comment;
 import com.example.alba_pocket.model.PostSearchKeyword;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -157,20 +159,15 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
     @Override
     public Page<PostResponseDto> myLikePostPage(User user, Pageable pageable) {
-        List<Long>  likePosts= queryFactory
-                .select(likes.post.id)
-                .from(likes)
+        List<Post> userLikePosts = queryFactory
+                .select(post)
+                .from(post)
+                .join(likes)
+                .on(post.id.eq(likes.post.id))
                 .where(
                         likes.userId.eq(user.getId())
                 )
                 .orderBy(likes.id.desc())
-                .fetch();
-
-        List<Post> userLikePosts = queryFactory
-                .selectFrom(post)
-                .where(
-                        post.id.in(likePosts)
-                )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -186,7 +183,12 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 .select(post.count())
                 .from(post)
                 .where(
-                       post.id.in(likePosts)
+                       post.id.in(
+                               JPAExpressions
+                               .select(likes.post.id)
+                               .from(likes)
+                               .where(likes.userId.eq(user.getId()))
+                       )
                 )
                 .fetchOne();
         return new PageImpl<>(postList, pageable, count);
@@ -200,6 +202,7 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 .where(
                         comment1.user.id.eq(user.getId())
                 )
+                .orderBy(comment1.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
