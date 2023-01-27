@@ -32,7 +32,7 @@ public class StatisticsMonthResponseDto {
     @Setter
     @NoArgsConstructor
     public static class PlaceFiveMonthDto {
-        private String placeName;
+        private String name;
         List<Integer> data = new ArrayList<>();
 
         public void addData(int pay) {
@@ -40,7 +40,7 @@ public class StatisticsMonthResponseDto {
         }
 
         public PlaceFiveMonthDto(String placeName) {
-            this.placeName = placeName;
+            this.name = placeName;
         }
     }
 
