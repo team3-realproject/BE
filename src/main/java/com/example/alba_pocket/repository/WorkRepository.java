@@ -16,7 +16,6 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
     List<Work> findAllByUserId(Long user_id);
 
     boolean existsById(Long id);
-
 //    @Query(value = "select w.id as placeId, w.place_name as placeName, w.place_color as placeColor, sec_to_time(sum(time_to_sec(c.working_time))) as monthWorkTime " +
 //            "from work w " +
 //            "join calendar c on w.id=c.work_id " +
