@@ -5,10 +5,7 @@ import com.example.alba_pocket.dto.CommentResponseDto;
 import com.example.alba_pocket.dto.MypageCommentResponseDto;
 import com.example.alba_pocket.dto.MypageResponseDto;
 import com.example.alba_pocket.dto.PostResponseDto;
-import com.example.alba_pocket.entity.Post;
-import com.example.alba_pocket.entity.User;
-import com.example.alba_pocket.entity.Likes;
-import com.example.alba_pocket.entity.Comment;
+import com.example.alba_pocket.entity.*;
 import com.example.alba_pocket.model.PostSearchKeyword;
 
 import com.querydsl.core.types.Projections;
@@ -32,6 +29,7 @@ import java.util.List;
 import static com.example.alba_pocket.entity.QComment.comment1;
 import static com.example.alba_pocket.entity.QPost.post;
 import static com.example.alba_pocket.entity.QLikes.likes;
+import static com.example.alba_pocket.entity.QUser.user;
 
 
 
@@ -254,5 +252,53 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 .fetchOne();
         return new PageImpl<>(postList, pageable, count);
     }
+
+
+//    public Page<PostResponseDto> getMyPage(User user, Pageable pageable) {
+//        queryFactory
+//                .select(Projections.fields(
+//                        PostResponseDto.class,
+//                        post.id.as("postId"),
+//                        QUser.user.profileImage,
+//                        QUser.user.userId,
+//                        QUser.user.nickname,
+//                        post.title,
+//                        post.content,
+//                        post.imgUrl,
+//                        likes.count().as("postLikeNum"),
+//                        likes.count().gt(0).as("isLikePost")
+//
+//
+//
+//
+//                ))
+//                .from(post)
+//                .where(post.user.id.eq(user.getId()))
+//                .orderBy(post.createdAt.desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+//
+//        List<PostResponseDto> postList = new ArrayList<>();
+//
+//        for (Post post : getMyPost) {
+//            boolean isLike = false;
+//            if (user != null) {
+//                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
+//            }
+//            int likeCount = likesRepository.countByPostId(post.getId());
+//            int commentCount = commentRepository.countByPostId(post.getId());
+//            postList.add(new PostResponseDto(post, isLike, likeCount, commentCount));
+//        }
+//
+//        Long count = queryFactory //count 조회
+//                .select(post.count())
+//                .from(post)
+//                .where(
+//                        post.user.id.eq(user.getId())
+//                )
+//                .fetchOne();
+//        return new PageImpl<>(postList, pageable, count);
+//    }
 
 }
