@@ -50,3 +50,16 @@ $(function () {
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
 });
+
+
+export const instance = axios.create({
+    withCredentials: true,
+    baseURL: "https://jaeha.shop",
+    headers: {
+        "Authorization" : "토큰",
+        // "content-type": "application/json;charset=UTF-8",
+        //accept: "application/json,",
+        "Access-Control-Allow-Origin": "*",
+        //"Content-type": "application/json",
+    },
+});
