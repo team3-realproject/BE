@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class StatisticsResponseDto {
+    private String nickname;
     private List<String> labels = new ArrayList<>();
     private List<String> colors = new ArrayList<>();
     private List<Integer> series = new ArrayList<>();

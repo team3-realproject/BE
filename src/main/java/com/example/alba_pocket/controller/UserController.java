@@ -29,10 +29,10 @@ public class UserController {
 
 
     @PostMapping("/userid")
-    public ResponseEntity<?>  userCheck(@RequestBody UserIdCheckDto userIdCheckDto) { return userService.userIdCheck(userIdCheckDto); }
+    public ResponseEntity<?>  userCheck(@RequestBody @Valid UserIdCheckDto userIdCheckDto) { return userService.userIdCheck(userIdCheckDto); }
 
     @PostMapping("/nickname")
-    public ResponseEntity<?> nicknameCheck(@RequestBody NickNameCheckDto nickNameCheckDto) { return userService.nicknameCheck(nickNameCheckDto);}
+    public ResponseEntity<?> nicknameCheck(@RequestBody @Valid NickNameCheckDto nickNameCheckDto) { return userService.nicknameCheck(nickNameCheckDto);}
 
 
     @PostMapping("/login")

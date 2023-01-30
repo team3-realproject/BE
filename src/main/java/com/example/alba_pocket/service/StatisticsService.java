@@ -35,6 +35,7 @@ public class StatisticsService {
         List<Work> workList = workRepository.findByUser(user);
 
         StatisticsResponseDto statisticsResponseDto = new StatisticsResponseDto();
+        statisticsResponseDto.setNickname(user.getNickname());
         month += "01";
         for (Work work : workList) {
             LocalDate startDay = LocalDate.parse(month, DateTimeFormatter.ofPattern("yyyyMMdd"));
