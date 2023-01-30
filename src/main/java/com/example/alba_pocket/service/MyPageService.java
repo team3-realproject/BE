@@ -6,6 +6,7 @@ import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.User;
 
 import com.example.alba_pocket.errorcode.CommonStatusCode;
+import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.repository.*;
 
@@ -50,6 +51,11 @@ public class MyPageService {
     @Transactional
     public ResponseEntity<?> updateMypage(MypageAttributeRequestDto mypageAttributeRequestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
+        if(mypageAttributeRequestDto.getNickname()!=null) {
+            if(userRepository.existsByNickname(mypageAttributeRequestDto.getNickname())) {
+                throw new RestApiException(UserStatusCode.OVERLAPPED_NICKNAME);
+            }
+        }
         String imgUrl = null;
         if(mypageAttributeRequestDto.getFile()!=null){
             imgUrl = s3Uploader.upload(mypageAttributeRequestDto.getFile(), "files");
