@@ -2,6 +2,7 @@ package com.example.alba_pocket.controller;
 
 import com.example.alba_pocket.dto.ChatMessageRequestDto;
 import com.example.alba_pocket.service.ChatMessageService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class ChatMessageController {
 
     //  /pub/api/chat/message 요청처리 /sub
     @MessageMapping("/api/chat/message")
-    public void message(ChatMessageRequestDto message) {
+    public void message(ChatMessageRequestDto message) throws JsonProcessingException {
         log.info("-------  MessageMapping ----------");
         chatMessageService.message(message);
     }
