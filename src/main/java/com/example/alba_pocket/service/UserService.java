@@ -50,7 +50,7 @@ public class UserService {
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserId()));
 
-        return new ResponseEntity<>(new LoginResponseDto(user.getUserId()), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponseDto(user.getUserId(), user.getNickname()), HttpStatus.OK);
 
 
 

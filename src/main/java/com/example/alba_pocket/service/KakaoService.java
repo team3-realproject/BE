@@ -68,7 +68,7 @@ public class KakaoService {
 //
 //        UserInfoDto userInfoDto = new UserInfoDto(member,notificationNum);
 
-        return new ResponseEntity<>(new LoginResponseDto(user.getUserId()), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponseDto(user.getUserId(), user.getNickname()), HttpStatus.OK);
     }
 
     private void forceLoginUser(User user) {
