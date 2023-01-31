@@ -13,6 +13,9 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ChatMessageService {
@@ -34,7 +37,7 @@ public class ChatMessageService {
             ChatMessage chatMessage = new ChatMessage(message, user);
             chatMessageRepository.save(chatMessage);
         }
-        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        messagingTemplate.convertAndSend("/sub/api/chat/message/" + message.getRoomId(), message);
 
 
 
@@ -43,8 +46,8 @@ public class ChatMessageService {
 
     @Transactional
     public ResponseEntity<?> getMessage(String roomId) {
-        ChatMessage chatMessage = chatMessageRepository.findByRoomId(roomId);
-        return new ResponseEntity<>(new ChatResponseDto(chatMessage), HttpStatus.OK);
+        List<ChatMessage> chatMessage = chatMessageRepository.findAllByRoomId(roomId);
+        return new ResponseEntity<>(chatMessage.stream().map(ChatResponseDto::new).collect(Collectors.toList()), HttpStatus.OK);
 
     }
 }
