@@ -7,6 +7,13 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum CommonStatusCode implements StatusCode{
+
+    //문자열 체크
+    NOT_VALIDCONTENT("유효하지 않은 내용입니다.",HttpStatus.BAD_REQUEST.value()),
+    NOT_VALIDURL("유효하지 않은 URL입니다.",HttpStatus.BAD_REQUEST.value()),
+    //sse
+    NOT_EXIST_NOTIFICATION("존재하지 않는 알림입니다.",HttpStatus.NOT_FOUND.value()),
+
     OK("정상", HttpStatus.OK.value()),
     FILE_SAVE_FAIL("파일 저장에 실패하였습니다.", HttpStatus.BAD_REQUEST.value()),
     WRONG_IMAGE_FORMAT("지원하지 않는 파일 형식입니다.", HttpStatus.BAD_REQUEST.value()),
