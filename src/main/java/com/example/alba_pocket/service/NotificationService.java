@@ -16,6 +16,7 @@ import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.EmitterRepository;
 import com.example.alba_pocket.repository.EmitterRepositoryImpl;
 import com.example.alba_pocket.repository.NotificationRepository;
+import com.example.alba_pocket.security.SecurityUtil;
 import com.example.alba_pocket.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -36,9 +37,10 @@ public class NotificationService {
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
     private final NotificationRepository notificationRepository;
 
-    public SseEmitter subscribe(Long userId, String lastEventId) {
+    public SseEmitter subscribe(String lastEventId) {
+        User user=SecurityUtil.getCurrentUser();
         //emitter 하나하나 에 고유의 값을 주기 위해
-        String emitterId = makeTimeIncludeId(userId);
+        String emitterId = makeTimeIncludeId(user.getId());
 
         Long timeout = 60L * 1000L * 60L; // 1시간
         // 생성된 emiiterId를 기반으로 emitter를 저장
@@ -49,13 +51,13 @@ public class NotificationService {
         emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
 
         // 503 에러를 방지하기 위해 처음 연결 진행 시 더미 데이터를 전달
-        String eventId = makeTimeIncludeId(userId);
+        String eventId = makeTimeIncludeId(user.getId());
         // 수 많은 이벤트 들을 구분하기 위해 이벤트 ID에 시간을 통해 구분을 해줌
-        sendNotification(emitter, eventId, emitterId, "EventStream Created. [userId=" + userId + "]");
+        sendNotification(emitter, eventId, emitterId, "EventStream Created. [userId=" + user.getId() + "]");
 
         // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
         if (hasLostData(lastEventId)) {
-            sendLostData(lastEventId, userId, emitterId, emitter);
+            sendLostData(lastEventId, user.getId(), emitterId, emitter);
         }
 
         return emitter;
