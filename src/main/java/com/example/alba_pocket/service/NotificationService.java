@@ -130,17 +130,19 @@ public class NotificationService {
 
     //알림조회
     @Transactional
-    public List<NotificationDto> findAllNotifications(Long userId) {
-        List<Notification> notifications = notificationRepository.findAllByUserId(userId);
+    public List<NotificationDto> findAllNotifications() {
+        User user = SecurityUtil.getCurrentUser();
+        List<Notification> notifications = notificationRepository.findAllByUserId(user.getId());
         return notifications.stream()
                 .map(NotificationDto::create)
                 .collect(Collectors.toList());
     }
 
 
-    public NotificationCountDto countUnReadNotifications(Long userId) {
+    public NotificationCountDto countUnReadNotifications() {
+        User user = SecurityUtil.getCurrentUser();
         //유저의 알람리스트에서 ->isRead(false)인 갯수를 측정 ,
-        Long count = notificationRepository.countUnReadNotifications(userId);
+        Long count = notificationRepository.countUnReadNotifications(user.getId());
         return NotificationCountDto.builder()
                 .count(count)
                 .build();
@@ -157,8 +159,9 @@ public class NotificationService {
     }
 
     @Transactional
-    public void deleteAllByNotifications(UserDetailsImpl userDetails) {
-        Long receiverId = userDetails.getUser().getId();
+    public void deleteAllByNotifications() {
+        User user = SecurityUtil.getCurrentUser();
+        Long receiverId = user.getId();
         notificationRepository.deleteAllByReceiverId(receiverId);
 
     }

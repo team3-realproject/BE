@@ -32,8 +32,8 @@ public class NotificationController {
     }
     //알림조회
     @GetMapping(value = "/notifications")
-    public List<NotificationDto> findAllNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return notificationService.findAllNotifications(userDetails.getUser().getId());
+    public List<NotificationDto> findAllNotifications() {
+        return notificationService.findAllNotifications();
     }
 
     //전체목록 알림 조회에서 해당 목록 클릭 시 읽음처리 ,
@@ -44,15 +44,14 @@ public class NotificationController {
     }
     //알림 조회 - 구독자가 현재 읽지않은 알림 갯수
     @GetMapping(value = "/notifications/count")
-    public NotificationCountDto countUnReadNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return notificationService.countUnReadNotifications(userDetails.getUser().getId());
+    public NotificationCountDto countUnReadNotifications() {
+        return notificationService.countUnReadNotifications();
     }
 
     //알림 전체 삭제
     @DeleteMapping(value = "/notifications/delete")
-    public ResponseEntity<Object> deleteNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails){
-
-        notificationService.deleteAllByNotifications(userDetails);
+    public ResponseEntity<Object> deleteNotifications(){
+        notificationService.deleteAllByNotifications();
         return new ResponseEntity<>(new MsgResponseDto("알림 목록 전체삭제 성공"), HttpStatus.OK);
     }
     //단일 알림 삭제
