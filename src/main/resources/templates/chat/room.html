@@ -73,8 +73,10 @@
       enterRoom: function(roomId) {
         var sender = prompt('대화명을 입력해 주세요.');
         if(sender != "") {
+          //여기서세팅??
           localStorage.setItem('wschat.sender',sender);
           localStorage.setItem('wschat.roomId',roomId);
+          //여기서입장요청
           location.href="/chat/room/enter/"+roomId;
         }
       }

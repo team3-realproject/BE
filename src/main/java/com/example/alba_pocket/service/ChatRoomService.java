@@ -3,7 +3,7 @@ package com.example.alba_pocket.service;
 import com.example.alba_pocket.dto.RoomIdResponseDto;
 import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
-import com.example.alba_pocket.repository.ChatRoomRepository1;
+import com.example.alba_pocket.repository.ChatRoomRepository;
 import com.example.alba_pocket.repository.UserRepository;
 import com.example.alba_pocket.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ChatRoomService1 {
+public class ChatRoomService {
 
-    private final ChatRoomRepository1 chatRoomRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     private final UserRepository userRepository;
 

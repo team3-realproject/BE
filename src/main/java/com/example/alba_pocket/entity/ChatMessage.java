@@ -1,9 +1,11 @@
 package com.example.alba_pocket.entity;
 
+import com.example.alba_pocket.dto.ChatMessageRequestDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,10 +23,13 @@ public class ChatMessage {
 
     private String message;
 
+    private LocalDateTime createdAt;
 
-    public ChatMessage(com.example.alba_pocket.test11.ChatMessage message, User user) {
+
+    public ChatMessage(ChatMessageRequestDto message, User user) {
         this.roomId = message.getRoomId();
         this.message = message.getMessage();
         this.user = user;
+        this.createdAt = LocalDateTime.now();
     }
 }
