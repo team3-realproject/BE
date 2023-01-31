@@ -13,6 +13,5 @@ public class LoginResponseDto {
     public LoginResponseDto(String userId, String nickname) {
         this.userId = userId;
         this.nickname = nickname;
-
     }
 }
