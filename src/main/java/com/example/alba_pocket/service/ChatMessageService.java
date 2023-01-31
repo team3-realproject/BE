@@ -37,7 +37,7 @@ public class ChatMessageService {
             ChatMessage chatMessage = new ChatMessage(message, user);
             chatMessageRepository.save(chatMessage);
         }
-        messagingTemplate.convertAndSend("/sub/api/chat/message/" + message.getRoomId(), message);
+        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
 
 
 
