@@ -33,10 +33,4 @@ public class ChatMessage {
         this.createdAt = LocalDateTime.now();
     }
 
-    public ChatMessage(com.example.alba_pocket.test11.ChatMessage message, User user) {
-        this.roomId = message.getRoomId();
-        this.message = message.getMessage();
-        this.user = user;
-        this.createdAt = LocalDateTime.now();
-    }
 }
