@@ -43,13 +43,13 @@ public class ChatRepositoryImpl implements ChatCustomRepository{
                         QUser.user.nickname,
                         QUser.user.profileImage,
                         chatMessage.message,
-                        chatMessage.createdAt.max())
+                        chatMessage.createdAt.max().as("createdAt"))
                 ).from(chatRoom)
-                .join(QUser.user)
-                .on(chatRoom.toUser.id.eq(QUser.user.id))
-                .join(chatMessage)
+                .leftJoin(chatMessage)
+                .on(chatRoom.roomId.eq(chatMessage.roomId))
+                .leftJoin(chatMessage)
                 .on(chatRoom.toUser.id.eq(chatMessage.user.id))
-                .where(chatMessage.user.id.eq(user.getId()))
+                .where(chatRoom.user.id.eq(user.getId()))
                 .groupBy(QUser.user.nickname)
                 .fetch();
         return chatRoomList;

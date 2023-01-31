@@ -26,15 +26,14 @@ public class NotificationController {
     // 전달받은 마지막 ID 값을 넘겨 그 이후의 데이터[ 받지 못한 데이터 ]부터 받을 수 있게 한다
 
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
-    public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "")
+    public SseEmitter subscribe(@RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "")
                                 String lastEventId) {
-        return notificationService.subscribe(userDetails.getUser().getId(),lastEventId);
+        return notificationService.subscribe(lastEventId);
     }
     //알림조회
     @GetMapping(value = "/notifications")
-    public List<NotificationDto> findAllNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return notificationService.findAllNotifications(userDetails.getUser().getId());
+    public List<NotificationDto> findAllNotifications() {
+        return notificationService.findAllNotifications();
     }
 
     //전체목록 알림 조회에서 해당 목록 클릭 시 읽음처리 ,
@@ -45,15 +44,14 @@ public class NotificationController {
     }
     //알림 조회 - 구독자가 현재 읽지않은 알림 갯수
     @GetMapping(value = "/notifications/count")
-    public NotificationCountDto countUnReadNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return notificationService.countUnReadNotifications(userDetails.getUser().getId());
+    public NotificationCountDto countUnReadNotifications() {
+        return notificationService.countUnReadNotifications();
     }
 
     //알림 전체 삭제
     @DeleteMapping(value = "/notifications/delete")
-    public ResponseEntity<Object> deleteNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails){
-
-        notificationService.deleteAllByNotifications(userDetails);
+    public ResponseEntity<Object> deleteNotifications(){
+        notificationService.deleteAllByNotifications();
         return new ResponseEntity<>(new MsgResponseDto("알림 목록 전체삭제 성공"), HttpStatus.OK);
     }
     //단일 알림 삭제
