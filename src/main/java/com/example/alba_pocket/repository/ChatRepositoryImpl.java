@@ -45,8 +45,8 @@ public class ChatRepositoryImpl implements ChatCustomRepository{
                         chatMessage.message,
                         chatMessage.createdAt.max().as("createdAt"))
                 ).from(chatRoom)
-                .leftJoin(QUser.user)
-                .on(chatRoom.toUser.id.eq(QUser.user.id))
+                .leftJoin(chatMessage)
+                .on(chatRoom.roomId.eq(chatMessage.roomId))
                 .leftJoin(chatMessage)
                 .on(chatRoom.toUser.id.eq(chatMessage.user.id))
                 .where(chatRoom.user.id.eq(user.getId()))
