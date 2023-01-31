@@ -17,6 +17,7 @@ public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
 
+    //  /pub/api/chat/message 요청처리 /sub
     @MessageMapping("/message")
     public void message(ChatMessageRequestDto message) {
         chatMessageService.message(message);
