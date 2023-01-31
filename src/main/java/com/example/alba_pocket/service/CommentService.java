@@ -9,6 +9,7 @@ import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
+import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.CommentLikesRepository;
 import com.example.alba_pocket.repository.CommentRepository;
 import com.example.alba_pocket.repository.PostRepository;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +33,8 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CommentLikesRepository commentLikesRepository;
 
+    private final NotificationService notificationService;
+
     //댓글작성
     @Transactional
     public ResponseEntity<?> createComment(Long postId, CommentRequestDto requestDto) {
@@ -40,6 +44,15 @@ public class CommentService {
         );
         Comment save = new Comment(user, post, requestDto);
         commentRepository.saveAndFlush(save);
+        //해당 댓글로 이동하는 url
+        String Url = "https://.alba-pocket-tak3.vercel.app/board"+post.getId();
+        //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
+        String content = post.getUser().getNickname()+"님! 게시글에 댓글 알림이 도착했어요!";
+
+        //본인의 게시글에 댓글을 남길때는 알림을 보낼 필요가 없다.
+        if(!Objects.equals(SecurityUtil.getCurrentUser().getId(), post.getUser().getId())) {
+            notificationService.send(post.getUser(), NotificationType.REPLY, content, Url);
+        }
         return new ResponseEntity<>(new CommentResponseDto(save), HttpStatus.OK);
     }
 
@@ -88,4 +101,6 @@ public class CommentService {
 
 
     }
+
+
 }
