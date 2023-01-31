@@ -7,7 +7,7 @@ package com.example.alba_pocket.service;
  */
 
 import com.example.alba_pocket.dto.NotificationCountDto;
-import com.example.alba_pocket.dto.NotificationDto;
+import com.example.alba_pocket.dto.NotificationResponseDto;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
@@ -16,8 +16,8 @@ import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.EmitterRepository;
 import com.example.alba_pocket.repository.EmitterRepositoryImpl;
 import com.example.alba_pocket.repository.NotificationRepository;
+import com.example.alba_pocket.repository.UserRepository;
 import com.example.alba_pocket.security.SecurityUtil;
-import com.example.alba_pocket.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -36,11 +36,16 @@ import java.util.stream.Collectors;
 public class NotificationService {
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
     private final NotificationRepository notificationRepository;
+    private final UserRepository userRepository;
 
     public SseEmitter subscribe(String lastEventId) {
         User user=SecurityUtil.getCurrentUser();
+        User user1 = userRepository.findByNickname("수민1123").orElse(new User());
+        if(user.getId() == null){
+            throw new IllegalArgumentException("유저정보없음");
+        }
         //emitter 하나하나 에 고유의 값을 주기 위해
-        String emitterId = makeTimeIncludeId(user.getId());
+        String emitterId = makeTimeIncludeId(user.getId(),user1.getId());
 
         Long timeout = 60L * 1000L * 60L; // 1시간
         // 생성된 emiiterId를 기반으로 emitter를 저장
@@ -51,7 +56,7 @@ public class NotificationService {
         emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
 
         // 503 에러를 방지하기 위해 처음 연결 진행 시 더미 데이터를 전달
-        String eventId = makeTimeIncludeId(user.getId());
+        String eventId = makeTimeIncludeId(user.getId(), user1.getId());
         // 수 많은 이벤트 들을 구분하기 위해 이벤트 ID에 시간을 통해 구분을 해줌
         sendNotification(emitter, eventId, emitterId, "EventStream Created. [userId=" + user.getId() + "]");
 
@@ -67,7 +72,7 @@ public class NotificationService {
     // SseEmitter를 구분 -> 구분자로 시간을 사용함 ,
     // 시간을 붙혀주는 이유 -> 브라우저에서 여러개의 구독을 진행 시
     //탭 마다 SssEmitter 구분을 위해 시간을 붙여 구분하기 위해 아래와 같이 진행
-    private String makeTimeIncludeId(Long userId) {
+    private String makeTimeIncludeId(Long userId, Long id) {
         return userId + "_" + System.currentTimeMillis();
     }
 
@@ -112,7 +117,7 @@ public class NotificationService {
         emitters.forEach(
                 (key, emitter) -> {
                     emitterRepository.saveEventCache(key, notification);
-                    sendNotification(emitter, eventId, key, NotificationDto.create(notification));
+                    sendNotification(emitter, eventId, key, NotificationResponseDto.create(notification));
                 }
         );
 
@@ -130,11 +135,11 @@ public class NotificationService {
 
     //알림조회
     @Transactional
-    public List<NotificationDto> findAllNotifications() {
+    public List<NotificationResponseDto> findAllNotifications() {
         User user = SecurityUtil.getCurrentUser();
         List<Notification> notifications = notificationRepository.findAllByUserId(user.getId());
         return notifications.stream()
-                .map(NotificationDto::create)
+                .map(NotificationResponseDto::create)
                 .collect(Collectors.toList());
     }
 

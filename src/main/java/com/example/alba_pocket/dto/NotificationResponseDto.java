@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class NotificationDto {
+public class NotificationResponseDto {
 
 
     private Long id;
@@ -22,8 +22,8 @@ public class NotificationDto {
     private Boolean status;
 
 
-    public static NotificationDto create(Notification notification) {
-        return new NotificationDto(notification.getId(), notification.getContent(),
+    public static NotificationResponseDto create(Notification notification) {
+        return new NotificationResponseDto(notification.getId(), notification.getContent(),
                 notification.getUrl(), notification.getIsRead());
     }
 }

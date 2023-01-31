@@ -2,13 +2,11 @@ package com.example.alba_pocket.controller;
 
 import com.example.alba_pocket.dto.MsgResponseDto;
 import com.example.alba_pocket.dto.NotificationCountDto;
-import com.example.alba_pocket.dto.NotificationDto;
-import com.example.alba_pocket.security.UserDetailsImpl;
+import com.example.alba_pocket.dto.NotificationResponseDto;
 import com.example.alba_pocket.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -32,7 +30,7 @@ public class NotificationController {
     }
     //알림조회
     @GetMapping(value = "/notifications")
-    public List<NotificationDto> findAllNotifications() {
+    public List<NotificationResponseDto> findAllNotifications() {
         return notificationService.findAllNotifications();
     }
 
