@@ -1,8 +1,11 @@
 package com.example.alba_pocket.service;
 
+import com.example.alba_pocket.dto.ChatRoomListResponseDto;
 import com.example.alba_pocket.dto.RoomIdResponseDto;
 import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
+import com.example.alba_pocket.repository.ChatCustomRepository;
+import com.example.alba_pocket.repository.ChatRepositoryImpl;
 import com.example.alba_pocket.repository.ChatRoomRepository;
 import com.example.alba_pocket.repository.UserRepository;
 import com.example.alba_pocket.security.SecurityUtil;
@@ -24,6 +27,7 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
 
     private final UserRepository userRepository;
+    private final ChatRepositoryImpl chatRepositoryImpl;
 
 
 
@@ -64,6 +68,8 @@ public class ChatRoomService {
 
     public ResponseEntity<?> getRoomList() {
         User user = SecurityUtil.getCurrentUser();
+//        List<ChatRoomListResponseDto> chatRoomList = chatRepositoryImpl.chatRoomList(user);
+//        return new ResponseEntity<>(chatRoomList, HttpStatus.OK);
         List<ChatRoom> roomLists = chatRoomRepository.findAllByUserId(user.getId());
         return new ResponseEntity<>(roomLists.stream().map(RoomIdResponseDto::new).collect(Collectors.toList()), HttpStatus.OK);
     }
