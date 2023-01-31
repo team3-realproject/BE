@@ -61,10 +61,6 @@ public class ChatRoomService1 {
     }
 
 
-    public ResponseEntity<?> testRoom() {
-
-        return null;
-    }
 
     public ResponseEntity<?> getRoomList() {
         User user = SecurityUtil.getCurrentUser();

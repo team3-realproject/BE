@@ -21,10 +21,6 @@ public class ChatRoomController1 {
         return chatRoomService.createRoom(nickname);
     }
 
-    @PostMapping("/test")
-    public ResponseEntity<?> testRoom(){
-        return chatRoomService.testRoom();
-    }
 
     @GetMapping("/rooms")
     public ResponseEntity<?> getRoomList(){
