@@ -4,10 +4,7 @@ import com.example.alba_pocket.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -27,6 +24,11 @@ public class ChatRoomController {
         return chatRoomService.getRoomList();
     }
 
+    //채팅방나가기
+    @DeleteMapping("/rooms/{roomId}")
+    public ResponseEntity<?> deleteRooms(@PathVariable String roomId){
+        return chatRoomService.deleteRooms(roomId);
+    }
 
 
 }

@@ -67,4 +67,12 @@ public class ChatRoomService {
         List<ChatRoom> roomLists = chatRoomRepository.findAllByUserId(user.getId());
         return new ResponseEntity<>(roomLists.stream().map(RoomIdResponseDto::new).collect(Collectors.toList()), HttpStatus.OK);
     }
+
+    public ResponseEntity<?> deleteRooms(String roomId) {
+        User user = SecurityUtil.getCurrentUser();
+
+
+
+        return null;
+    }
 }
