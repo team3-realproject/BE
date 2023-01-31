@@ -9,14 +9,16 @@ import lombok.NoArgsConstructor;
 public class ChatResponseDto {
 
     private String message;
-    private String nickname;
-    private String profileImage;
+    private String name;
+//    private String nickname;
+//    private String profileImage;
 
 
     public ChatResponseDto(ChatMessage chatMessage) {
         this.message = chatMessage.getMessage();
-        this.nickname = chatMessage.getUser().getNickname();
-        this.profileImage = chatMessage.getUser().getProfileImage();
+//        this.nickname = chatMessage.getUser().getNickname();
+//        this.profileImage = chatMessage.getUser().getProfileImage();
+        this.name = chatMessage.getUser().getNickname();
 
     }
 }
