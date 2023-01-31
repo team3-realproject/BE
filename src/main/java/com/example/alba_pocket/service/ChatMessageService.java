@@ -24,7 +24,7 @@ public class ChatMessageService {
 
     @Transactional
     public void message(ChatMessageRequestDto message) {
-        User user = userRepository.findByNickname("testuser").orElse(new User());
+        User user = userRepository.findByNickname("").orElse(new User());
         if (ChatMessageRequestDto.MessageType.ENTER.equals(message.getType())){
             message.setMessage(message.getSender() + "님이 입장하셨습니다.");
 //            ChatMessage chatMessage = chatMessageRepository.findByRoomId(message.getRoomId());
@@ -35,6 +35,8 @@ public class ChatMessageService {
             chatMessageRepository.save(chatMessage);
         }
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+
+
 
 //        return new ResponseEntity<>("", HttpStatus.OK);
     }
