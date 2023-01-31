@@ -8,8 +8,11 @@ import lombok.NoArgsConstructor;
 public class LoginResponseDto {
 
     String userId;
+    String nickname;
 
-    public LoginResponseDto(String userId) {
+    public LoginResponseDto(String userId, String nickname) {
         this.userId = userId;
+        this.nickname = nickname;
+
     }
 }
