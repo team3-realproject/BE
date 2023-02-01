@@ -115,6 +115,7 @@ public class PostService {
         return new ResponseEntity<>(new PostResponseDto(post, isLike, likeCount, commentCount), HttpStatus.OK);
     }
     //삭제
+    @Transactional
     public ResponseEntity<?> deletePost(Long postId) {
         User user = SecurityUtil.getCurrentUser();
         Post post = postRepository.findById(postId).orElseThrow(

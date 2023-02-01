@@ -66,6 +66,7 @@ public class ChatRoomService {
 
 
 
+    @Transactional
     public ResponseEntity<?> getRoomList() {
         User user = SecurityUtil.getCurrentUser();
 //        List<ChatRoomListResponseDto> chatRoomList = chatRepositoryImpl.chatRoomList(user);
@@ -74,6 +75,7 @@ public class ChatRoomService {
         return new ResponseEntity<>(roomLists.stream().map(RoomIdResponseDto::new).collect(Collectors.toList()), HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<?> deleteRooms(String roomId) {
         User user = SecurityUtil.getCurrentUser();
 
