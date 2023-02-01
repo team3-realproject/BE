@@ -45,10 +45,12 @@ public class PostService {
     public ResponseEntity<?> createPost(PostRequestDto requestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
         String imgUrl = null;
-        if(!requestDto.getFile().isEmpty()){
+        if(requestDto.getFile()!=null){
             imgUrl = s3Uploader.upload(requestDto.getFile(), "files");
         }
+
         Post post = postRepository.saveAndFlush(new Post(requestDto, user, imgUrl));
+
         return new ResponseEntity<>(new PostResponseDto(post), HttpStatus.OK);
     }
 //    무한스크롤 전체글조회
@@ -99,9 +101,14 @@ public class PostService {
         if(requestDto.getFile()!=null){
             imgUrl = s3Uploader.upload(requestDto.getFile(), "files");
         }
+        if(imgUrl==null && requestDto.getIsDelete().equals("true")) {
+            post.update(requestDto, imgUrl);
+        } else if(imgUrl==null) {
+            post.contentUpdate(requestDto);
+        } else {
+            post.update(requestDto, imgUrl);
+        }
 
-
-        post.update(requestDto, imgUrl);
         boolean isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
         int likeCount = likesRepository.countByPostId(post.getId());
         int commentCount = commentRepository.countByPostId(post.getId());
