@@ -2,18 +2,11 @@ package com.example.alba_pocket.controller;
 
 import com.example.alba_pocket.dto.MypageAttributeRequestDto;
 import com.example.alba_pocket.dto.MypageDeleteRequestDto;
-import com.example.alba_pocket.dto.MypageReqeustDto;
-import com.example.alba_pocket.entity.Post;
-import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.service.MyPageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController

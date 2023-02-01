@@ -7,6 +7,7 @@ import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.repository.ChatMessageRepository;
 import com.example.alba_pocket.repository.UserRepository;
 import com.example.alba_pocket.security.SecurityUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,8 @@ public class ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
 
-    @Transactional
-    public void message(ChatMessageRequestDto message) {
+
+    public void message(ChatMessageRequestDto message) throws JsonProcessingException {
         User user = SecurityUtil.getCurrentUser();
         log.info("-------  service넘어옴 ----------");
         if (ChatMessageRequestDto.MessageType.ENTER.equals(message.getType())){
