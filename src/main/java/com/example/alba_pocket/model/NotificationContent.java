@@ -15,7 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor
 public class NotificationContent {
 
-    private static final int Max_LENGTH = 50;
+    private static final int Max_LENGTH = 80;
 
     @Column(nullable = false,length = Max_LENGTH)
     private String content;
