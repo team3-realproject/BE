@@ -24,8 +24,9 @@ public class User extends Timestamped{
     @Column(nullable = false, unique = true)
     private String nickname;
 
+//    "https://wooo96bucket.s3.ap-northeast-2.amazonaws.com/static/Default_pfp.jpg"
     @Column
-    private String profileImage="https://wooo96bucket.s3.ap-northeast-2.amazonaws.com/static/Default_pfp.jpg";
+    private String profileImage="https://alba-pocket.s3.ap-northeast-2.amazonaws.com/files/Group%20260%20%281%29.svg";
 
     public User(SignupRequestDto requestDto, String password) {
         this.userId = requestDto.getUserId();

@@ -29,8 +29,8 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
 
 
-    public void message(ChatMessageRequestDto message) throws JsonProcessingException {
-        User user = userRepository.findByNickname("수민1123").orElse(new User());
+    public void message(ChatMessageRequestDto message, String myNickName) throws JsonProcessingException {
+        User user = userRepository.findByNickname(myNickName).orElse(new User());
         if(user.getId() == null){
             throw new IllegalArgumentException("유저정보없음");
         }
@@ -63,4 +63,6 @@ public class ChatMessageService {
         return new ResponseEntity<>(chatMessage.stream().map(ChatResponseDto::new).collect(Collectors.toList()), HttpStatus.OK);
 
     }
+
+
 }

@@ -4,20 +4,24 @@ import com.example.alba_pocket.entity.ChatMessage;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 public class ChatResponseDto {
 
     private String message;
 
-    private String nickname;
+    private String sender;//닉네임
     private String profileImage;
+    private LocalDateTime createdAt;
 
 
     public ChatResponseDto(ChatMessage chatMessage) {
         this.message = chatMessage.getMessage();
-        this.nickname = chatMessage.getUser().getNickname();
+        this.sender = chatMessage.getUser().getNickname();
         this.profileImage = chatMessage.getUser().getProfileImage();
+        this.createdAt = chatMessage.getCreatedAt();
 
     }
 
