@@ -1,9 +1,11 @@
 package com.example.alba_pocket.service;
 
+import com.example.alba_pocket.dto.CommentCreateResponseDto;
 import com.example.alba_pocket.dto.MsgResponseDto;
 import com.example.alba_pocket.entity.*;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
+import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.CommentLikesRepository;
 import com.example.alba_pocket.repository.CommentRepository;
 import com.example.alba_pocket.repository.LikesRepository;
@@ -14,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +32,8 @@ public class LikesService {
 
     private final CommentLikesRepository commentLikesRepository;
 
+    private final NotificationService notificationService;
+
     @Transactional
     public ResponseEntity<?> postLike(Long postId) {
         User user = SecurityUtil.getCurrentUser();
@@ -35,6 +42,14 @@ public class LikesService {
         );
         Likes like = likesRepository.findByUserIdAndPostId(user.getId(), post.getId()).orElse(new Likes());
 
+        String Url =  "http://localhost:3000/post/"+post.getId();
+
+        String content = post.getUser().getNickname()+"님! 게시글에 좋아요 알림이 도착했어요!"+user.getNickname()+"님이 게시글에 좋아요을 눌렀습니다!";
+
+        //본인의 게시글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
+        if(!Objects.equals(user.getId(), post.getUser().getId())) {
+            notificationService.send(post.getUser(), NotificationType.POSTLIKE, content, Url);
+        }
         if(like.getId() == null){
             Likes likes = new Likes(user, post);
             likesRepository.save(likes);
@@ -43,6 +58,7 @@ public class LikesService {
             likesRepository.deleteById(like.getId());
             return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.POST_LIKE_CANCEL), HttpStatus.OK);
         }
+
 
     }
     @Transactional
@@ -53,6 +69,14 @@ public class LikesService {
         );
         CommentLikes commentLikes = commentLikesRepository.findByUserIdAndCommentId(user.getId(), comment.getId()).orElse(new CommentLikes());
 
+        String Url =  "http://localhost:3000/post/"+comment.getPost().getId();
+
+        String content = comment.getPost().getUser().getNickname()+"님! 댓글에 좋아요 알림이 도착했어요!"+user.getNickname()+"님이 댓글에 좋아요을 눌렀습니다!";
+
+        //본인의 게시글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
+        if(!Objects.equals(user.getId(), comment.getPost().getUser().getId())) {
+            notificationService.send(comment.getPost().getUser(), NotificationType.COMMENTLIKE, content, Url);
+        }
         if(commentLikes.getId() == null){
             CommentLikes commentLike = new CommentLikes(user, comment);
             commentLikesRepository.save(commentLike);
