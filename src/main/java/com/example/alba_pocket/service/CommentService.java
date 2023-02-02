@@ -54,9 +54,10 @@ public class CommentService {
         List<Comment> findCommentByPost = commentRepository.findAllByPostAndUser(post, user);
         Long commentId = findCommentByPost.get(findCommentByPost.size() - 1).getId();
         //해당 댓글로 이동하는 url
-        String Url = "http://localhost:3000/post/"+post.getId();
+//        String Url = "http://localhost:3000/post/"+post.getId();
+        String Url = "https://https://alba-pocket-tak3.vercel.app:3000/post/"+post.getId();
         //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
-        String content = post.getUser().getNickname()+"님! "+user.getNickname()+"님이 게시글에 댓글을 작성했습니다.!";
+        String content = post.getUser().getNickname()+"님! "+user.getNickname()+"님이 게시글에 댓글을 작성했습니다!";
 
         //본인의 게시글에 댓글을 남길때는 알림을 보낼 필요가 없다.
         if(!Objects.equals(SecurityUtil.getCurrentUser().getId(), post.getUser().getId())) {
