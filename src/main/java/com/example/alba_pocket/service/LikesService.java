@@ -73,7 +73,7 @@ public class LikesService {
 
         String content = comment.getPost().getUser().getNickname()+"님! "+user.getNickname()+"님이 댓글에 좋아요을 눌렀습니다!";
 
-        //본인의 게시글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
+        //본인의 댓글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
         if(!Objects.equals(user.getId(), comment.getPost().getUser().getId())) {
             notificationService.send(comment.getPost().getUser(), NotificationType.COMMENTLIKE, content, Url);
         }
