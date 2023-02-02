@@ -1,7 +1,7 @@
 package com.example.alba_pocket.model;
 
 public enum NotificationType {
-    APPLY, ACCEPT,
     REJECT, REPLY,
+    POSTLIKE,COMMENTLIKE,
     CHAT, REVIEW;
 }
