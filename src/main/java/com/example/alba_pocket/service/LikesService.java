@@ -79,7 +79,7 @@ public class LikesService {
             if(!Objects.equals(user.getId(), comment.getPost().getUser().getId())) {
                 notificationService.send(comment.getPost().getUser(), NotificationType.COMMENTLIKE, content, Url);
             }
-            
+
             CommentLikes commentLike = new CommentLikes(user, comment);
             commentLikesRepository.save(commentLike);
             return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.COMMENT_LIKE), HttpStatus.OK);
