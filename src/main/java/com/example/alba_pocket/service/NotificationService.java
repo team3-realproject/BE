@@ -103,7 +103,6 @@ public class NotificationService {
      */
 
     @Async
-    @TransactionalEventListener
     public void send(User receiver, NotificationType notificationType, String content, String url) {
 
         Notification notification = notificationRepository.save(createNotification(receiver, notificationType, content, url));
