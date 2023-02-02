@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 // No activity within 45000 milliseconds. 59 chars received. Reconnecting.
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class NotificationService {
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
     private final NotificationRepository notificationRepository;
@@ -134,7 +133,6 @@ public class NotificationService {
     public List<NotificationResponseDto> findAllNotifications() {
         User user = SecurityUtil.getCurrentUser();
         List<Notification> notifications = notificationRepository.findAllByUserId(user.getId());
-        notifications.forEach(notification -> {log.info(String.valueOf(notification.getIsRead()));});
         return notifications.stream()
                 .map(NotificationResponseDto::create)
                 .collect(Collectors.toList());
