@@ -44,7 +44,7 @@ public class LikesService {
 
         String Url =  "http://localhost:3000/post/"+post.getId();
 
-        String content = post.getUser().getNickname()+"님! 게시글에 좋아요 알림이 도착했어요!"+user.getNickname()+"님이 게시글에 좋아요을 눌렀습니다!";
+        String content = post.getUser().getNickname()+"님! "+user.getNickname()+"님이 게시글에 좋아요을 눌렀습니다!";
 
         //본인의 게시글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
         if(!Objects.equals(user.getId(), post.getUser().getId())) {
@@ -71,7 +71,7 @@ public class LikesService {
 
         String Url =  "http://localhost:3000/post/"+comment.getPost().getId();
 
-        String content = comment.getPost().getUser().getNickname()+"님! 댓글에 좋아요 알림이 도착했어요!"+user.getNickname()+"님이 댓글에 좋아요을 눌렀습니다!";
+        String content = comment.getPost().getUser().getNickname()+"님! "+user.getNickname()+"님이 댓글에 좋아요을 눌렀습니다!";
 
         //본인의 게시글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
         if(!Objects.equals(user.getId(), comment.getPost().getUser().getId())) {
