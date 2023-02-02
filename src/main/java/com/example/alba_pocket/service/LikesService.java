@@ -44,7 +44,7 @@ public class LikesService {
 
         String Url =  "http://localhost:3000/post/"+post.getId();
 
-        String content = post.getUser().getNickname()+"님! "+user.getNickname()+"님이 게시글에 좋아요을 눌렀습니다!";
+        String content = user.getNickname()+"님이 게시글에 좋아요을 눌렀습니다!";
 
         //본인의 게시글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
         if(!Objects.equals(user.getId(), post.getUser().getId())) {
@@ -71,13 +71,15 @@ public class LikesService {
 
         String Url =  "http://localhost:3000/post/"+comment.getPost().getId();
 
-        String content = comment.getPost().getUser().getNickname()+"님! "+user.getNickname()+"님이 댓글에 좋아요을 눌렀습니다!";
+        String content = user.getNickname()+"님이 댓글에 좋아요을 눌렀습니다!";
 
-        //본인의 댓글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
-        if(!Objects.equals(user.getId(), comment.getPost().getUser().getId())) {
-            notificationService.send(comment.getPost().getUser(), NotificationType.COMMENTLIKE, content, Url);
-        }
+
         if(commentLikes.getId() == null){
+            //본인의 댓글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
+            if(!Objects.equals(user.getId(), comment.getPost().getUser().getId())) {
+                notificationService.send(comment.getPost().getUser(), NotificationType.COMMENTLIKE, content, Url);
+            }
+            
             CommentLikes commentLike = new CommentLikes(user, comment);
             commentLikesRepository.save(commentLike);
             return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.COMMENT_LIKE), HttpStatus.OK);
