@@ -11,6 +11,11 @@ import java.time.LocalDateTime;
 @Getter
 @RequiredArgsConstructor
 public class ChatMessage {
+
+    public enum MessageType {
+        ENTER, TALK, QUIT
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +29,8 @@ public class ChatMessage {
     private String message;
 
     private LocalDateTime createdAt;
+
+    private MessageType type;
 
 
     public ChatMessage(ChatMessageRequestDto message, User user) {

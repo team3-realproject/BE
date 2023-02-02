@@ -6,7 +6,6 @@ import com.example.alba_pocket.entity.ChatMessage;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.repository.ChatMessageRepository;
 import com.example.alba_pocket.repository.UserRepository;
-import com.example.alba_pocket.security.SecurityUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,15 +30,22 @@ public class ChatMessageService {
 
 
     public void message(ChatMessageRequestDto message) throws JsonProcessingException {
-        User user = SecurityUtil.getCurrentUser();
+        User user = userRepository.findByNickname("수민1123").orElse(new User());
+        if(user.getId() == null){
+            throw new IllegalArgumentException("유저정보없음");
+        }
+        log.info("메세지" + message.getMessage());
+        log.info("샌더" + message.getSender());
+        log.info("룸ID" + message.getRoomId());
+        log.info(String.valueOf(message));
         log.info("-------  service넘어옴 ----------");
-        if (ChatMessageRequestDto.MessageType.ENTER.equals(message.getType())){
+        if (ChatMessage.MessageType.ENTER.equals(message.getType())){
             message.setMessage(message.getSender() + "님이 입장하셨습니다.");
             log.info("-------  ENTER! ----------");
 //            ChatMessage chatMessage = chatMessageRepository.findByRoomId(message.getRoomId());
 //            return new ResponseEntity<>(new ChatResponseDto(chatMessage), HttpStatus.OK);
         }
-        if (ChatMessageRequestDto.MessageType.TALK.equals(message.getType())){
+        if (ChatMessage.MessageType.TALK.equals(message.getType())){
             log.info("-------  TALK! ----------");
             ChatMessage chatMessage = new ChatMessage(message, user);
             chatMessageRepository.save(chatMessage);
