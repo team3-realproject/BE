@@ -4,6 +4,7 @@ import com.example.alba_pocket.dto.RoomIdResponseDto;
 import com.example.alba_pocket.entity.ChatMessage;
 import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
+import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.ChatMessageRepository;
 import com.example.alba_pocket.repository.ChatRepositoryImpl;
 import com.example.alba_pocket.repository.ChatRoomRepository;
@@ -30,6 +31,8 @@ public class ChatRoomService {
     private final ChatRepositoryImpl chatRepositoryImpl;
     private final ChatMessageRepository chatMessageRepository;
 
+    private final NotificationService notificationService;
+
 
 
 
@@ -39,6 +42,8 @@ public class ChatRoomService {
         User user1 = userRepository.findByNickname(nickname).orElseThrow(
                 () -> new IndexOutOfBoundsException("유저가존재하지않습니다.")
         );
+
+
         Optional<String> getRoomId = chatRoomRepository.getRoomId(user.getId(), user1.getId());
         System.out.println(getRoomId);
         if (getRoomId.isPresent()) {
@@ -50,6 +55,10 @@ public class ChatRoomService {
         ChatRoom chatRoom1 = new ChatRoom(user1, user, roomId);
         chatRoomRepository.save(chatRoom);
         chatRoomRepository.save(chatRoom1);
+
+        String Url =  "http://localhost:3000/chat/"+RoomIdCheck(user.getUserId());
+        String content = user.getNickname()+"님이 채팅을 신청하셨습니다.!";
+        notificationService.send(user, NotificationType.CHAT,content,Url);
 
         return new ResponseEntity<>(roomId, HttpStatus.OK);
     }
