@@ -16,5 +16,9 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     @Query(value = "select room_id from chat_room where user_id = :user_id OR user_id = :user_id2 group by room_id HAVING COUNT(room_id)>1", nativeQuery = true)
     Optional<String> getRoomId(@Param("user_id") Long user_id, @Param("user_id2") Long user_id2);
 
+    void deleteAllByRoomId(String roomId);
+
+
+
 
 }

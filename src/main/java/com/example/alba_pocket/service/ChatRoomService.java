@@ -1,10 +1,10 @@
 package com.example.alba_pocket.service;
 
-import com.example.alba_pocket.dto.ChatRoomListResponseDto;
 import com.example.alba_pocket.dto.RoomIdResponseDto;
+import com.example.alba_pocket.entity.ChatMessage;
 import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
-import com.example.alba_pocket.repository.ChatCustomRepository;
+import com.example.alba_pocket.repository.ChatMessageRepository;
 import com.example.alba_pocket.repository.ChatRepositoryImpl;
 import com.example.alba_pocket.repository.ChatRoomRepository;
 import com.example.alba_pocket.repository.UserRepository;
@@ -25,9 +25,10 @@ import java.util.stream.Collectors;
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
-
     private final UserRepository userRepository;
+
     private final ChatRepositoryImpl chatRepositoryImpl;
+    private final ChatMessageRepository chatMessageRepository;
 
 
 
@@ -64,7 +65,7 @@ public class ChatRoomService {
         return checkId;
     }
 
-
+//    RoomIdResponseDto::new
 
     @Transactional
     public ResponseEntity<?> getRoomList() {
@@ -72,15 +73,17 @@ public class ChatRoomService {
 //        List<ChatRoomListResponseDto> chatRoomList = chatRepositoryImpl.chatRoomList(user);
 //        return new ResponseEntity<>(chatRoomList, HttpStatus.OK);
         List<ChatRoom> roomLists = chatRoomRepository.findAllByUserId(user.getId());
-        return new ResponseEntity<>(roomLists.stream().map(RoomIdResponseDto::new).collect(Collectors.toList()), HttpStatus.OK);
+        return new ResponseEntity<>(roomLists.stream().map(chatRoom -> {
+            ChatMessage chatMessage = chatMessageRepository.findTopByRoomIdOrderByIdDesc(chatRoom.getRoomId()).orElse(new ChatMessage());
+            return new RoomIdResponseDto(chatRoom, chatMessage);
+        }).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity<?> deleteRooms(String roomId) {
         User user = SecurityUtil.getCurrentUser();
-
-
-
-        return null;
+        //해당룸아이디 모두삭제 추후에 수정필요
+        chatRoomRepository.deleteAllByRoomId(roomId);
+        return new ResponseEntity<>("방삭제완료",  HttpStatus.OK);
     }
 }
