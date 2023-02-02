@@ -130,7 +130,7 @@ public class NotificationService {
     }
 
     //알림조회
-    @Transactional
+    @Transactional(readOnly = true)
     public List<NotificationResponseDto> findAllNotifications() {
         User user = SecurityUtil.getCurrentUser();
         List<Notification> notifications = notificationRepository.findAllByUserId(user.getId());
@@ -150,7 +150,7 @@ public class NotificationService {
 
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void readNotification(Long notificationId) {
         //알림을 받은 사람의 id 와 알림의 id 를 받아와서 해당 알림을 찾는다.
         Optional<Notification> notification = notificationRepository.findById(notificationId);
@@ -159,14 +159,14 @@ public class NotificationService {
 
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void deleteAllByNotifications() {
         User user = SecurityUtil.getCurrentUser();
         Long receiverId = user.getId();
         notificationRepository.deleteAllByReceiverId(receiverId);
 
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public void deleteByNotifications(Long notificationId) {
         notificationRepository.deleteById(notificationId);
     }
