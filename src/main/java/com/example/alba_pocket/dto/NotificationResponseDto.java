@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -21,9 +23,14 @@ public class NotificationResponseDto {
 
     private Boolean status;
 
+    private LocalDateTime time;
+
+
 
     public static NotificationResponseDto create(Notification notification) {
         return new NotificationResponseDto(notification.getId(), notification.getContent(),
-                notification.getUrl(), notification.getIsRead());
+                notification.getUrl(), notification.getIsRead(), notification.getCreatedAt());
     }
+
+
 }

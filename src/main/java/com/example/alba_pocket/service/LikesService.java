@@ -46,11 +46,20 @@ public class LikesService {
 
         String content = user.getNickname()+"님이 게시글에 좋아요을 눌렀습니다!";
 
+        NotificationType category = null;
+        if (post.getCategory().equals("free")) {
+            category = NotificationType.FREELIKE;
+        } else if (post.getCategory().equals("partTime")) {
+            category = NotificationType.PARTTIMELIKE;
+        } else if (post.getCategory().equals("cover")) {
+            category = NotificationType.COVERLIKE;
+        }
+
 
         if(like.getId() == null){
             //본인의 게시글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
             if(!Objects.equals(user.getId(), post.getUser().getId())) {
-                notificationService.send(post.getUser(), NotificationType.POSTLIKE, content, Url);
+                notificationService.send(post.getUser(), category, content, Url);
             }
             Likes likes = new Likes(user, post);
             likesRepository.save(likes);

@@ -22,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -58,6 +60,8 @@ public class CommentService {
         String Url = "https://https://alba-pocket-tak3.vercel.app:3000/post/"+post.getId();
         //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String content = user.getNickname()+"님이 게시글에 댓글을 작성했습니다!";
+        String category = save.getPost().getCategory();
+        LocalDateTime time = LocalDateTime.now();
 
         //본인의 게시글에 댓글을 남길때는 알림을 보낼 필요가 없다.
         if(!Objects.equals(SecurityUtil.getCurrentUser().getId(), post.getUser().getId())) {
