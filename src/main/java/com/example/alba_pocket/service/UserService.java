@@ -2,7 +2,6 @@ package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.*;
 import com.example.alba_pocket.entity.User;
-import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.jwt.JwtUtil;
@@ -14,7 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final MailService emailService;
     private final JwtUtil jwtUtil;
     @Transactional
     public ResponseEntity<?> signup(SignupRequestDto requestDto) {
@@ -73,5 +74,9 @@ public class UserService {
             return new ResponseEntity<>(new MsgResponseDto("사용 가능한 닉네임 입니다."), HttpStatus.OK);
         }
     }
-
+    //email 인증
+    public ResponseEntity<?> emailCheck(EmailCheckDto emailCheckDto) throws MessagingException, UnsupportedEncodingException {
+        String authCode = emailService.sendEmail(emailCheckDto.getEmail());
+        return new ResponseEntity<>(new MsgResponseDto(authCode), HttpStatus.OK);
+    }
 }

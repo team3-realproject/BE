@@ -1,9 +1,6 @@
 package com.example.alba_pocket.controller;
 
-import com.example.alba_pocket.dto.LoginRequestDto;
-import com.example.alba_pocket.dto.NickNameCheckDto;
-import com.example.alba_pocket.dto.SignupRequestDto;
-import com.example.alba_pocket.dto.UserIdCheckDto;
+import com.example.alba_pocket.dto.*;
 import com.example.alba_pocket.service.KakaoService;
 import com.example.alba_pocket.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,8 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,7 +48,10 @@ public class UserController {
 
     }
 
-
-
+    //email 인증
+    @PostMapping("/email")
+    public ResponseEntity<?> emailCheck(@RequestBody EmailCheckDto emailCheckDto) throws MessagingException, UnsupportedEncodingException {
+        return userService.emailCheck(emailCheckDto);
+    }
 
 }
