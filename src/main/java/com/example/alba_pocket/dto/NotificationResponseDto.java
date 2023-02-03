@@ -23,7 +23,7 @@ public class NotificationResponseDto {
     private String url;
 
     private Boolean status;
-    private NotificationType type;
+    private String type;
 
     private LocalDateTime time;
 
@@ -31,7 +31,7 @@ public class NotificationResponseDto {
 
     public static NotificationResponseDto create(Notification notification) {
         return new NotificationResponseDto(notification.getId(), notification.getContent(),
-                notification.getUrl(), notification.getIsRead(), notification.getNotificationType(), notification.getCreatedAt());
+                notification.getUrl(), notification.getIsRead(), notification.getNotificationType().name(), notification.getCreatedAt());
     }
 
 
