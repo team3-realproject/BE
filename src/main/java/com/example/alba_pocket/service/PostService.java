@@ -94,6 +94,11 @@ public class PostService {
     @Transactional
     public ResponseEntity<?> updatePost(Long postId, PostRequestDto requestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
+
+        if(requestDto.getContent().length()>500) {
+            throw new RestApiException(CommonStatusCode.OVER_CONTENT);
+        }
+
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new RestApiException(CommonStatusCode.NO_ARTICLE)
         );

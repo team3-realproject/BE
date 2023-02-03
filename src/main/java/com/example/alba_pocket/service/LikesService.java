@@ -46,11 +46,12 @@ public class LikesService {
 
         String content = user.getNickname()+"님이 게시글에 좋아요을 눌렀습니다!";
 
-        //본인의 게시글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
-        if(!Objects.equals(user.getId(), post.getUser().getId())) {
-            notificationService.send(post.getUser(), NotificationType.POSTLIKE, content, Url);
-        }
+
         if(like.getId() == null){
+            //본인의 게시글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
+            if(!Objects.equals(user.getId(), post.getUser().getId())) {
+                notificationService.send(post.getUser(), NotificationType.POSTLIKE, content, Url);
+            }
             Likes likes = new Likes(user, post);
             likesRepository.save(likes);
             return new ResponseEntity<>(new MsgResponseDto(CommonStatusCode.POST_LIKE), HttpStatus.OK);
