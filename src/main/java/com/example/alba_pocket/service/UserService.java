@@ -77,6 +77,6 @@ public class UserService {
     //email 인증
     public ResponseEntity<?> emailCheck(EmailCheckDto emailCheckDto) throws MessagingException, UnsupportedEncodingException {
         String authCode = emailService.sendEmail(emailCheckDto.getEmail());
-        return new ResponseEntity<>(authCode, HttpStatus.OK);
+        return new ResponseEntity<>(new MsgResponseDto(authCode), HttpStatus.OK);
     }
 }
