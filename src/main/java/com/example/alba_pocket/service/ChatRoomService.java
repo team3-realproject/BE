@@ -56,9 +56,9 @@ public class ChatRoomService {
         chatRoomRepository.save(chatRoom);
         chatRoomRepository.save(chatRoom1);
 
-        String Url =  "http://localhost:3000/chat/"+RoomIdCheck(user.getUserId());
+        String Url =  "http://localhost:3000/chat/"+roomId;
         String content = user.getNickname()+"님이 채팅을 신청하셨습니다.!";
-        notificationService.send(user, NotificationType.CHAT,content,Url);
+        notificationService.send(user1, NotificationType.CHAT,content,Url);
 
         return new ResponseEntity<>(roomId, HttpStatus.OK);
     }
