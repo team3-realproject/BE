@@ -44,6 +44,9 @@ public class PostService {
     @Transactional
     public ResponseEntity<?> createPost(PostRequestDto requestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
+        if(requestDto.getContent().length()>500) {
+            throw new RestApiException(CommonStatusCode.OVER_CONTENT);
+        }
         String imgUrl = null;
         if(requestDto.getFile()!=null){
             imgUrl = s3Uploader.upload(requestDto.getFile(), "files");
