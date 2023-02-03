@@ -42,17 +42,17 @@ public class LikesService {
         );
         Likes like = likesRepository.findByUserIdAndPostId(user.getId(), post.getId()).orElse(new Likes());
 
-        String Url =  "http://localhost:3000/post/"+post.getId();
+        String Url =  "/post/"+post.getId();
 
         String content = user.getNickname()+"님이 게시글에 좋아요을 눌렀습니다!";
 
         NotificationType category = null;
         if (post.getCategory().equals("free")) {
-            category = NotificationType.FREELIKE;
+            category = NotificationType.FREEPOST;
         } else if (post.getCategory().equals("partTime")) {
-            category = NotificationType.PARTTIMELIKE;
+            category = NotificationType.PARTTIMEPOST;
         } else if (post.getCategory().equals("cover")) {
-            category = NotificationType.COVERLIKE;
+            category = NotificationType.COVERPOST;
         }
 
 
@@ -79,15 +79,23 @@ public class LikesService {
         );
         CommentLikes commentLikes = commentLikesRepository.findByUserIdAndCommentId(user.getId(), comment.getId()).orElse(new CommentLikes());
 
-        String Url =  "http://localhost:3000/post/"+comment.getPost().getId();
+        String Url =  "/post/"+comment.getPost().getId();
 
         String content = user.getNickname()+"님이 댓글에 좋아요을 눌렀습니다!";
 
+        NotificationType category = null;
+        if (comment.getPost().getCategory().equals("free")) {
+            category = NotificationType.FREEPOST;
+        } else if (comment.getPost().getCategory().equals("partTime")) {
+            category = NotificationType.PARTTIMEPOST;
+        } else if (comment.getPost().getCategory().equals("cover")) {
+            category = NotificationType.COVERPOST;
+        }
 
         if(commentLikes.getId() == null){
             //본인의 댓글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
             if(!Objects.equals(user.getId(), comment.getPost().getUser().getId())) {
-                notificationService.send(comment.getPost().getUser(), NotificationType.COMMENTLIKE, content, Url);
+                notificationService.send(comment.getPost().getUser(), category, content, Url);
             }
 
             CommentLikes commentLike = new CommentLikes(user, comment);

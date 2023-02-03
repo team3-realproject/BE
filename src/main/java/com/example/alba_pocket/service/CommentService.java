@@ -56,16 +56,22 @@ public class CommentService {
         List<Comment> findCommentByPost = commentRepository.findAllByPostAndUser(post, user);
         Long commentId = findCommentByPost.get(findCommentByPost.size() - 1).getId();
         //해당 댓글로 이동하는 url
-//        String Url = "http://localhost:3000/post/"+post.getId();
-        String Url = "https://https://alba-pocket-tak3.vercel.app:3000/post/"+post.getId();
+        String Url = "/post/"+post.getId();
         //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String content = user.getNickname()+"님이 게시글에 댓글을 작성했습니다!";
-        String category = save.getPost().getCategory();
-        LocalDateTime time = LocalDateTime.now();
+
+        NotificationType category = null;
+        if (post.getCategory().equals("free")) {
+            category = NotificationType.FREEPOST;
+        } else if (post.getCategory().equals("partTime")) {
+            category = NotificationType.PARTTIMEPOST;
+        } else if (post.getCategory().equals("cover")) {
+            category = NotificationType.COVERPOST;
+        }
 
         //본인의 게시글에 댓글을 남길때는 알림을 보낼 필요가 없다.
         if(!Objects.equals(SecurityUtil.getCurrentUser().getId(), post.getUser().getId())) {
-            notificationService.send(post.getUser(), NotificationType.REPLY, content, Url);
+            notificationService.send(post.getUser(), category, content, Url);
         }
         return new ResponseEntity<>(new CommentCreateResponseDto(commentId), HttpStatus.OK);
     }

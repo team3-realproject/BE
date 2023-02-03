@@ -23,6 +23,7 @@ public class NotificationResponseDto {
     private String url;
 
     private Boolean status;
+
     private NotificationType type;
 
     private LocalDateTime time;
