@@ -56,8 +56,8 @@ public class ChatRoomService {
         chatRoomRepository.save(chatRoom);
         chatRoomRepository.save(chatRoom1);
 
-        String Url =  "/chat/room/"+roomId;
-        String content = user.getNickname()+"님이 채팅을 신청하셨습니다.!";
+        String Url =  "/chat/"+roomId;
+        String content = user.getNickname()+"님이 채팅을 신청하셨습니다!";
         notificationService.send(user1, NotificationType.CHAT,content,Url);
 
         return new ResponseEntity<>(roomId, HttpStatus.OK);
