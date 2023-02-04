@@ -10,12 +10,14 @@ import com.example.alba_pocket.dto.NotificationCountDto;
 import com.example.alba_pocket.dto.NotificationResponseDto;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
+import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.model.Notification;
 import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.EmitterRepository;
 import com.example.alba_pocket.repository.EmitterRepositoryImpl;
 import com.example.alba_pocket.repository.NotificationRepository;
+import com.example.alba_pocket.repository.UserRepository;
 import com.example.alba_pocket.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +39,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class NotificationService {
+    private final UserRepository userRepository;
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
     private final NotificationRepository notificationRepository;
 
-    public SseEmitter subscribe(String lastEventId) {
-        User user=SecurityUtil.getCurrentUser();
+    public SseEmitter subscribe(String lastEventId, String userId) {
+        User user = userRepository.findByUserId(userId).orElseThrow(
+                () -> new RestApiException(UserStatusCode.NOT_FOUND_USERID)
+        );
+//        User user=SecurityUtil.getCurrentUser();
         //emitter 하나하나 에 고유의 값을 주기 위해
         String emitterId = makeTimeIncludeId(user.getId());
 
