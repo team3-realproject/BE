@@ -107,7 +107,10 @@ public class NotificationService {
     @Async
     public void send(User receiver, NotificationType notificationType, String content, String url) {
 
-        Notification notification = notificationRepository.save(createNotification(receiver, notificationType, content, url));
+        Notification notification = createNotification(receiver, notificationType, content, url);
+        if(!notification.getNotificationType().equals(NotificationType.CHAT)) {
+            notificationRepository.save(notification);
+        }
 
         String receiverId = String.valueOf(receiver.getId());
         String eventId = receiverId + "_" + System.currentTimeMillis();
@@ -118,9 +121,24 @@ public class NotificationService {
                     sendNotification(emitter, eventId, key, NotificationResponseDto.create(notification));
                 }
         );
-
-
     }
+//
+//    @Async
+//    public void sendChat(User receiver, NotificationType notificationType, String content, String url) {
+//
+//        Notification notification = createNotification(receiver, notificationType, content, url);
+//
+//        String receiverId = String.valueOf(receiver.getId());
+//        String eventId = receiverId + "_" + System.currentTimeMillis();
+//        Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(receiverId);
+//        emitters.forEach(
+//                (key, emitter) -> {
+//                    emitterRepository.saveEventCache(key, notification);
+//                    sendNotification(emitter, eventId, key, NotificationResponseDto.create(notification));
+//                }
+//        );
+//    }
+
     private Notification createNotification(User receiver, NotificationType notificationType, String content, String url) {
         return Notification.builder()
                 .receiver(receiver)

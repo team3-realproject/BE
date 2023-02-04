@@ -1,6 +1,7 @@
 package com.example.alba_pocket.repository;
 
 import com.example.alba_pocket.entity.ChatRoom;
+import com.example.alba_pocket.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,6 +25,9 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     Optional<String> getRoomId(@Param("user_id") Long user_id, @Param("user_id2") Long user_id2);
 
     void deleteAllByRoomId(String roomId);
+
+    @Query(value = "select u from User u join fetch ChatRoom r on u.id=r.user.id where r.roomId=:roomId and r.user.id not in (:userId)")
+    Optional<User> findByToUser(String roomId, Long userId);
 
 
 

@@ -35,5 +35,4 @@ public class NotificationResponseDto {
                 notification.getUrl(), notification.getIsRead(), notification.getNotificationType(), notification.getCreatedAt());
     }
 
-
 }
