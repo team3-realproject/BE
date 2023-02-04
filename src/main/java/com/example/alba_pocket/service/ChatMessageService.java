@@ -57,6 +57,7 @@ public class ChatMessageService {
             User toUser = chatRoomRepository.findByToUser(message.getRoomId(), user.getId()).orElse(null);
             notificationService.send(toUser, NotificationType.CHAT,content,Url);
         }
+
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
         log.info("----------------------------------------------------------------------------------");
 
