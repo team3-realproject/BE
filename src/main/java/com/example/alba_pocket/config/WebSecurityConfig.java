@@ -64,7 +64,8 @@ public class WebSecurityConfig {
         // 서버에서 응답하는 리소스에 접근 가능한 출처를 명시
         // Access-Control-Allow-Origin
         config.addAllowedOrigin("http://localhost:3000/");
-        config.addAllowedOrigin("https://alba-pocket-tak3.vercel.app/");
+//        config.addAllowedOrigin("https://alba-pocket-tak3.vercel.app/");
+        config.addAllowedOrigin("https://www.albapocket.com");
         config.addAllowedOrigin("ws://localhost:8080/ws/chat");
 //        config.addAllowedOrigin("https://instargram-clone-coding.vercel.app");
 
