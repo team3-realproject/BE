@@ -1,7 +1,6 @@
 package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.RoomIdResponseDto;
-import com.example.alba_pocket.entity.ChatMessage;
 import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.model.NotificationType;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -79,13 +79,26 @@ public class ChatRoomService {
     @Transactional
     public ResponseEntity<?> getRoomList() {
         User user = SecurityUtil.getCurrentUser();
-//        List<ChatRoomListResponseDto> chatRoomList = chatRepositoryImpl.chatRoomList(user);
-//        return new ResponseEntity<>(chatRoomList, HttpStatus.OK);
-        List<ChatRoom> roomLists = chatRoomRepository.findAllByUserId(user.getId());
-        return new ResponseEntity<>(roomLists.stream().map(chatRoom -> {
-            ChatMessage chatMessage = chatMessageRepository.findTopByRoomIdOrderByIdDesc(chatRoom.getRoomId()).orElse(new ChatMessage());
-            return new RoomIdResponseDto(chatRoom, chatMessage);
+//        List<ChatRoom> roomLists = chatRoomRepository.findAllByUserId(user.getId());
+        List<Map<Object, Object>> lists = chatRoomRepository.findRoomList(user.getId());
+//        lists.forEach(list->{
+//            log.info("----------시작-----------------");
+//            log.info((String) list.get("message"));
+//            log.info((String) list.get("room_id"));
+//            log.info(String.valueOf(list.get("created_at")));
+//            Long toUserId = Long.valueOf(String.valueOf(list.get("to_user_id")));
+//            log.info(String.valueOf(toUserId));
+//
+//        });
+        return new ResponseEntity<>(lists.stream().map(list->{
+            Long toUserId = Long.valueOf(String.valueOf(list.get("to_user_id")));
+            User toUser = userRepository.findById(toUserId).orElse(new User());
+            return new RoomIdResponseDto(list, toUser);
         }).collect(Collectors.toList()), HttpStatus.OK);
+//        return new ResponseEntity<>(roomLists.stream().map(chatRoom -> {
+//            ChatMessage chatMessage = chatMessageRepository.findTopByRoomIdOrderByIdDesc(chatRoom.getRoomId()).orElse(new ChatMessage());
+//            return new RoomIdResponseDto(chatRoom, chatMessage);
+//        }).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @Transactional
