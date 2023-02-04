@@ -58,6 +58,7 @@ public class NotificationService {
         //emitter의 시간이 만료된 후 레포에서 삭제
         emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
         emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
+        emitter.onError((e) -> emitterRepository.deleteById(emitterId));
 
         // 503 에러를 방지하기 위해 처음 연결 진행 시 더미 데이터를 전달
         String eventId = makeTimeIncludeId(user.getId());

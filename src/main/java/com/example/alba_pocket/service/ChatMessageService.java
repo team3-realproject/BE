@@ -52,11 +52,11 @@ public class ChatMessageService {
             log.info("-------  TALK! ----------");
             ChatMessage chatMessage = new ChatMessage(message, user);
             chatMessageRepository.save(chatMessage);
-            String Url =  "/chat/"+message.getRoomId();
 
-            String content = message.getSender()+"님이 채팅을 보내셨습니다!";
-            User toUser = chatRoomRepository.findByToUser(message.getRoomId(), user.getId()).orElse(null);
-            notificationService.send(toUser, NotificationType.CHAT,content,Url);
+//            String Url =  "/chat/"+message.getRoomId();
+//            String content = message.getSender()+"님이 채팅을 보내셨습니다!";
+//            User toUser = chatRoomRepository.findByToUser(message.getRoomId(), user.getId()).orElse(null);
+//            notificationService.send(toUser, NotificationType.CHAT,content,Url);
         }
 
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
