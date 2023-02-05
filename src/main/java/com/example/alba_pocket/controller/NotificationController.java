@@ -24,9 +24,8 @@ public class NotificationController {
     // 전달받은 마지막 ID 값을 넘겨 그 이후의 데이터[ 받지 못한 데이터 ]부터 받을 수 있게 한다
 
     @GetMapping(value = "/subscribe/{userId}", produces = "text/event-stream")
-    public SseEmitter subscribe(@RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "")
-                                String lastEventId, @PathVariable String userId) {
-        return notificationService.subscribe(lastEventId, userId);
+    public SseEmitter subscribe(@PathVariable String userId) {
+        return notificationService.subscribe(userId);
     }
     //알림조회
     @GetMapping(value = "/notifications")
