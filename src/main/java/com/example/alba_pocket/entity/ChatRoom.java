@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @RequiredArgsConstructor
 public class ChatRoom {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,12 +25,18 @@ public class ChatRoom {
 
     private LocalDateTime createdAt;
 
+    private int countUser;
+
     public ChatRoom(User user, User user1, String roomId) {
         this.user = user;
         this.toUser = user1;
         this.roomId = roomId;
         this.createdAt = LocalDateTime.now();
     }
+
+//    public void plusUser{
+//        countUser++;
+//    }
 
 
 }
