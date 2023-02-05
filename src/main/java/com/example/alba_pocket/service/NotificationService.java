@@ -90,6 +90,7 @@ public class NotificationService {
                     .data(data));
         } catch (IOException exception) {
             emitterRepository.deleteById(emitterId);
+            throw new RuntimeException("sse error!!!");
         }
     }
     // Last - event - id 가 존재한다는 것은 받지 못한 데이터가 있다는 것이다.
