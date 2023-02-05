@@ -5,6 +5,7 @@ import com.example.alba_pocket.dto.ChatResponseDto;
 import com.example.alba_pocket.entity.ChatMessage;
 import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
+import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.ChatMessageRepository;
 import com.example.alba_pocket.repository.ChatRoomRepository;
 import com.example.alba_pocket.repository.UserRepository;
@@ -64,7 +65,7 @@ public class ChatMessageService {
 
             String Url =  "/chat/"+user.getId();
             String content = user.getNickname()+"님이 메시지를 보냈습니다!";
-            notificationService.send(user,NotificationType.CHAT,content,Url);
+            notificationService.send(user, NotificationType.CHAT,content,Url);
 
 //            String Url =  "/chat/"+message.getRoomId();
 //            String content = message.getSender()+"님이 채팅을 보내셨습니다!";
