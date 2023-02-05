@@ -53,6 +53,10 @@ public class ChatMessageService {
             ChatMessage chatMessage = new ChatMessage(message, user);
             chatMessageRepository.save(chatMessage);
 
+            String Url =  "/chat/"+user.getId();
+            String content = user.getNickname()+"님이 메시지를 보냈습니다!";
+            notificationService.send(user,NotificationType.CHAT,content,Url);
+
 //            String Url =  "/chat/"+message.getRoomId();
 //            String content = message.getSender()+"님이 채팅을 보내셨습니다!";
 //            User toUser = chatRoomRepository.findByToUser(message.getRoomId(), user.getId()).orElse(null);
