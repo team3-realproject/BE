@@ -15,9 +15,11 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     List<ChatRoom> findAllByUserId(Long userId);
 
-    @Query(value = "select message, A.room_id, to_user_id, user_id, A.created_at from(\n" +
-            "                 select created_at, message, room_id from chat_message where user_id = :user_id and (room_id, created_at) in (select room_id, max(created_at) as a from chat_message group by room_id)\n" +
-            "             ) A, (select * from chat_room where user_id = :user_id) B where A.room_id = B.room_id order by A.created_at desc;", nativeQuery = true)
+    @Query(value = "select message, M.room_id, to_user_id, user_id, created_at from (\n" +
+            "    select room_id, to_user_id from chat_room where user_id = :user_id) R, (\n" +
+            "        select * from (\n" +
+            "            select * from chat_message where (room_id, created_at) in (select room_id, max(created_at) as a from chat_message group by room_id)) A)\n" +
+            "        M where M.room_id = R.room_id order by created_at desc;", nativeQuery = true)
     List<Map<Object, Object>> findRoomList(@Param("user_id") Long user_id);
 
 
