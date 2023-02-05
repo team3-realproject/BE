@@ -19,6 +19,8 @@ public class RoomIdResponseDto {
 
     private String createdAt;
 
+    private int count;
+
 //    public RoomIdResponseDto(ChatRoom roomList, ChatMessage chatMessage) {
 //        this.roomId = roomList.getRoomId();
 //        this.nickname = roomList.getToUser().getNickname();
@@ -34,6 +36,7 @@ public class RoomIdResponseDto {
         this.profileImage = toUser.getProfileImage();
         this.lastMessage = String.valueOf(roomList.get("message"));
         this.createdAt = String.valueOf(roomList.get("created_at"));
+        this.count = 0;
     }
 
 }
