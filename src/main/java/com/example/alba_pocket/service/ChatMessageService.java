@@ -5,6 +5,7 @@ import com.example.alba_pocket.dto.ChatResponseDto;
 import com.example.alba_pocket.entity.ChatMessage;
 import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
+import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.ChatMessageRepository;
 import com.example.alba_pocket.repository.ChatRoomRepository;
 import com.example.alba_pocket.repository.UserRepository;
