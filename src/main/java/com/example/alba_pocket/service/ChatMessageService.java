@@ -4,11 +4,9 @@ import com.example.alba_pocket.dto.ChatMessageRequestDto;
 import com.example.alba_pocket.dto.ChatResponseDto;
 import com.example.alba_pocket.entity.ChatMessage;
 import com.example.alba_pocket.entity.User;
-import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.ChatMessageRepository;
 import com.example.alba_pocket.repository.ChatRoomRepository;
 import com.example.alba_pocket.repository.UserRepository;
-import com.example.alba_pocket.security.SecurityUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +32,7 @@ public class ChatMessageService {
     private final NotificationService notificationService;
 
 
+    @Transactional
     public void message(ChatMessageRequestDto message, String myNickName) throws JsonProcessingException {
         User user = userRepository.findByNickname(myNickName).orElse(new User());
         if(user.getId() == null){
@@ -42,11 +41,20 @@ public class ChatMessageService {
         log.info("메세지" + message.getMessage());
         log.info("샌더" + message.getSender());
         log.info("룸ID" + message.getRoomId());
-        log.info(String.valueOf(message));
         log.info("-------  service넘어옴 ----------");
         if (ChatMessage.MessageType.ENTER.equals(message.getType())){
             message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+//            List<ChatRoom> chatRooms = chatRoomRepository.findAllByRoomId(message.getRoomId());
+//            chatRooms.forEach(list -> {
+//                ChatRoom chatRoom = chatRoomRepository.findByRoomId(message.getRoomId()).orElse(new ChatRoom());
+//                chatRoom.plusUser;
+//            });
+
             log.info("-------  ENTER! ----------");
+        }
+        if (ChatMessage.MessageType.QUIT.equals(message.getType())){
+            message.setMessage(message.getSender() + "님이 퇴장하셨습니다.");
+            log.info("-------  QUIT! ----------");
         }
         if (ChatMessage.MessageType.TALK.equals(message.getType())){
             log.info("-------  TALK! ----------");

@@ -32,6 +32,9 @@ public class ChatMessage {
 
     private MessageType type;
 
+    private boolean readUser = false;
+
+
 
     public ChatMessage(ChatMessageRequestDto message, User user) {
         this.roomId = message.getRoomId();
