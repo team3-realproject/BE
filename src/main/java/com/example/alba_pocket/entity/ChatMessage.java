@@ -32,15 +32,20 @@ public class ChatMessage {
 
     private MessageType type;
 
-    private boolean readUser = false;
+    private boolean readUser;
 
 
 
-    public ChatMessage(ChatMessageRequestDto message, User user) {
+    public ChatMessage(ChatMessageRequestDto message, User user, boolean readUser) {
         this.roomId = message.getRoomId();
         this.message = message.getMessage();
         this.user = user;
         this.createdAt = LocalDateTime.now();
+        this.readUser = readUser;
+    }
+
+    public void TrueReadUser(){
+        readUser = true;
     }
 
 }

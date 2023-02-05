@@ -2,6 +2,7 @@ package com.example.alba_pocket.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -16,11 +17,11 @@ public class ChatRoom {
 
     private String roomId;
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User toUser;
 
     private LocalDateTime createdAt;
@@ -34,9 +35,13 @@ public class ChatRoom {
         this.createdAt = LocalDateTime.now();
     }
 
-//    public void plusUser{
-//        countUser++;
-//    }
+    public void plusUser() {
+        countUser += 1;
+    }
+
+    public void minusUser() {
+        countUser -= 1;
+    }
 
 
 }
