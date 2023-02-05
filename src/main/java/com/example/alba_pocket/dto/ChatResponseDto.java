@@ -16,13 +16,15 @@ public class ChatResponseDto {
     private String profileImage;
     private LocalDateTime createdAt;
 
+    private boolean readUser;
+
 
     public ChatResponseDto(ChatMessage chatMessage) {
         this.message = chatMessage.getMessage();
         this.sender = chatMessage.getUser().getNickname();
         this.profileImage = chatMessage.getUser().getProfileImage();
         this.createdAt = chatMessage.getCreatedAt();
-
+        this.readUser = chatMessage.isReadUser();
     }
 
 

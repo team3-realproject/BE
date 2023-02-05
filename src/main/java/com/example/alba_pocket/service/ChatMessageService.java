@@ -3,6 +3,7 @@ package com.example.alba_pocket.service;
 import com.example.alba_pocket.dto.ChatMessageRequestDto;
 import com.example.alba_pocket.dto.ChatResponseDto;
 import com.example.alba_pocket.entity.ChatMessage;
+import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.repository.ChatMessageRepository;
 import com.example.alba_pocket.repository.ChatRoomRepository;
@@ -43,23 +44,27 @@ public class ChatMessageService {
         log.info("룸ID" + message.getRoomId());
         log.info("-------  service넘어옴 ----------");
         if (ChatMessage.MessageType.ENTER.equals(message.getType())){
-            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
-//            List<ChatRoom> chatRooms = chatRoomRepository.findAllByRoomId(message.getRoomId());
-//            chatRooms.forEach(list -> {
-//                ChatRoom chatRoom = chatRoomRepository.findByRoomId(message.getRoomId()).orElse(new ChatRoom());
-//                chatRoom.plusUser;
-//            });
-
+            List<ChatRoom> chatRooms = chatRoomRepository.findAllByRoomId(message.getRoomId());
+            chatRooms.forEach(ChatRoom::plusUser);
+            List<ChatMessage> chatMessages = chatMessageRepository.falseMessage(message.getRoomId(), user.getId());
+            chatMessages.forEach(ChatMessage::TrueReadUser);
             log.info("-------  ENTER! ----------");
         }
         if (ChatMessage.MessageType.QUIT.equals(message.getType())){
-            message.setMessage(message.getSender() + "님이 퇴장하셨습니다.");
+            List<ChatRoom> chatRooms = chatRoomRepository.findAllByRoomId(message.getRoomId());
+            chatRooms.forEach(ChatRoom::minusUser);
             log.info("-------  QUIT! ----------");
         }
         if (ChatMessage.MessageType.TALK.equals(message.getType())){
             log.info("-------  TALK! ----------");
-            ChatMessage chatMessage = new ChatMessage(message, user);
+            ChatRoom chatRoom = chatRoomRepository.findByRoomIdAndUserId(message.getRoomId(), user.getId()).orElse(new ChatRoom());
+            boolean countUser = chatRoom.getCountUser() == 2;
+            ChatMessage chatMessage = new ChatMessage(message, user, countUser);
             chatMessageRepository.save(chatMessage);
+
+            String Url =  "/chat/"+user.getId();
+            String content = user.getNickname()+"님이 메시지를 보냈습니다!";
+            notificationService.send(user,NotificationType.CHAT,content,Url);
 
 //            String Url =  "/chat/"+message.getRoomId();
 //            String content = message.getSender()+"님이 채팅을 보내셨습니다!";
