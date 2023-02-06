@@ -24,6 +24,9 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     
     void deleteAllByRoomId(String roomId);
 
+    @Query(value = "select count(*) from chat_room R, chat_message C where R.user_id = :user_id and R.room_id = C.room_id and read_user = false and C.user_id not in (:user_id)", nativeQuery = true)
+    Integer CountTotalMessage(@Param("user_id") Long user_id);
+
 
 
 }
