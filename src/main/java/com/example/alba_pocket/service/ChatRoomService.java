@@ -1,6 +1,7 @@
 package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.RoomIdResponseDto;
+import com.example.alba_pocket.dto.TotalCountMessageDto;
 import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.repository.ChatMessageRepository;
@@ -104,5 +105,11 @@ public class ChatRoomService {
         chatRoomRepository.deleteAllByRoomId(roomId);
         chatMessageRepository.deleteAllByRoomId(roomId);
         return new ResponseEntity<>("방삭제완료",  HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> TotalCountMessage() {
+        User user = SecurityUtil.getCurrentUser();
+        Integer count = chatMessageRepository.CountTotalMessage(user.getId());
+        return new ResponseEntity<>(new TotalCountMessageDto(count), HttpStatus.OK);
     }
 }

@@ -30,5 +30,9 @@ public class ChatRoomController {
         return chatRoomService.deleteRooms(roomId);
     }
 
+    @GetMapping("/message/count")
+    public ResponseEntity<?> TotalCountMessage(){
+        return chatRoomService.TotalCountMessage();
+    }
 
 }
