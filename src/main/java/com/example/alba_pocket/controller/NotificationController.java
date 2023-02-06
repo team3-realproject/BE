@@ -3,6 +3,10 @@ package com.example.alba_pocket.controller;
 import com.example.alba_pocket.dto.MsgResponseDto;
 import com.example.alba_pocket.dto.NotificationCountDto;
 import com.example.alba_pocket.dto.NotificationResponseDto;
+import com.example.alba_pocket.entity.User;
+import com.example.alba_pocket.errorcode.UserStatusCode;
+import com.example.alba_pocket.exception.RestApiException;
+import com.example.alba_pocket.repository.UserRepository;
 import com.example.alba_pocket.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,11 +16,15 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
+
+
 @RestController
 @RequiredArgsConstructor
 public class NotificationController {
 
     private final NotificationService notificationService;
+
+    private final UserRepository userRepository;
     // MIME TYPE - text/event-stream 형태로 받아야함.
     // 클라이어트로부터 오는 알림 구독 요청을 받는다.
     // 로그인한 유저는 SSE 연결
@@ -25,6 +33,7 @@ public class NotificationController {
 
     @GetMapping(value = "/subscribe/{userId}", produces = "text/event-stream")
     public SseEmitter subscribe(@PathVariable String userId) {
+
         return notificationService.subscribe(userId);
     }
     //알림조회
