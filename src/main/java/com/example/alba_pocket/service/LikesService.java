@@ -94,8 +94,8 @@ public class LikesService {
 
         if(commentLikes.getId() == null){
             //본인의 댓글에 좋아요를 남길때는 알림을 보낼 필요가 없다.
-            if(!Objects.equals(user.getId(), comment.getPost().getUser().getId())) {
-                notificationService.send(comment.getPost().getUser(), category, content, Url);
+            if(!Objects.equals(user.getId(), comment.getUser().getId())) {
+                notificationService.send(comment.getUser(), category, content, Url);
             }
 
             CommentLikes commentLike = new CommentLikes(user, comment);
