@@ -69,8 +69,7 @@ public class ChatMessageService {
 
             String Url =  "/chat/"+message.getRoomId();
             String content = message.getSender()+"님이 채팅을 보내셨습니다!";
-            User toUser = chatRoomRepository.findByToUser(message.getRoomId(), user.getId()).orElse(null);
-            notificationService.send(toUser, NotificationType.CHAT,content,Url);
+            notificationService.send(chatRoom.getToUser(), NotificationType.CHAT,content,Url);
         }
 
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
