@@ -3,7 +3,6 @@ package com.example.alba_pocket.service;
 import com.example.alba_pocket.dto.RoomIdResponseDto;
 import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
-import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.ChatMessageRepository;
 import com.example.alba_pocket.repository.ChatRepositoryImpl;
 import com.example.alba_pocket.repository.ChatRoomRepository;
@@ -89,7 +88,8 @@ public class ChatRoomService {
         return new ResponseEntity<>(lists.stream().map(list->{
             Long toUserId = Long.valueOf(String.valueOf(list.get("to_user_id")));
             User toUser = userRepository.findById(toUserId).orElse(new User());
-            return new RoomIdResponseDto(list, toUser);
+            Integer count = chatMessageRepository.CountMessage(String.valueOf(list.get("room_id")), user.getId());
+            return new RoomIdResponseDto(list, toUser, count);
         }).collect(Collectors.toList()), HttpStatus.OK);
 //        return new ResponseEntity<>(roomLists.stream().map(chatRoom -> {
 //            ChatMessage chatMessage = chatMessageRepository.findTopByRoomIdOrderByIdDesc(chatRoom.getRoomId()).orElse(new ChatMessage());
@@ -102,6 +102,7 @@ public class ChatRoomService {
         User user = SecurityUtil.getCurrentUser();
         //해당룸아이디 모두삭제 추후에 수정필요
         chatRoomRepository.deleteAllByRoomId(roomId);
+        chatMessageRepository.deleteAllByRoomId(roomId);
         return new ResponseEntity<>("방삭제완료",  HttpStatus.OK);
     }
 }

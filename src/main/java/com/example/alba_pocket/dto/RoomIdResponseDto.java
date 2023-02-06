@@ -30,13 +30,13 @@ public class RoomIdResponseDto {
 //    }
 
 
-    public RoomIdResponseDto(Map<Object, Object> roomList, User toUser) {
+    public RoomIdResponseDto(Map<Object, Object> roomList, User toUser, Integer count) {
         this.roomId = (String) roomList.get("room_id");
         this.nickname = toUser.getNickname();
         this.profileImage = toUser.getProfileImage();
         this.lastMessage = String.valueOf(roomList.get("message"));
         this.createdAt = String.valueOf(roomList.get("created_at"));
-        this.count = 0;
+        this.count = count;
     }
 
 }
