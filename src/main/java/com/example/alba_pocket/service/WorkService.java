@@ -33,7 +33,7 @@ public class WorkService {
     @Transactional
     public ResponseEntity<?> getMyWorkplace() {
         User user = SecurityUtil.getCurrentUser();
-        WorkListResponseDto workListResponseDto = new WorkListResponseDto();
+        WorkResponseDto.WorkListResponseDto workListResponseDto = new WorkResponseDto.WorkListResponseDto();
         List<Work> myWorkplace = workRepository.findByUser(user);
         for (Work work : myWorkplace) {
             WorkResponseDto workResponseDto = new WorkResponseDto(work);

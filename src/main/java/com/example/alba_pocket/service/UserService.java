@@ -26,7 +26,7 @@ public class UserService {
     private final MailService emailService;
     private final JwtUtil jwtUtil;
     @Transactional
-    public ResponseEntity<?> signup(SignupRequestDto requestDto) {
+    public ResponseEntity<?> signup(UserRequestDto.SignupRequestDto requestDto) {
         String password = passwordEncoder.encode(requestDto.getPassword());
         if(userRepository.existsByUserId(requestDto.getUserId())) {
             throw new RestApiException(UserStatusCode.OVERLAPPED_USERID);
@@ -42,7 +42,7 @@ public class UserService {
     }
 
     @Transactional
-    public ResponseEntity<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
+    public ResponseEntity<?> login(UserRequestDto.LoginRequestDto requestDto, HttpServletResponse response) {
         User user = userRepository.findByUserId(requestDto.getUserId()).orElseThrow(
                 () -> new RestApiException(UserStatusCode.NOT_FOUND_USERID)
         );
@@ -51,14 +51,14 @@ public class UserService {
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserId()));
 
-        return new ResponseEntity<>(new LoginResponseDto(user.getUserId(), user.getNickname()), HttpStatus.OK);
+        return new ResponseEntity<>(new UserResponseDto.LoginResponseDto(user.getUserId(), user.getNickname()), HttpStatus.OK);
 
 
 
     }
 
     @Transactional
-    public ResponseEntity<?> userIdCheck(UserIdCheckDto userIdCheckDto) {
+    public ResponseEntity<?> userIdCheck(UserRequestDto.UserIdCheckDto userIdCheckDto) {
         if(userRepository.existsByUserId(userIdCheckDto.getUserId())) {
             throw new RestApiException(UserStatusCode.OVERLAPPED_USERID);
         } else {
@@ -67,7 +67,7 @@ public class UserService {
     }
 
     @Transactional
-    public ResponseEntity<?> nicknameCheck(NickNameCheckDto nickNameCheckDto) {
+    public ResponseEntity<?> nicknameCheck(UserRequestDto.NickNameCheckDto nickNameCheckDto) {
         if(userRepository.existsByNickname(nickNameCheckDto.getNickname())) {
             throw new RestApiException(UserStatusCode.OVERLAPPED_NICKNAME);
         } else {
@@ -75,7 +75,7 @@ public class UserService {
         }
     }
     //email 인증
-    public ResponseEntity<?> emailCheck(EmailCheckDto emailCheckDto) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<?> emailCheck(UserRequestDto.EmailCheckDto emailCheckDto) throws MessagingException, UnsupportedEncodingException {
         String authCode = emailService.sendEmail(emailCheckDto.getEmail());
         return new ResponseEntity<>(new MsgResponseDto(authCode), HttpStatus.OK);
     }

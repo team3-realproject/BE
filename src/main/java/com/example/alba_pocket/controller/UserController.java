@@ -24,20 +24,20 @@ public class UserController {
     private final KakaoService kakaoService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody @Valid SignupRequestDto requestDto){
+    public ResponseEntity<?> signup(@RequestBody @Valid UserRequestDto.SignupRequestDto requestDto){
         return userService.signup(requestDto);
     }
 
 
     @PostMapping("/userid")
-    public ResponseEntity<?>  userCheck(@RequestBody @Valid UserIdCheckDto userIdCheckDto) { return userService.userIdCheck(userIdCheckDto); }
+    public ResponseEntity<?>  userCheck(@RequestBody @Valid UserRequestDto.UserIdCheckDto userIdCheckDto) { return userService.userIdCheck(userIdCheckDto); }
 
     @PostMapping("/nickname")
-    public ResponseEntity<?> nicknameCheck(@RequestBody @Valid NickNameCheckDto nickNameCheckDto) { return userService.nicknameCheck(nickNameCheckDto);}
+    public ResponseEntity<?> nicknameCheck(@RequestBody @Valid UserRequestDto.NickNameCheckDto nickNameCheckDto) { return userService.nicknameCheck(nickNameCheckDto);}
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response){
+    public ResponseEntity<?> login(@RequestBody UserRequestDto.LoginRequestDto requestDto, HttpServletResponse response){
         log.info("login-------------");
         return userService.login(requestDto, response);
     }
@@ -50,7 +50,7 @@ public class UserController {
 
     //email 인증
     @PostMapping("/email")
-    public ResponseEntity<?> emailCheck(@RequestBody EmailCheckDto emailCheckDto) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<?> emailCheck(@RequestBody UserRequestDto.EmailCheckDto emailCheckDto) throws MessagingException, UnsupportedEncodingException {
         return userService.emailCheck(emailCheckDto);
     }
 

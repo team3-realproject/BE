@@ -1,7 +1,6 @@
 package com.example.alba_pocket.dto;
 
 import com.example.alba_pocket.entity.Comment;
-import com.example.alba_pocket.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,5 +39,17 @@ public class CommentResponseDto {
         this.isLikeComment = isLike;
         this.createAt = comment.getCreatedAt();
         this.profileImage = comment.getUser().getProfileImage();
+    }
+
+
+    @Getter
+    @NoArgsConstructor
+    public static class CommentCreateResponseDto {
+
+        private Long commentId;
+
+        public CommentCreateResponseDto(Long commentId) {
+            this.commentId = commentId;
+        }
     }
 }

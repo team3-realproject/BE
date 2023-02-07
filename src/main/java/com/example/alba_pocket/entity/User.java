@@ -1,6 +1,6 @@
 package com.example.alba_pocket.entity;
 
-import com.example.alba_pocket.dto.SignupRequestDto;
+import com.example.alba_pocket.dto.UserRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class User extends Timestamped{
     @Column
     private String profileImage="https://alba-pocket.s3.ap-northeast-2.amazonaws.com/files/Group%20260%20%281%29.svg";
 
-    public User(SignupRequestDto requestDto, String password) {
+    public User(UserRequestDto.SignupRequestDto requestDto, String password) {
         this.userId = requestDto.getUserId();
         this.password = password;
         this.nickname = requestDto.getNickname();
