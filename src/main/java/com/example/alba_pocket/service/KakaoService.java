@@ -132,8 +132,13 @@ public class KakaoService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         Long id = jsonNode.get("id").asLong();
-        String email = jsonNode.get("kakao_account")
-                .get("email").asText();
+        String email=null;
+        try {
+            email = jsonNode.get("kakao_account")
+                    .get("email").asText();
+        } catch (Exception e) {
+            email = "k_"+jsonNode.get("id").asLong()+"@kakaoemail.com";
+        }
         String userImgUrl = jsonNode.get("properties")
                 .get("profile_image").asText();
 
