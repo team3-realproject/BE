@@ -137,7 +137,7 @@ public class KakaoService {
             email = jsonNode.get("kakao_account")
                     .get("email").asText();
         } catch (Exception e) {
-            email = "k_"+jsonNode.get("id").asLong()+"@kakaoemail.com";
+            email = jsonNode.get("id").asLong()+"@kakaoEmail.com";
         }
         String userImgUrl = jsonNode.get("properties")
                 .get("profile_image").asText();
