@@ -54,4 +54,18 @@ public class ChatRepositoryImpl implements ChatCustomRepository{
                 .fetch();
         return chatRoomList;
     }
+
+
+    @Override
+    public List<String> getRoomId (Long userId, Long userId2) {
+        List<String> getRoomId = queryFactory
+                .select(chatRoom.roomId)
+                .from(chatRoom)
+                .where(chatRoom.user.id.eq(userId)
+                        .or(chatRoom.user.id.eq(userId2)))
+                .groupBy(chatRoom.roomId)
+                .having(chatRoom.roomId.count().gt(1))
+                .fetch();
+        return getRoomId;
+    }
 }

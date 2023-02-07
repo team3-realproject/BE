@@ -29,9 +29,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     void deleteAllByRoomId(String roomId);
 
-    @Query(value = "select u from User u join fetch ChatRoom r on u.id=r.toUser.id where r.roomId=:roomId and r.user.id not in (:userId)")
-    Optional<User> findByToUser(String roomId, Long userId);
-
     Optional<ChatRoom> findByRoomIdAndUserId(String roomId, Long user_id);
 
 }

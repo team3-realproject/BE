@@ -44,12 +44,19 @@ public class ChatRoomService {
         );
 
 
-        Optional<String> getRoomId = chatRoomRepository.getRoomId(user.getId(), user1.getId());
+//        Optional<String> getRoomId = chatRoomRepository.getRoomId(user.getId(), user1.getId());
+//        System.out.println(getRoomId);
+//        if (getRoomId.isPresent()) {
+//            System.out.println("채팅한적있음");
+//            return new ResponseEntity<>(getRoomId.get(), HttpStatus.OK);
+//        }
+        List<String> getRoomId = chatRepositoryImpl.getRoomId(user.getId(), user1.getId());
         System.out.println(getRoomId);
-        if (getRoomId.isPresent()) {
+        if (getRoomId.size()>0) {
             System.out.println("채팅한적있음");
-            return new ResponseEntity<>(getRoomId.get(), HttpStatus.OK);
+            return new ResponseEntity<>(getRoomId.get(0), HttpStatus.OK);
         }
+
         String roomId = RoomIdCheck(String.valueOf(ThreadLocalRandom.current().nextInt(100000000, 1000000000)));
         ChatRoom chatRoom = new ChatRoom(user, user1, roomId);
         ChatRoom chatRoom1 = new ChatRoom(user1, user, roomId);

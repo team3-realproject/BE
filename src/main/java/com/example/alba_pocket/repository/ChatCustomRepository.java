@@ -8,4 +8,5 @@ import java.util.List;
 public interface ChatCustomRepository {
 
     List<ChatRoomListResponseDto> chatRoomList(User user);
+    List<String> getRoomId(Long userId, Long userId2);
 }
