@@ -32,7 +32,8 @@ public enum CommonStatusCode implements StatusCode{
     NO_WORKPLACE("근무지가 존재하지 않습니다.", HttpStatus.BAD_REQUEST.value()),
     INVALID_USER_UPDATE("작성자만 수정할 수 있습니다.", HttpStatus.BAD_REQUEST.value()),
     INVALID_USER_DELETE("작성자만 삭제할 수 있습니다.", HttpStatus.BAD_REQUEST.value()),
-    OVER_CONTENT("게시물은 500자 이내로 작성해주세요.", HttpStatus.BAD_REQUEST.value());
+    OVER_CONTENT("게시물은 500자 이내로 작성해주세요.", HttpStatus.BAD_REQUEST.value()),
+    OVER_TITLE("제목은 30자 이내로 작성해주세요.", HttpStatus.BAD_REQUEST.value());
 
 
 
