@@ -1,26 +1,20 @@
 package com.example.alba_pocket.repository;
 
 
-import com.example.alba_pocket.dto.CommentResponseDto;
-import com.example.alba_pocket.dto.MypageCommentResponseDto;
-import com.example.alba_pocket.dto.MypageResponseDto;
+import com.example.alba_pocket.dto.MyPageRequestDto;
 import com.example.alba_pocket.dto.PostResponseDto;
-import com.example.alba_pocket.entity.*;
+import com.example.alba_pocket.entity.Comment;
+import com.example.alba_pocket.entity.QUser;
+import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.model.PostSearchKeyword;
-
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.*;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -28,10 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.alba_pocket.entity.QComment.comment1;
-import static com.example.alba_pocket.entity.QCommentLikes.commentLikes;
+
 import static com.example.alba_pocket.entity.QPost.post;
 import static com.example.alba_pocket.entity.QLikes.likes;
 import static com.example.alba_pocket.entity.QUser.user;
+
 
 
 
@@ -70,6 +65,23 @@ public class PostRepositoryImpl implements PostCustomRepository{
     @Override
     public Slice<PostResponseDto> scrollPost(Pageable pageable, User user) {
 
+//        List<Post> result = queryFactory
+//                .selectFrom(post)
+//                .orderBy(post.createdAt.desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize() + 1)
+//                .fetch();
+//
+//        List<PostResponseDto> postList = new ArrayList<>();
+//        for (Post findPost : result) {
+//            boolean isLike = false;
+//            if (user != null) {
+//                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), findPost.getId());
+//            }
+//            Long likeCount = likesRepository.countByPostId(findPost.getId());
+//            Long commentCount = commentRepository.countByPostId(findPost.getId());
+//            postList.add(new PostResponseDto(findPost, isLike, likeCount, commentCount));
+//        }
         List<PostResponseDto> postList = queryFactory
                 .select(Projections.fields(
                         PostResponseDto.class,
@@ -112,23 +124,7 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
-//        List<Post> result = queryFactory
-//                .selectFrom(post)
-//                .orderBy(post.createdAt.desc())
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize() + 1)
-//                .fetch();
-//
-//        List<PostResponseDto> postList = new ArrayList<>();
-//        for (Post findPost : result) {
-//            boolean isLike = false;
-//            if (user != null) {
-//                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), findPost.getId());
-//            }
-//            Long likeCount = likesRepository.countByPostId(findPost.getId());
-//            Long commentCount = commentRepository.countByPostId(findPost.getId());
-//            postList.add(new PostResponseDto(findPost, isLike, likeCount, commentCount));
-//        }
+
         boolean hasNext = false;
         if (postList.size() > pageable.getPageSize()) {
             postList.remove(pageable.getPageSize());
@@ -355,7 +351,6 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 .fetchOne();
         return new PageImpl<>(postList, pageable, count);
     }
-
 
 
 

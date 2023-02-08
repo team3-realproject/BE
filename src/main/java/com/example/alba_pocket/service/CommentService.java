@@ -1,6 +1,5 @@
 package com.example.alba_pocket.service;
 
-import com.example.alba_pocket.dto.CommentCreateResponseDto;
 import com.example.alba_pocket.dto.CommentRequestDto;
 import com.example.alba_pocket.dto.CommentResponseDto;
 import com.example.alba_pocket.dto.MsgResponseDto;
@@ -8,7 +7,6 @@ import com.example.alba_pocket.entity.Comment;
 import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
-import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.*;
@@ -19,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -71,7 +67,7 @@ public class CommentService {
         if(!Objects.equals(SecurityUtil.getCurrentUser().getId(), post.getUser().getId())) {
             notificationService.send(post.getUser(), category, content, Url);
         }
-        return new ResponseEntity<>(new CommentCreateResponseDto(commentId), HttpStatus.OK);
+        return new ResponseEntity<>(new CommentResponseDto.CommentCreateResponseDto(commentId), HttpStatus.OK);
     }
 
     //댓글수정

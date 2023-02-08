@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MypageCommentResponseDto {
     private String title;
-
     private Long postId;
     private Long commentId;
     private String comment;
@@ -22,16 +21,4 @@ public class MypageCommentResponseDto {
     private String profileImage;
 
 
-    public MypageCommentResponseDto(Comment comment, boolean isLike, Long likeCount) {
-        this.title = comment.getPost().getTitle();
-        this.postId = comment.getPost().getId();
-        this.commentId = comment.getId();
-        this.comment = comment.getComment();
-        this.userId = comment.getUser().getUserId();
-        this.nickname = comment.getUser().getNickname();
-        this.commentLikeNum = likeCount;
-        this.isLikeComment = isLike;
-        this.createAt = comment.getCreatedAt();
-        this.profileImage = comment.getUser().getProfileImage();
-    }
 }

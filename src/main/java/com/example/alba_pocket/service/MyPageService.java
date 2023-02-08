@@ -2,14 +2,11 @@ package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.*;
 import com.example.alba_pocket.entity.Comment;
-import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.User;
-
 import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.repository.*;
-
 import com.example.alba_pocket.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,12 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +44,7 @@ public class MyPageService {
     }
 
     @Transactional
-    public ResponseEntity<?> updateMypage(MypageAttributeRequestDto mypageAttributeRequestDto) throws IOException {
+    public ResponseEntity<?> updateMypage(MyPageRequestDto.MyPageAttributeRequestDto mypageAttributeRequestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
         if(mypageAttributeRequestDto.getNickname()!=null) {
             if(userRepository.existsByNickname(mypageAttributeRequestDto.getNickname())) {
@@ -84,7 +78,7 @@ public class MyPageService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteMyPageComments(MypageDeleteRequestDto mypageDeleteRequestDto) {
+    public ResponseEntity<?> deleteMyPageComments(MyPageRequestDto.MyPageDeleteRequestDto mypageDeleteRequestDto) {
         User user = SecurityUtil.getCurrentUser();
         for (Long commentId : mypageDeleteRequestDto.getCommentIdList()) {
             Comment comment = commentRepository.findById(commentId).orElseThrow(
@@ -105,6 +99,7 @@ public class MyPageService {
         User user = SecurityUtil.getCurrentUser();
         Pageable pageable = PageRequest.of(page, size);
         Page<MypageCommentResponseDto> commentPage = commentRepositoryImpl.myCommentPostPage(user, pageable);
+
         return new ResponseEntity<>(commentPage, HttpStatus.OK);
     }
 }

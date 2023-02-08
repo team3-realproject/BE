@@ -1,7 +1,6 @@
 package com.example.alba_pocket.controller;
 
-import com.example.alba_pocket.dto.MypageAttributeRequestDto;
-import com.example.alba_pocket.dto.MypageDeleteRequestDto;
+import com.example.alba_pocket.dto.MyPageRequestDto;
 import com.example.alba_pocket.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ public class MyPageController {
     }
 
     @PutMapping("/mypage")
-    public ResponseEntity<?> updateMypage(@ModelAttribute MypageAttributeRequestDto mypageAttributeRequestDto) throws IOException{
+    public ResponseEntity<?> updateMypage(@ModelAttribute MyPageRequestDto.MyPageAttributeRequestDto mypageAttributeRequestDto) throws IOException{
         return myPageService.updateMypage(mypageAttributeRequestDto);
 
     }
@@ -33,7 +32,7 @@ public class MyPageController {
 
 
     @DeleteMapping("/mypage/comments")
-    public ResponseEntity<?> deleteMypageComments(@RequestBody MypageDeleteRequestDto mypageDeleteRequestDto) {
+    public ResponseEntity<?> deleteMypageComments(@RequestBody MyPageRequestDto.MyPageDeleteRequestDto mypageDeleteRequestDto) {
         return myPageService.deleteMyPageComments(mypageDeleteRequestDto);
     }
 

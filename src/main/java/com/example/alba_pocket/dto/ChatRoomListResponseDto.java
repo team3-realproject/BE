@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+//쿼리dsl관련dto
 @Getter
 @Setter
 public class ChatRoomListResponseDto {

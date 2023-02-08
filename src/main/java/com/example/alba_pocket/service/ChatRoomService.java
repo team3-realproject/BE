@@ -1,7 +1,6 @@
 package com.example.alba_pocket.service;
 
-import com.example.alba_pocket.dto.RoomIdResponseDto;
-import com.example.alba_pocket.dto.TotalCountMessageDto;
+import com.example.alba_pocket.dto.ChatResponseDto;
 import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.repository.ChatMessageRepository;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -97,7 +95,7 @@ public class ChatRoomService {
             Long toUserId = Long.valueOf(String.valueOf(list.get("to_user_id")));
             User toUser = userRepository.findById(toUserId).orElse(new User());
             Integer count = chatMessageRepository.CountMessage(String.valueOf(list.get("room_id")), user.getId());
-            return new RoomIdResponseDto(list, toUser, count);
+            return new ChatResponseDto.RoomIdResponseDto(list, toUser, count);
         }).collect(Collectors.toList()), HttpStatus.OK);
 //        return new ResponseEntity<>(roomLists.stream().map(chatRoom -> {
 //            ChatMessage chatMessage = chatMessageRepository.findTopByRoomIdOrderByIdDesc(chatRoom.getRoomId()).orElse(new ChatMessage());
@@ -117,6 +115,6 @@ public class ChatRoomService {
     public ResponseEntity<?> TotalCountMessage() {
         User user = SecurityUtil.getCurrentUser();
         Integer count = chatMessageRepository.CountTotalMessage(user.getId());
-        return new ResponseEntity<>(new TotalCountMessageDto(count), HttpStatus.OK);
+        return new ResponseEntity<>(new ChatResponseDto.TotalCountMessageDto(count), HttpStatus.OK);
     }
 }

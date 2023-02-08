@@ -1,19 +1,15 @@
 package com.example.alba_pocket.repository;
 
 import com.example.alba_pocket.dto.ChatRoomListResponseDto;
-import com.example.alba_pocket.dto.LastMessageResponseDto;
-import com.example.alba_pocket.entity.Post;
 import com.example.alba_pocket.entity.QUser;
 import com.example.alba_pocket.entity.User;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.example.alba_pocket.entity.QUser.user;
 import static com.example.alba_pocket.entity.QChatMessage.chatMessage;
 import static com.example.alba_pocket.entity.QChatRoom.chatRoom;
 
