@@ -18,7 +18,7 @@ public class Post extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 30)
+    @Column(length = 50)
     private String title;
 
     @Column(length = 500)

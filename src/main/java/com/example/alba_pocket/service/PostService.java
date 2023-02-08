@@ -44,7 +44,7 @@ public class PostService {
     @Transactional
     public ResponseEntity<?> createPost(PostRequestDto requestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
-        if(requestDto.getTitle().length()>30) {
+        if(requestDto.getTitle().length()>50) {
             throw new RestApiException(CommonStatusCode.OVER_TITLE);
         }
         if(requestDto.getContent().length()>500) {
@@ -96,7 +96,7 @@ public class PostService {
     public ResponseEntity<?> updatePost(Long postId, PostRequestDto requestDto) throws IOException {
         User user = SecurityUtil.getCurrentUser();
 
-        if(requestDto.getTitle().length()>30) {
+        if(requestDto.getTitle().length()>50) {
             throw new RestApiException(CommonStatusCode.OVER_TITLE);
         }
         if(requestDto.getContent().length()>500) {
