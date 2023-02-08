@@ -8,6 +8,7 @@ import com.example.alba_pocket.dto.PostResponseDto;
 import com.example.alba_pocket.entity.*;
 import com.example.alba_pocket.model.PostSearchKeyword;
 
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.alba_pocket.entity.QComment.comment1;
+import static com.example.alba_pocket.entity.QCommentLikes.commentLikes;
 import static com.example.alba_pocket.entity.QPost.post;
 import static com.example.alba_pocket.entity.QLikes.likes;
 import static com.example.alba_pocket.entity.QUser.user;
@@ -67,25 +69,68 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
     @Override
     public Slice<PostResponseDto> scrollPost(Pageable pageable, User user) {
-        List<Post> result = queryFactory
-                .selectFrom(post)
+
+        List<PostResponseDto> postList = queryFactory
+                .select(Projections.fields(
+                        PostResponseDto.class,
+                        post.id.as("postId"),
+                        QUser.user.profileImage,
+                        QUser.user.userId,
+                        QUser.user.nickname,
+                        post.title,
+                        post.content,
+                        post.imgUrl,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(likes.count())
+                                        .from(likes)
+                                        .where(likes.post.id.eq(post.id)),
+                                "postLikeNum"
+                        ),
+                        ExpressionUtils.as
+                                (JPAExpressions
+                                                .selectFrom(likes)
+                                                .where(likes.userId.eq(user.getId())
+                                                        .and(likes.post.id.eq(post.id)))
+                                                .exists(),
+                                        "isLikePost"),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(comment1.count())
+                                        .from(comment1)
+                                        .where(comment1.post.id.eq(post.id)),
+                                "commentCount"
+                        ),
+                        post.category,
+                        post.createdAt.as("createAt"),
+                        post.modifiedAt
+                        )
+                ).from(post)
+                .join(QUser.user)
+                .on(post.user.id.eq(QUser.user.id))
                 .orderBy(post.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
-
-        List<PostResponseDto> postList = new ArrayList<>();
-        for (Post findPost : result) {
-            boolean isLike = false;
-            if (user != null) {
-                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), findPost.getId());
-            }
-            int likeCount = likesRepository.countByPostId(findPost.getId());
-            int commentCount = commentRepository.countByPostId(findPost.getId());
-            postList.add(new PostResponseDto(findPost, isLike, likeCount, commentCount));
-        }
+//        List<Post> result = queryFactory
+//                .selectFrom(post)
+//                .orderBy(post.createdAt.desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize() + 1)
+//                .fetch();
+//
+//        List<PostResponseDto> postList = new ArrayList<>();
+//        for (Post findPost : result) {
+//            boolean isLike = false;
+//            if (user != null) {
+//                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), findPost.getId());
+//            }
+//            Long likeCount = likesRepository.countByPostId(findPost.getId());
+//            Long commentCount = commentRepository.countByPostId(findPost.getId());
+//            postList.add(new PostResponseDto(findPost, isLike, likeCount, commentCount));
+//        }
         boolean hasNext = false;
-        if (result.size() > pageable.getPageSize()) {
+        if (postList.size() > pageable.getPageSize()) {
             postList.remove(pageable.getPageSize());
             hasNext = true;
         }
@@ -95,26 +140,52 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
     @Override
     public Slice<PostResponseDto> scrollCategoryPost(Pageable pageable, User user, String category) {
-        List<Post> result = queryFactory
-                .selectFrom(post)
+        List<PostResponseDto> postList = queryFactory
+                .select(Projections.fields(
+                                PostResponseDto.class,
+                                post.id.as("postId"),
+                                QUser.user.profileImage,
+                                QUser.user.userId,
+                                QUser.user.nickname,
+                                post.title,
+                                post.content,
+                                post.imgUrl,
+                                ExpressionUtils.as(
+                                        JPAExpressions
+                                                .select(likes.count())
+                                                .from(likes)
+                                                .where(likes.post.id.eq(post.id)),
+                                        "postLikeNum"
+                                ),
+                                ExpressionUtils.as
+                                        (JPAExpressions
+                                                        .selectFrom(likes)
+                                                        .where(likes.userId.eq(user.getId())
+                                                                .and(likes.post.id.eq(post.id)))
+                                                        .exists(),
+                                                "isLikePost"),
+                                ExpressionUtils.as(
+                                        JPAExpressions
+                                                .select(comment1.count())
+                                                .from(comment1)
+                                                .where(comment1.post.id.eq(post.id)),
+                                        "commentCount"
+                                ),
+                                post.category,
+                                post.createdAt.as("createAt"),
+                                post.modifiedAt
+                        )
+                ).from(post)
+                .join(QUser.user)
+                .on(post.user.id.eq(QUser.user.id))
                 .where(post.category.eq(category))
                 .orderBy(post.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        List<PostResponseDto> postList = new ArrayList<>();
-        for (Post findPost : result) {
-            boolean isLike = false;
-            if (user != null) {
-                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), findPost.getId());
-            }
-            int likeCount = likesRepository.countByPostId(findPost.getId());
-            int commentCount = commentRepository.countByPostId(findPost.getId());
-            postList.add(new PostResponseDto(findPost, isLike, likeCount, commentCount));
-        }
         boolean hasNext = false;
-        if (result.size() > pageable.getPageSize()) {
+        if (postList.size() > pageable.getPageSize()) {
             postList.remove(pageable.getPageSize());
             hasNext = true;
         }
@@ -124,8 +195,64 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
     @Override
     public Page<PostResponseDto> searchPage(PostSearchKeyword keyword, Pageable pageable, User user) {
-        List<Post> content = queryFactory // 페이징을 사용한 데이터 조회
-                .selectFrom(post)
+//        List<Post> content = queryFactory // 페이징을 사용한 데이터 조회
+//                .selectFrom(post)
+//                .where(
+//                        titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
+//                )
+//                .orderBy(post.createdAt.desc())
+//                .offset(pageable.getOffset()) //페이지 offset(0부터 시작)
+//                .limit(pageable.getPageSize()) //페이지 limit(페이지 사이즈)
+//                .fetch();
+//
+//        List<PostResponseDto> postList = new ArrayList<>();
+//        for ( Post post : content) {
+//            boolean isLike = false;
+//            if(user!=null)
+//                isLike = likesRepository.existsByUserIdAndPostId(user.getId(),post.getId());
+//            Long likeCount = likesRepository.countByPostId(post.getId());
+//            Long commentCount = commentRepository.countByPostId(post.getId());
+//            postList.add(new PostResponseDto(post, isLike, likeCount, commentCount));
+//        }
+
+        List<PostResponseDto> postList = queryFactory
+                .select(Projections.fields(
+                                PostResponseDto.class,
+                                post.id.as("postId"),
+                                QUser.user.profileImage,
+                                QUser.user.userId,
+                                QUser.user.nickname,
+                                post.title,
+                                post.content,
+                                post.imgUrl,
+                                ExpressionUtils.as(
+                                        JPAExpressions
+                                                .select(likes.count())
+                                                .from(likes)
+                                                .where(likes.post.id.eq(post.id)),
+                                        "postLikeNum"
+                                ),
+                                ExpressionUtils.as
+                                        (JPAExpressions
+                                                        .selectFrom(likes)
+                                                        .where(likes.userId.eq(user.getId())
+                                                                .and(likes.post.id.eq(post.id)))
+                                                        .exists(),
+                                                "isLikePost"),
+                                ExpressionUtils.as(
+                                        JPAExpressions
+                                                .select(comment1.count())
+                                                .from(comment1)
+                                                .where(comment1.post.id.eq(post.id)),
+                                        "commentCount"
+                                ),
+                                post.category,
+                                post.createdAt.as("createAt"),
+                                post.modifiedAt
+                        )
+                ).from(post)
+                .join(QUser.user)
+                .on(post.user.id.eq(QUser.user.id))
                 .where(
                         titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
                 )
@@ -133,16 +260,6 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 .offset(pageable.getOffset()) //페이지 offset(0부터 시작)
                 .limit(pageable.getPageSize()) //페이지 limit(페이지 사이즈)
                 .fetch();
-
-        List<PostResponseDto> postList = new ArrayList<>();
-        for ( Post post : content) {
-            boolean isLike = false;
-            if(user!=null)
-                isLike = likesRepository.existsByUserIdAndPostId(user.getId(),post.getId());
-            int likeCount = likesRepository.countByPostId(post.getId());
-            int commentCount = commentRepository.countByPostId(post.getId());
-            postList.add(new PostResponseDto(post, isLike, likeCount, commentCount));
-        }
 
         Long count = queryFactory //count 조회
                 .select(post.count())
@@ -157,25 +274,72 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
     @Override
     public Page<PostResponseDto> myLikePostPage(User user, Pageable pageable) {
-        List<Post> userLikePosts = queryFactory
-                .select(post)
-                .from(post)
+//        List<Post> userLikePosts = queryFactory
+//                .select(post)
+//                .from(post)
+//                .join(likes)
+//                .on(post.id.eq(likes.post.id))
+//                .where(
+//                        likes.userId.eq(user.getId())
+//                )
+//                .orderBy(likes.id.desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+//
+//        List<PostResponseDto> postList = new ArrayList<>();
+//        for ( Post post : userLikePosts) {
+//        Long likeCount = likesRepository.countByPostId(post.getId());
+//        Long commentCount = commentRepository.countByPostId(post.getId());
+//        postList.add(new PostResponseDto(post, true, likeCount, commentCount));
+//        }
+        List<PostResponseDto> postList = queryFactory
+                .select(Projections.fields(
+                                PostResponseDto.class,
+                                post.id.as("postId"),
+                                QUser.user.profileImage,
+                                QUser.user.userId,
+                                QUser.user.nickname,
+                                post.title,
+                                post.content,
+                                post.imgUrl,
+                                ExpressionUtils.as(
+                                        JPAExpressions
+                                                .select(likes.count())
+                                                .from(likes)
+                                                .where(likes.post.id.eq(post.id)),
+                                        "postLikeNum"
+                                ),
+                                ExpressionUtils.as
+                                        (JPAExpressions
+                                                        .selectFrom(likes)
+                                                        .where(likes.userId.eq(user.getId())
+                                                                .and(likes.post.id.eq(post.id)))
+                                                        .exists(),
+                                                "isLikePost"),
+                                ExpressionUtils.as(
+                                        JPAExpressions
+                                                .select(comment1.count())
+                                                .from(comment1)
+                                                .where(comment1.post.id.eq(post.id)),
+                                        "commentCount"
+                                ),
+                                post.category,
+                                post.createdAt.as("createAt"),
+                                post.modifiedAt
+                        )
+                ).from(post)
+                .join(QUser.user)
+                .on(post.user.id.eq(QUser.user.id))
                 .join(likes)
                 .on(post.id.eq(likes.post.id))
                 .where(
                         likes.userId.eq(user.getId())
                 )
                 .orderBy(likes.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset()) //페이지 offset(0부터 시작)
+                .limit(pageable.getPageSize()) //페이지 limit(페이지 사이즈)
                 .fetch();
-
-        List<PostResponseDto> postList = new ArrayList<>();
-        for ( Post post : userLikePosts) {
-        int likeCount = likesRepository.countByPostId(post.getId());
-        int commentCount = commentRepository.countByPostId(post.getId());
-        postList.add(new PostResponseDto(post, true, likeCount, commentCount));
-        }
 
         Long count = queryFactory //count 조회
                 .select(post.count())
@@ -193,86 +357,11 @@ public class PostRepositoryImpl implements PostCustomRepository{
     }
 
 
-    @Override
-    public Page<MypageCommentResponseDto> myCommentPostPage(User user, Pageable pageable) {
-        List<Comment> userCommentPosts = queryFactory
-                .selectFrom(comment1)
-                .where(
-                        comment1.user.id.eq(user.getId())
-                )
-                .orderBy(comment1.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
 
-        List<MypageCommentResponseDto> commentList = new ArrayList<>();
-        for ( Comment comment : userCommentPosts) {
-            int likeCount = commentLikesRepository.countByCommentId(comment.getId());
-            boolean isLikeComment = commentLikesRepository.existsByUserIdAndCommentId(user.getId(), comment.getId());
-            commentList.add(new MypageCommentResponseDto(comment, isLikeComment,likeCount) );
-        }
-
-        Long count = queryFactory //count 조회
-                .select(comment1.count())
-                .from(comment1)
-                .where(
-                        comment1.user.id.eq(user.getId())
-                )
-                .fetchOne();
-        return new PageImpl<>(commentList, pageable, count);
-    }
 
     public Page<PostResponseDto> getMyPage(User user, Pageable pageable) {
-        List<Post> getMyPost = queryFactory
-                .selectFrom(post)
-                .where(post.user.id.eq(user.getId()))
-                .orderBy(post.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        List<PostResponseDto> postList = new ArrayList<>();
-
-        for (Post post : getMyPost) {
-            boolean isLike = false;
-            if (user != null) {
-                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
-            }
-            int likeCount = likesRepository.countByPostId(post.getId());
-            int commentCount = commentRepository.countByPostId(post.getId());
-            postList.add(new PostResponseDto(post, isLike, likeCount, commentCount));
-        }
-
-        Long count = queryFactory //count 조회
-                .select(post.count())
-                .from(post)
-                .where(
-                        post.user.id.eq(user.getId())
-                )
-                .fetchOne();
-        return new PageImpl<>(postList, pageable, count);
-    }
-
-
-//    public Page<PostResponseDto> getMyPage(User user, Pageable pageable) {
-//        queryFactory
-//                .select(Projections.fields(
-//                        PostResponseDto.class,
-//                        post.id.as("postId"),
-//                        QUser.user.profileImage,
-//                        QUser.user.userId,
-//                        QUser.user.nickname,
-//                        post.title,
-//                        post.content,
-//                        post.imgUrl,
-//                        likes.count().as("postLikeNum"),
-//                        likes.count().gt(0).as("isLikePost")
-//
-//
-//
-//
-//                ))
-//                .from(post)
+//        List<Post> getMyPost = queryFactory
+//                .selectFrom(post)
 //                .where(post.user.id.eq(user.getId()))
 //                .orderBy(post.createdAt.desc())
 //                .offset(pageable.getOffset())
@@ -286,19 +375,115 @@ public class PostRepositoryImpl implements PostCustomRepository{
 //            if (user != null) {
 //                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
 //            }
-//            int likeCount = likesRepository.countByPostId(post.getId());
-//            int commentCount = commentRepository.countByPostId(post.getId());
+//            Long likeCount = likesRepository.countByPostId(post.getId());
+//            Long commentCount = commentRepository.countByPostId(post.getId());
 //            postList.add(new PostResponseDto(post, isLike, likeCount, commentCount));
 //        }
-//
-//        Long count = queryFactory //count 조회
-//                .select(post.count())
-//                .from(post)
-//                .where(
-//                        post.user.id.eq(user.getId())
-//                )
-//                .fetchOne();
-//        return new PageImpl<>(postList, pageable, count);
-//    }
+
+        List<PostResponseDto> postList = queryFactory
+                .select(Projections.fields(
+                                PostResponseDto.class,
+                                post.id.as("postId"),
+                                QUser.user.profileImage,
+                                QUser.user.userId,
+                                QUser.user.nickname,
+                                post.title,
+                                post.content,
+                                post.imgUrl,
+                                ExpressionUtils.as(
+                                        JPAExpressions
+                                                .select(likes.count())
+                                                .from(likes)
+                                                .where(likes.post.id.eq(post.id)),
+                                        "postLikeNum"
+                                ),
+                                ExpressionUtils.as
+                                        (JPAExpressions
+                                                        .selectFrom(likes)
+                                                        .where(likes.userId.eq(user.getId())
+                                                                .and(likes.post.id.eq(post.id)))
+                                                        .exists(),
+                                                "isLikePost"),
+                                ExpressionUtils.as(
+                                        JPAExpressions
+                                                .select(comment1.count())
+                                                .from(comment1)
+                                                .where(comment1.post.id.eq(post.id)),
+                                        "commentCount"
+                                ),
+                                post.category,
+                                post.createdAt.as("createAt"),
+                                post.modifiedAt
+                        )
+                ).from(post)
+                .join(QUser.user)
+                .on(post.user.id.eq(QUser.user.id))
+                .where(
+                        post.user.id.eq(user.getId())
+                )
+                .orderBy(post.createdAt.desc())
+                .offset(pageable.getOffset()) //페이지 offset(0부터 시작)
+                .limit(pageable.getPageSize()) //페이지 limit(페이지 사이즈)
+                .fetch();
+
+        Long count = queryFactory //count 조회
+                .select(post.count())
+                .from(post)
+                .where(
+                        post.user.id.eq(user.getId())
+                )
+                .fetchOne();
+        return new PageImpl<>(postList, pageable, count);
+    }
+
+    public PostResponseDto findPostById(User user, Long postId) {
+        PostResponseDto postInfo = queryFactory
+                .select(Projections.fields(
+                                PostResponseDto.class,
+                                post.id.as("postId"),
+                                QUser.user.profileImage,
+                                QUser.user.userId,
+                                QUser.user.nickname,
+                                post.title,
+                                post.content,
+                                post.imgUrl,
+                                ExpressionUtils.as(
+                                        JPAExpressions
+                                                .select(likes.count())
+                                                .from(likes)
+                                                .where(likes.post.id.eq(post.id)),
+                                        "postLikeNum"
+                                ),
+                                ExpressionUtils.as
+                                        (JPAExpressions
+                                                        .selectFrom(likes)
+                                                        .where(likes.userId.eq(user.getId())
+                                                                .and(likes.post.id.eq(post.id)))
+                                                        .exists(),
+                                                "isLikePost"),
+                                ExpressionUtils.as(
+                                        JPAExpressions
+                                                .select(comment1.count())
+                                                .from(comment1)
+                                                .where(comment1.post.id.eq(post.id)),
+                                        "commentCount"
+                                ),
+                                post.category,
+                                post.createdAt.as("createAt"),
+                                post.modifiedAt
+                        )
+                ).from(post)
+                .join(QUser.user)
+                .on(post.user.id.eq(QUser.user.id))
+                .where(
+                        post.id.eq(postId)
+                )
+                .orderBy(post.createdAt.desc())
+                .fetchOne();
+
+        return postInfo;
+    }
+
+
 
 }

@@ -79,16 +79,14 @@ public class PostService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getPost(Long postId) {
         User user = SecurityUtil.getCurrentUser();
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new RestApiException(CommonStatusCode.NO_ARTICLE)
-        );
-        boolean isLike = false;
-        if(user != null){
-            isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
-        }
-        int likeCount = likesRepository.countByPostId(post.getId());
-        int commentCount = commentRepository.countByPostId(post.getId());
-        return new ResponseEntity<>(new PostResponseDto(post, isLike, likeCount, commentCount), HttpStatus.OK);
+        PostResponseDto post = postRepositoryImpl.findPostById(user, postId);
+//        boolean isLike = false;
+//        if(user != null){
+//            isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
+//        }
+//        Long likeCount = likesRepository.countByPostId(post.getId());
+//        Long commentCount = commentRepository.countByPostId(post.getId());
+        return new ResponseEntity<>(post, HttpStatus.OK);
     }
     //수정
     @Transactional
@@ -118,8 +116,8 @@ public class PostService {
         }
 
         boolean isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
-        int likeCount = likesRepository.countByPostId(post.getId());
-        int commentCount = commentRepository.countByPostId(post.getId());
+        Long likeCount = likesRepository.countByPostId(post.getId());
+        Long commentCount = commentRepository.countByPostId(post.getId());
         return new ResponseEntity<>(new PostResponseDto(post, isLike, likeCount, commentCount), HttpStatus.OK);
     }
     //삭제

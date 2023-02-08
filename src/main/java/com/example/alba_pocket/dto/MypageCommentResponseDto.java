@@ -2,10 +2,12 @@ package com.example.alba_pocket.dto;
 
 import com.example.alba_pocket.entity.Comment;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class MypageCommentResponseDto {
     private String title;
 
@@ -14,13 +16,13 @@ public class MypageCommentResponseDto {
     private String comment;
     private String userId;
     private String nickname;
-    private int commentLikeNum;
+    private Long commentLikeNum;
     private boolean isLikeComment;
     private LocalDateTime createAt;
     private String profileImage;
 
 
-    public MypageCommentResponseDto(Comment comment, boolean isLike, int likeCount) {
+    public MypageCommentResponseDto(Comment comment, boolean isLike, Long likeCount) {
         this.title = comment.getPost().getTitle();
         this.postId = comment.getPost().getId();
         this.commentId = comment.getId();

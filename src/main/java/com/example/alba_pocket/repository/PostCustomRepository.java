@@ -24,6 +24,6 @@ public interface PostCustomRepository {
     Page<PostResponseDto> searchPage(PostSearchKeyword keyword, Pageable pageable, User user);
 
     Page<PostResponseDto> myLikePostPage(User user, Pageable pageable);
-    Page<MypageCommentResponseDto> myCommentPostPage(User user, Pageable pageable);
+
 
 }

@@ -16,10 +16,10 @@ public class PostResponseDto {
     private String title;
     private String content;
     private String imgUrl;
-    private int postLikeNum;
+    private Long postLikeNum;
     private boolean isLikePost;
     private String category;
-    private int commentCount;
+    private Long commentCount;
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
 
@@ -32,7 +32,7 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.imgUrl = post.getImgUrl();
-        this.postLikeNum = 0;
+        this.postLikeNum = 0l;
         this.isLikePost = false;
         this.category = post.getCategory();
         this.createAt = post.getCreatedAt();
@@ -40,7 +40,7 @@ public class PostResponseDto {
     }
 
 
-    public PostResponseDto(Post post, boolean isLike, int likeCount, int commentCount) {
+    public PostResponseDto(Post post, boolean isLike, Long likeCount, Long commentCount) {
         this.postId = post.getId();
         this.profileImage = post.getUser().getProfileImage();
         this.userId = post.getUser().getUserId();

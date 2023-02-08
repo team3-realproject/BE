@@ -35,6 +35,7 @@ public class MyPageService {
     private final S3Uploader s3Uploader;
     private final CommentRepository commentRepository;
     private final PostRepositoryImpl postRepositoryImpl;
+    private final CommentRepositoryImpl commentRepositoryImpl;
 
 
     @Transactional
@@ -103,7 +104,7 @@ public class MyPageService {
     public ResponseEntity<?> commentMypage(int page, int size) {
         User user = SecurityUtil.getCurrentUser();
         Pageable pageable = PageRequest.of(page, size);
-        Page<MypageCommentResponseDto> commentPage = postRepositoryImpl.myCommentPostPage(user, pageable);
+        Page<MypageCommentResponseDto> commentPage = commentRepositoryImpl.myCommentPostPage(user, pageable);
         return new ResponseEntity<>(commentPage, HttpStatus.OK);
     }
 }

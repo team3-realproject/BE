@@ -14,7 +14,7 @@ public class CommentResponseDto {
     private String comment;
     private String userId;
     private String nickname;
-    private int commentLikeNum;
+    private Long commentLikeNum;
     private boolean isLikeComment;
     private LocalDateTime createAt;
     private String profileImage;
@@ -24,14 +24,14 @@ public class CommentResponseDto {
         this.comment = save.getComment();
         this.userId = save.getUser().getUserId();
         this.nickname = save.getNickname();
-        this.commentLikeNum = 0;
+        this.commentLikeNum = 0l;
         this.isLikeComment = false;
         this.createAt = save.getCreatedAt();
         this.profileImage = save.getUser().getProfileImage();
     }
 
     
-    public CommentResponseDto(Comment comment, boolean isLike, int likeCount) {
+    public CommentResponseDto(Comment comment, boolean isLike, Long likeCount) {
         this.commentId = comment.getId();
         this.comment = comment.getComment();
         this.userId = comment.getUser().getUserId();

@@ -11,10 +11,7 @@ import com.example.alba_pocket.errorcode.CommonStatusCode;
 import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.model.NotificationType;
-import com.example.alba_pocket.repository.CommentLikesRepository;
-import com.example.alba_pocket.repository.CommentRepository;
-import com.example.alba_pocket.repository.PostRepository;
-import com.example.alba_pocket.repository.UserRepository;
+import com.example.alba_pocket.repository.*;
 import com.example.alba_pocket.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,6 +34,7 @@ public class CommentService {
     private final CommentLikesRepository commentLikesRepository;
 
     private final NotificationService notificationService;
+    private final CommentRepositoryImpl commentRepositoryImpl;
 
     //댓글작성
     @Transactional
@@ -108,18 +106,18 @@ public class CommentService {
     //댓글조회
     public List<CommentResponseDto> getComments(Long postId) {
         User user = SecurityUtil.getCurrentUser();
-        List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtAsc(postId);
-        return comments.stream().map(comment -> {
-            boolean isLike = false;
-            if(user != null) {
-                isLike = commentLikesRepository.existsByUserIdAndCommentId(user.getId(), comment.getId());
-            }
-
-            int likeCount = commentLikesRepository.countByCommentId(comment.getId());
-            return new CommentResponseDto(comment, isLike, likeCount);
-        }).collect(Collectors.toList());
-
-
+        List<CommentResponseDto> commentList = commentRepositoryImpl.commentList(user, postId);
+        return commentList;
+//        List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtAsc(postId);
+//        return comments.stream().map(comment -> {
+//            boolean isLike = false;
+//            if(user != null) {
+//                isLike = commentLikesRepository.existsByUserIdAndCommentId(user.getId(), comment.getId());
+//            }
+//
+//            Long likeCount = commentLikesRepository.countByCommentId(comment.getId());
+//            return new CommentResponseDto(comment, isLike, likeCount);
+//        }).collect(Collectors.toList());
     }
 
 
