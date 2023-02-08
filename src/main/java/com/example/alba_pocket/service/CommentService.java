@@ -36,6 +36,9 @@ public class CommentService {
     @Transactional
     public ResponseEntity<?> createComment(Long postId, CommentRequestDto requestDto) {
         User user = SecurityUtil.getCurrentUser();
+        if(requestDto.getComment().length()>100) {
+            throw new RestApiException(CommonStatusCode.OVER_COMMENT);
+        }
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new RestApiException(CommonStatusCode.NO_ARTICLE)
         );
@@ -74,6 +77,9 @@ public class CommentService {
     @Transactional
     public ResponseEntity<?> updateComment(Long commentId, CommentRequestDto requestDto) {
         User user = SecurityUtil.getCurrentUser();
+        if(requestDto.getComment().length()>100) {
+            throw new RestApiException(CommonStatusCode.OVER_COMMENT);
+        }
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new RestApiException(CommonStatusCode.NO_COMMENT)
         );
