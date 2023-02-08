@@ -22,8 +22,6 @@ public class ChatMessageController {
     //  /pub/api/chat/message 요청처리 /sub
     @MessageMapping("/api/chat/message")
     public void message(ChatMessageRequestDto message, @Header("myNickName") String myNickName) throws JsonProcessingException {
-        log.info("-------  MessageMapping ----------");
-        log.info(myNickName);
         chatMessageService.message(message, myNickName);
     }
 
@@ -32,7 +30,5 @@ public class ChatMessageController {
     public ResponseEntity<?> getMessage(@PathVariable String roomId){
         return chatMessageService.getMessage(roomId);
     }
-
-
 
 }

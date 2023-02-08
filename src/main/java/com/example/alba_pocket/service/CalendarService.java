@@ -67,7 +67,6 @@ public class CalendarService {
         month += "01";
         LocalDate early = LocalDate.parse(month, DateTimeFormatter.ofPattern("yyyyMMdd"));
         LocalDate endDay = early.withDayOfMonth(early.lengthOfMonth());
-        log.info("월초 - " + early + "----" + "월말 - " + endDay);
         List<Calendar> calendars = calendarRepository.findByUserIdAndWorkDay(user.getId(), early, endDay);
 
         return new ResponseEntity<>(calendars.stream().map(calendar -> {
@@ -224,8 +223,10 @@ public class CalendarService {
                 AtomicReference<LocalTime> totalTime = new AtomicReference<>(LocalTime.parse(LocalTime.parse("00:00").format(DateTimeFormatter.ofPattern("HH:mm"))));
                 AtomicInteger atomicHour = new AtomicInteger();
                 AtomicInteger atomicMinute = new AtomicInteger();
+
                 dates.stream().map(date -> {
                     List<Calendar> calendars = calendarRepository.findAllByWorkDayAndAndWorkId(date, work.getId());
+                    log.info("---쿼리확인");
                     calendars.forEach(calendar -> {
                         if (calendar.getWorkingTime() != null) {
                             atomicHour.set(Integer.parseInt(String.valueOf(atomicHour)) + calendar.getWorkingTime().getHour());
@@ -240,7 +241,6 @@ public class CalendarService {
                 minute = minute % 60;
                 hour += plusHour;
                 boolean result = hour >= 15;
-                log.info(String.valueOf(result));
                 LocalTime total = LocalTime.parse(totalTime.toString());
                 var sunday = today.with(DayOfWeek.SUNDAY);
                 statutoryLeisurePayResponseDto.add(new CalendarResponseDto.StatutoryLeisurePayResponseDto(result, hour, minute, sunday));
@@ -250,7 +250,6 @@ public class CalendarService {
             statutoryLeisurePayResponseDto.forEach(list -> {
                 if (list.isResult()) {
                     AtomicInteger Origin = new AtomicInteger();
-                    //int i = 0;
                     List<Calendar> calendarList = calendarRepository.findAllByUserIdAndAndWorkId(user.getId(), work.getId());
                     double size = calendarList.size();
                     calendarList.forEach(calendar -> {
@@ -336,7 +335,6 @@ public class CalendarService {
 
         List<Calendar> calendars = calendarRepository.workTotalPay(user.getId(), placeId, startDay, endDay);
 
-        System.out.println(calendars.size());
         AtomicInteger total = new AtomicInteger();
         calendars.forEach(calendar -> {
             total.addAndGet(Pay(calendar.getWorkingTime(), calendar.getHourlyWage()));

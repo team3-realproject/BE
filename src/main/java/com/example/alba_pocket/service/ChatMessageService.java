@@ -40,10 +40,7 @@ public class ChatMessageService {
         if(user.getId() == null){
             throw new IllegalArgumentException("유저정보없음");
         }
-        log.info("메세지" + message.getMessage());
-        log.info("샌더" + message.getSender());
-        log.info("룸ID" + message.getRoomId());
-        log.info("-------  service넘어옴 ----------");
+
         if (ChatMessage.MessageType.ENTER.equals(message.getType())){
             List<ChatRoom> chatRooms = chatRoomRepository.findAllByRoomId(message.getRoomId());
             chatRooms.forEach(ChatRoom::plusUser);
@@ -63,20 +60,12 @@ public class ChatMessageService {
             ChatMessage chatMessage = new ChatMessage(message, user, countUser);
             chatMessageRepository.save(chatMessage);
 
-//            String Url =  "/chat/"+user.getId();
-//            String content = user.getNickname()+"님이 메시지를 보냈습니다!";
-//            notificationService.send(user, NotificationType.CHAT,content,Url);
-
             String Url =  "/chat/"+message.getRoomId();
             String content = message.getSender()+"님이 채팅을 보내셨습니다!";
             notificationService.send(chatRoom.getToUser(), NotificationType.CHAT,content,Url);
         }
 
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
-        log.info("----------------------------------------------------------------------------------");
-
-
-//        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @Transactional

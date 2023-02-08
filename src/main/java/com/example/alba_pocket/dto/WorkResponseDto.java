@@ -23,6 +23,13 @@ public class WorkResponseDto {
         this.salaryDay = work.getSalaryDay();
     }
 
+    public WorkResponseDto(Work work, int lastDate) {
+        this.placeId = work.getId();
+        this.placeName = work.getPlaceName();
+        this.placeColor = work.getPlaceColor();
+        this.salaryDay = work.getSalaryDay() > lastDate ? lastDate : work.getSalaryDay();
+    }
+
 
     @Getter
     @NoArgsConstructor
@@ -30,6 +37,8 @@ public class WorkResponseDto {
         private List<WorkResponseDto> workList = new ArrayList<>();
 
 
-        public void addWork(WorkResponseDto workResponseDto) {workList.add(workResponseDto);}
+        public void addWork(WorkResponseDto workResponseDto) {
+            workList.add(workResponseDto);
+        }
     }
 }

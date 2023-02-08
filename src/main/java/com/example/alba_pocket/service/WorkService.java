@@ -1,6 +1,8 @@
 package com.example.alba_pocket.service;
 
-import com.example.alba_pocket.dto.*;
+import com.example.alba_pocket.dto.MsgResponseDto;
+import com.example.alba_pocket.dto.WorkRequestDto;
+import com.example.alba_pocket.dto.WorkResponseDto;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.entity.Work;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
@@ -8,15 +10,18 @@ import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.repository.WorkRepository;
 import com.example.alba_pocket.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class WorkService {
 
     private final WorkRepository workRepository;
@@ -34,9 +39,12 @@ public class WorkService {
     public ResponseEntity<?> getMyWorkplace() {
         User user = SecurityUtil.getCurrentUser();
         WorkResponseDto.WorkListResponseDto workListResponseDto = new WorkResponseDto.WorkListResponseDto();
-        List<Work> myWorkplace = workRepository.findByUser(user);
-        for (Work work : myWorkplace) {
-            WorkResponseDto workResponseDto = new WorkResponseDto(work);
+        List<Work> myWorkplaces = workRepository.findByUser(user);
+        LocalDate date = LocalDate.now();
+        int lastDate = date.withDayOfMonth(date.lengthOfMonth()).getDayOfMonth();
+        log.info(String.valueOf(lastDate));
+        for (Work work : myWorkplaces) {
+            WorkResponseDto workResponseDto = new WorkResponseDto(work, lastDate);
             workListResponseDto.addWork(workResponseDto);
         }
 
