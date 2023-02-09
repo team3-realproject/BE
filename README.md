@@ -134,6 +134,7 @@
 </div>
 </details>
 <br>
+
 ## 트러블 슈팅
 <details>
 <summary> SSE 알림 로직에서 Hikari Pool Connection is not available 에러 </summary>
