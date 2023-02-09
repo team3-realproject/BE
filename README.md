@@ -129,7 +129,7 @@
 <div markdown="1">
 <br>   
 - @MessageMapping을 사용할때 Class위에 @RequestMapping을 사용하여 공통된 URL처리를 해주고 있었는데 @RequestMapping이 적용 안되는 문제가 발생 <br>
-  - @RequestMapping`은 http통신이고 `@MessageMapping`은 ws://로 시작하는 소켓통신이여서 `@RequestMapping`으로 공통된URL을 설정해도 적용이 안되는걸 확인하고  `@RequestMapping`을 지워줌으로써 해결함. <br>
+  - @RequestMapping은 http통신이고 @MessageMapping은 ws://로 시작하는 소켓통신이여서 @RequestMapping으로 공통된URL을 설정해도 적용이 안되는걸 확인하고 @RequestMapping을 지워줌으로써 해결함. <br>
 </div>
 </details>
 
