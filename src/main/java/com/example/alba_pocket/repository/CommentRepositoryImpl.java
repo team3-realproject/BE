@@ -2,7 +2,6 @@ package com.example.alba_pocket.repository;
 
 import com.example.alba_pocket.dto.CommentResponseDto;
 import com.example.alba_pocket.dto.MypageCommentResponseDto;
-import com.example.alba_pocket.entity.Comment;
 import com.example.alba_pocket.entity.QUser;
 import com.example.alba_pocket.entity.User;
 import com.querydsl.core.types.ExpressionUtils;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import static com.example.alba_pocket.entity.QComment.comment1;
 import static com.example.alba_pocket.entity.QCommentLikes.commentLikes;

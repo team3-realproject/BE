@@ -74,10 +74,3 @@ public class EmitterRepositoryImpl implements EmitterRepository{
 
     }
 }
-
-/*
- SseEmitter 를 이용해 알림을 보낸다 ->
- 어떤 회원에게 어떤 Emitter 가 연결되어있는지 저장해줘야
- 어떤 이벤트들이 현재까지 발생했는지에 대해서도 저장하고 있어야한다.
- [last - event - id : 연결이 끊기게 될 시 이전 데이터를 전송해줘야하기 떼문에 , ]
- */

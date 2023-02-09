@@ -1,7 +1,6 @@
 package com.example.alba_pocket.repository;
 
 import com.example.alba_pocket.entity.ChatRoom;
-import com.example.alba_pocket.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

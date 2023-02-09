@@ -1,16 +1,9 @@
 package com.example.alba_pocket.service;
 
-/*
-    구독 -> Spring 에서 제공하는 Emitter를 생성 후 저장
-    -> 구독자가 생성한 Emitter를 불러와 이벤트에 대한 응답을 전송
-    -> 어떤 회원이 어떤 Emitter를 사용하느지에 대한 구분이 필요
- */
-
 import com.example.alba_pocket.dto.NotificationCountDto;
 import com.example.alba_pocket.dto.NotificationResponseDto;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.errorcode.CommonStatusCode;
-import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.model.Notification;
 import com.example.alba_pocket.model.NotificationType;
@@ -19,32 +12,25 @@ import com.example.alba_pocket.repository.EmitterRepositoryImpl;
 import com.example.alba_pocket.repository.NotificationRepository;
 import com.example.alba_pocket.repository.UserRepository;
 import com.example.alba_pocket.security.SecurityUtil;
-import com.zaxxer.hikari.pool.HikariPool;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-// No activity within 45000 milliseconds. 59 chars received. Reconnecting.
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class NotificationService {
     public static Map<String, SseEmitter> sseEmitters = new ConcurrentHashMap<>();
-    private final UserRepository userRepository;
-    private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
     private final NotificationRepository notificationRepository;
 
     public SseEmitter subscribe(String userId) {

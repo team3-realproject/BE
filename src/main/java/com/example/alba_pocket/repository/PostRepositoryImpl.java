@@ -35,10 +35,6 @@ import static com.example.alba_pocket.entity.QUser.user;
 public class PostRepositoryImpl implements PostCustomRepository{
 
     private final JPAQueryFactory queryFactory;
-    private final LikesRepository likesRepository;
-    private final CommentRepository commentRepository;
-
-    private final CommentLikesRepository commentLikesRepository;
 
     //  BooleanExpression은 and, or 을 조합해서 새로운 BooleanExpression을 만들 수 있다.
    //  또한, 결과 값이 null일 경우 무시하기 때문에 npe를 방지할 수 있다

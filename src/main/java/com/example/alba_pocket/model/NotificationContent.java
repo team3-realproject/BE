@@ -1,7 +1,6 @@
 package com.example.alba_pocket.model;
 
 import com.example.alba_pocket.errorcode.CommonStatusCode;
-import com.example.alba_pocket.errorcode.StatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

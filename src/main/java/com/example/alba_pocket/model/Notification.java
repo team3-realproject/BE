@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-//import org.springframework.security.core.userdetails.User;
 
 import javax.persistence.*;
 
@@ -66,9 +65,3 @@ public class Notification extends Timestamped {
     }
 
 }
-
-/*
- 알림 기능 처리 요소
-  - 누구 : ~ 에 대한 알림이 도착했다. 형식의 알림을 클릭하면 관련 페이지로 이동하는 방식.
-  - 알림을 읽으면 '읽음' 처리가 되어야한다.
- */

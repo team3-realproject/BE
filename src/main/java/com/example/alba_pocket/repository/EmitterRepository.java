@@ -1,13 +1,6 @@
 package com.example.alba_pocket.repository;
 
-/*
-    추가적으로 Emitter REPO 를 구현한 이유
-    Ssemitter 를 이욯해서 알림을 실제로 보내게 되는데 ,
-    어떤 회원에게 어떤 Emitter 가 연결되어있는지 저장 해줘야하며,
-    어떤 이벤트들이 현재까지 발생했는지에 대해서도 저장하고 있어야한다.
-    -> Emitter의 연결이 끊기게 되면 저장되어 있는 Event 를 기반으로 이를 전송해줄수 있어야 되기 때문임.
-      추후 확장성과 변동성을 생각해 INTERFACE 방식으로 구현
- */
+
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 

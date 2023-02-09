@@ -19,7 +19,6 @@ public class MailService {
     // 타임리프를사용하기 위한 객체를 의존성 주입으로 가져온다
     private final SpringTemplateEngine templateEngine;
     private String authNum; //랜덤 인증 코드
-//    String roomId = (String.valueOf(ThreadLocalRandom.current().nextInt(100000000, 1000000000)));
 
     //랜덤 인증 코드 생성
     public void createCode() {

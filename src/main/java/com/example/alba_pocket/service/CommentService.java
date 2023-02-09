@@ -42,16 +42,9 @@ public class CommentService {
         Comment save = new Comment(user, post, requestDto);
         commentRepository.saveAndFlush(save);
 
-        /*
-         댓글이 달린 post 정보와 로그인한 user 정보가 일치하는 댓글들만 list 에 담고,
-         가장 마지막에 달린 댓글 id를 commentId에 담아서 보내줌
-         (방금 단 댓글이 해당 유저가 그 post 에 쓴 가장 마지막 댓글임을 이용)
-         */
         List<Comment> findCommentByPost = commentRepository.findAllByPostAndUser(post, user);
         Long commentId = findCommentByPost.get(findCommentByPost.size() - 1).getId();
-        //해당 댓글로 이동하는 url
         String Url = "/post/"+post.getId();
-        //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String content = user.getNickname()+"님이 게시글에 댓글을 작성했습니다!";
 
         NotificationType category = null;
@@ -63,7 +56,6 @@ public class CommentService {
             category = NotificationType.COVERPOST;
         }
 
-        //본인의 게시글에 댓글을 남길때는 알림을 보낼 필요가 없다.
         if(!Objects.equals(SecurityUtil.getCurrentUser().getId(), post.getUser().getId())) {
             notificationService.send(post.getUser(), category, content, Url);
         }

@@ -29,7 +29,6 @@ public class ChatRoomService {
     private final ChatRepositoryImpl chatRepositoryImpl;
     private final ChatMessageRepository chatMessageRepository;
 
-    private final NotificationService notificationService;
 
 
 
@@ -42,12 +41,6 @@ public class ChatRoomService {
         );
 
 
-//        Optional<String> getRoomId = chatRoomRepository.getRoomId(user.getId(), user1.getId());
-//        System.out.println(getRoomId);
-//        if (getRoomId.isPresent()) {
-//            System.out.println("채팅한적있음");
-//            return new ResponseEntity<>(getRoomId.get(), HttpStatus.OK);
-//        }
         List<String> getRoomId = chatRepositoryImpl.getRoomId(user.getId(), user1.getId());
         System.out.println(getRoomId);
         if (getRoomId.size()>0) {

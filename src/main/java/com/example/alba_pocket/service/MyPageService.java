@@ -24,8 +24,6 @@ import java.io.IOException;
 public class MyPageService {
 
     private final UserRepository userRepository;
-    private final LikesRepository likesRepository;
-    private final PostRepository postRepository;
     private final S3Uploader s3Uploader;
     private final CommentRepository commentRepository;
     private final PostRepositoryImpl postRepositoryImpl;

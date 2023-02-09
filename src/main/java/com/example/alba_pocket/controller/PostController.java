@@ -22,8 +22,6 @@ public class PostController {
         return postService.createPost(requestDto);
     }
 
-//    @GetMapping
-//    public ResponseEntity<?> getPosts(){ return postService.getPosts(); }
     @GetMapping
     public ResponseEntity<?> getPosts(@RequestParam int page, @RequestParam int size) {
         return postService.getPosts(page-1, size); }
