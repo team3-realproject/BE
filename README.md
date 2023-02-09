@@ -4,6 +4,10 @@
 
 ## 나만의 알바 일지와 알바생 커뮤니티
 
+## 📆 개발 기간  
+2022년 12월 30일 ~ 2023년 02월 10일   
+<p>
+
 ## 👥 팀 소개
 #### `Frontend`
  <a href="https://github.com/headwing" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=React&message=최유정 &color=61dafb&style=for-the-badge&>"/></a>
