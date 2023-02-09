@@ -1,4 +1,6 @@
-# Alba Poket Project!!!!!!!!!!!
+# Alba Poket Project
+
+![image](https://user-images.githubusercontent.com/117805482/217720232-1199e879-590e-44ce-8074-f77ba68addf0.png)
 
 ## 나만의 알바 일지와 알바생 커뮤니티
 
@@ -22,4 +24,20 @@
 ### 서비스 타겟
 + 본인의 알바 시간을 정리해 기록 하고싶은 알바생
 + 알바생들끼리의 커뮤니티를 이용하고 싶은 알바생
+
+
+
+##BE 기술스택
+<div align=center> 
+  <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
+  <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+  <img src="https://img.shields.io/badge/Springjpa-4FC08D?style=for-the-badge&logo=jpa&logoColor=white"> 
+  <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
+  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
+  <br>
+  
+  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+  <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white">
+    <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white">
+#2496ED
 
