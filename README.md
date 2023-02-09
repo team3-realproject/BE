@@ -159,7 +159,7 @@
 ## 성능개선
 
 <details>
-<summary> 커뮤니티 전체 게시글 조회 </summary>
+<summary> ex) 커뮤니티 전체 게시글 조회 </summary>
 <div markdown="1">
 <br>   
 <br>
@@ -177,37 +177,26 @@ jmeter 이용한 부하테스트 ( 1000명의 유저가 1초동안 2번씩 요�
 
  ![image](https://user-images.githubusercontent.com/117805482/217812618-d1a9e301-c817-455c-8a95-a6b35dce5078.png)<br>
 <br>
-</div>
-</details>
-
+ <br>   
 <br>
-
-
-<br>   
-<br>
-변경 후 수행 쿼리<br>
+변경 수행 쿼리 <br> 
  
-
-![image](https://user-images.githubusercontent.com/117805482/217807931-e0dbc0ae-753b-4c56-8f1c-138507d50871.png)<br>
+  ![image](https://user-images.githubusercontent.com/117805482/217807931-e0dbc0ae-753b-4c56-8f1c-138507d50871.png)<br>
 
 <br>
 jmeter 이용한 부하테스트 ( 1000명의 유저가 1초동안 2번씩 요청한 경우 ) <br>
 
+ ![무한스크롤 쿼리 수정 후 (summary report)](https://user-images.githubusercontent.com/117805482/217845059-07e61abb-c204-4c8a-97f2-00328de8cdde.png)<br>
+
+ ![무한스크롤 쿼리 수정 후 (Response Times Over Time)](https://user-images.githubusercontent.com/117805482/217845286-04f23d87-611f-411c-b705-0c7538ed5238.png)<br>
  
- ![image](https://user-images.githubusercontent.com/117805482/217812516-b03c7df2-5d06-4765-a6fb-2579737ddf1c.png)<br>
-
- ![image](https://user-images.githubusercontent.com/117805482/217812569-fee3d904-be59-4679-91cb-4d645a05db9b.png)<br>
-
- ![image](https://user-images.githubusercontent.com/117805482/217812618-d1a9e301-c817-455c-8a95-a6b35dce5078.png)<br>
+ ![무한스크롤 쿼리 수정 후 (Transactions per Second)](https://user-images.githubusercontent.com/117805482/217845202-9b0419a6-d8b2-4ad4-aaa9-7555cb8028a6.png)<br>
 <br>
+ 
+ 
+ 
 </div>
 </details>
-
-
-
-jmeter 이용한 부하테스트 ( 1000명의 유저가 1초동안 2번씩 요청한 경우 ) <br>
-![image](https://user-images.githubusercontent.com/117805482/217812781-32802f7d-dcde-43d6-9854-822d9e4f87f3.png)
-
 
 
 
