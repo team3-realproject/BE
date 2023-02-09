@@ -34,7 +34,9 @@ public class MyPageService {
     public ResponseEntity<?> getMypage(int page, int size) {
         User user = SecurityUtil.getCurrentUser();
         Pageable pageable = PageRequest.of(page, size);
-        Page<PostResponseDto> getMypage = postRepositoryImpl.getMyPage(user, pageable);
+        PostCondition postCondition = new PostCondition();
+        postCondition.setUserId(user.getId());
+        Page<PostResponseDto> getMypage = postRepositoryImpl.dynamicPagePost(pageable, user, postCondition);
         MypageResponseDto mypageResponseDto = new MypageResponseDto(user);
         mypageResponseDto.addPost(getMypage);
 

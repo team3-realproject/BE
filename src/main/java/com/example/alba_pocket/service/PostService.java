@@ -1,6 +1,7 @@
 package com.example.alba_pocket.service;
 
 import com.example.alba_pocket.dto.MsgResponseDto;
+import com.example.alba_pocket.dto.PostCondition;
 import com.example.alba_pocket.dto.PostRequestDto;
 import com.example.alba_pocket.dto.PostResponseDto;
 import com.example.alba_pocket.entity.Post;
@@ -64,7 +65,9 @@ public class PostService {
     public ResponseEntity<?> getPosts(int page, int size) {
         User user = SecurityUtil.getCurrentUser();
         Pageable pageable = PageRequest.of(page, size);
-        Slice<PostResponseDto> postResponseDtos = postRepositoryImpl.scrollPost(pageable, user);
+        PostCondition postCondition = new PostCondition();
+        Slice<PostResponseDto> postResponseDtos = postRepositoryImpl.dynamicScrollPost(pageable, user, postCondition);
+
         return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
     }
 
@@ -73,7 +76,9 @@ public class PostService {
     public ResponseEntity<?> categoryGetPosts(int page, int size, String category) {
         User user = SecurityUtil.getCurrentUser();
         Pageable pageable = PageRequest.of(page, size);
-        Slice<PostResponseDto> postResponseDtos = postRepositoryImpl.scrollCategoryPost(pageable, user, category);
+        PostCondition postCondition = new PostCondition();
+        postCondition.setCategory(category);
+        Slice<PostResponseDto> postResponseDtos = postRepositoryImpl.dynamicScrollPost(pageable, user, postCondition);
         return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
     }
 
@@ -145,7 +150,9 @@ public class PostService {
         }
         User user = SecurityUtil.getCurrentUser();
         Pageable pageable = PageRequest.of(page,size);
-        Page<PostResponseDto> postPage = postRepositoryImpl.searchPage(keyword, pageable, user);
+        PostCondition postCondition = new PostCondition();
+        postCondition.setKeyword(keyword.getKeyword());
+        Page<PostResponseDto> postPage = postRepositoryImpl.dynamicPagePost(pageable, user, postCondition);
 
         return new ResponseEntity<>(postPage, HttpStatus.OK);
     }
