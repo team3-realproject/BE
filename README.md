@@ -99,7 +99,7 @@
 <summary> QueryDsl </summary>
 <div markdown="1">
 <br>   
-- 쿼리 성능 개선 : 기존 로직에서 엔티티 fetch type을 lazy로 설정하여 연관된 객체를 spring data jpa를 통해 select 할 때 N+1 문제가 발생했고, DTO에 반환되어야 할 정보를 추가적으로 select하는 로직이어 쿼리량이 방대하고 성능적으로 문제가 생김.<br>
+- 쿼리 성능 개선 : 기존 로직에서 엔티티 fetch type을 lazy로 설정하여 연관된 객체를 spring data jpa를 통해 select 할 때 N+1 문제가 발생했고, DTO에 반환되어야 할 정보를 추가적으로 select하는 로직이어서 쿼리량이 방대하고 성능적으로 문제가 생김.<br>
 이를 해결하기 위해서 querydsl를 사용하여 연관된 객체 정보를 같이 select 하여 한번에 처리하도록 변경 -> 쿼리량을 감소시키고 성능적으로도 쿼리 수행속도를 1/5로 개선 <br>
 <br>
 - 동적 쿼리 : querydsl을 사용하여 쿼리를 동적으로 작성하여 처리 ( 도전중 ) <br>
@@ -163,16 +163,22 @@
 <div markdown="1">
 <br>   
 <br>
+ 
   ![image](https://user-images.githubusercontent.com/117805482/217813431-d95576c9-c31c-4b74-aa0d-db56dcd3d5c8.png)
 
 <br>
 jmeter 이용한 부하테스트 ( 1000명의 유저가 1초동안 2번씩 요청한 경우 ) <br>
-![image](https://user-images.githubusercontent.com/117805482/217812516-b03c7df2-5d06-4765-a6fb-2579737ddf1c.png)<br>
-![image](https://user-images.githubusercontent.com/117805482/217812569-fee3d904-be59-4679-91cb-4d645a05db9b.png)<br>
-![image](https://user-images.githubusercontent.com/117805482/217812618-d1a9e301-c817-455c-8a95-a6b35dce5078.png)<br>
+
+ 
+ ![image](https://user-images.githubusercontent.com/117805482/217812516-b03c7df2-5d06-4765-a6fb-2579737ddf1c.png)<br>
+
+ ![image](https://user-images.githubusercontent.com/117805482/217812569-fee3d904-be59-4679-91cb-4d645a05db9b.png)<br>
+
+ ![image](https://user-images.githubusercontent.com/117805482/217812618-d1a9e301-c817-455c-8a95-a6b35dce5078.png)<br>
 <br>
 </div>
 </details>
+
 
 <br>
 
