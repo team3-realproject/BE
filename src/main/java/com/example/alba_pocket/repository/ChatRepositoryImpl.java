@@ -54,4 +54,7 @@ public class ChatRepositoryImpl implements ChatCustomRepository{
                 .fetch();
         return getRoomId;
     }
+
+    @Override
+    public List<>
 }
