@@ -7,6 +7,7 @@ import com.example.alba_pocket.entity.ChatRoom;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.model.NotificationType;
 import com.example.alba_pocket.repository.ChatMessageRepository;
+import com.example.alba_pocket.repository.ChatRepositoryImpl;
 import com.example.alba_pocket.repository.ChatRoomRepository;
 import com.example.alba_pocket.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,6 +34,8 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final NotificationService notificationService;
 
+    private final ChatRepositoryImpl chatRepository;
+
 
     @Transactional
     public void message(ChatMessageRequestDto message, String myNickName) throws JsonProcessingException {
@@ -44,7 +47,7 @@ public class ChatMessageService {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())){
             List<ChatRoom> chatRooms = chatRoomRepository.findAllByRoomId(message.getRoomId());
             chatRooms.forEach(ChatRoom::plusUser);
-            List<ChatMessage> chatMessages = chatMessageRepository.falseMessage(message.getRoomId(), user.getId());
+            List<ChatMessage> chatMessages = chatRepository.falseMessage(message.getRoomId(), user.getId());
             chatMessages.forEach(ChatMessage::TrueReadUser);
             log.info("-------  ENTER! ----------");
         }

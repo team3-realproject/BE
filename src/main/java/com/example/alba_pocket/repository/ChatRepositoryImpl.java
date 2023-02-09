@@ -1,6 +1,7 @@
 package com.example.alba_pocket.repository;
 
 import com.example.alba_pocket.dto.ChatRoomListResponseDto;
+import com.example.alba_pocket.entity.ChatMessage;
 import com.example.alba_pocket.entity.QUser;
 import com.example.alba_pocket.entity.User;
 import com.querydsl.core.types.Projections;
@@ -16,9 +17,8 @@ import static com.example.alba_pocket.entity.QChatRoom.chatRoom;
 
 @Repository
 @RequiredArgsConstructor
-public class ChatRepositoryImpl implements ChatCustomRepository{
+public class ChatRepositoryImpl implements ChatCustomRepository {
     private final JPAQueryFactory queryFactory;
-
 
 
     @Override
@@ -43,7 +43,7 @@ public class ChatRepositoryImpl implements ChatCustomRepository{
 
 
     @Override
-    public List<String> getRoomId (Long userId, Long userId2) {
+    public List<String> getRoomId(Long userId, Long userId2) {
         List<String> getRoomId = queryFactory
                 .select(chatRoom.roomId)
                 .from(chatRoom)
@@ -54,5 +54,55 @@ public class ChatRepositoryImpl implements ChatCustomRepository{
                 .fetch();
         return getRoomId;
     }
-    
+
+    @Override
+    public List<ChatMessage> falseMessage(String roomId, Long userId) {
+        List<ChatMessage> falseMessage = queryFactory
+                .select(chatMessage)
+                .from(chatMessage)
+                .where(chatMessage.roomId.eq(roomId)
+                        .and(
+                                chatMessage.user.id.notIn(userId)
+                        )
+                        .and(
+                                chatMessage.readUser.eq(false)
+                        )
+                ).fetch();
+        return falseMessage;
+    }
+
+    @Override
+    public Long CountMessage(String roomId, Long userId) {
+        Long CountMessage = queryFactory
+                .select(chatMessage.readUser.count())
+                .from(chatMessage)
+                .where(chatMessage.readUser.eq(false)
+                        .and(
+                                chatMessage.roomId.eq(roomId)
+                        )
+                        .and(
+                                chatMessage.user.id.notIn(userId)
+                        )
+                ).fetchOne();
+          return CountMessage;
+    }
+
+    public Long CountTotalMessage(Long userId) {
+        Long CountTotalMessage = queryFactory
+                .select(chatMessage.count())
+                .from(chatRoom, chatMessage)
+                .where(chatRoom.user.id.eq(userId)
+                        .and(
+                                chatRoom.roomId.eq(chatMessage.roomId)
+                        )
+                        .and(
+                                chatMessage.readUser.eq(false)
+                        )
+                        .and(
+                                chatMessage.user.id.notIn(userId)
+                        )
+                ).fetchOne();
+        return CountTotalMessage;
+    }
+
 }

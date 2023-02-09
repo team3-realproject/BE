@@ -40,14 +40,6 @@ public class ChatRoomService {
         User user1 = userRepository.findByNickname(nickname).orElseThrow(
                 () -> new IndexOutOfBoundsException("유저가존재하지않습니다.")
         );
-
-
-//        Optional<String> getRoomId = chatRoomRepository.getRoomId(user.getId(), user1.getId());
-//        System.out.println(getRoomId);
-//        if (getRoomId.isPresent()) {
-//            System.out.println("채팅한적있음");
-//            return new ResponseEntity<>(getRoomId.get(), HttpStatus.OK);
-//        }
         List<String> getRoomId = chatRepositoryImpl.getRoomId(user.getId(), user1.getId());
         System.out.println(getRoomId);
         if (getRoomId.size()>0) {
@@ -80,27 +72,14 @@ public class ChatRoomService {
     @Transactional
     public ResponseEntity<?> getRoomList() {
         User user = SecurityUtil.getCurrentUser();
-//        List<ChatRoom> roomLists = chatRoomRepository.findAllByUserId(user.getId());
         List<Map<Object, Object>> lists = chatRoomRepository.findRoomList(user.getId());
-//        lists.forEach(list->{
-//            log.info("----------시작-----------------");
-//            log.info((String) list.get("message"));
-//            log.info((String) list.get("room_id"));
-//            log.info(String.valueOf(list.get("created_at")));
-//            Long toUserId = Long.valueOf(String.valueOf(list.get("to_user_id")));
-//            log.info(String.valueOf(toUserId));
-//
-//        });
+
         return new ResponseEntity<>(lists.stream().map(list->{
             Long toUserId = Long.valueOf(String.valueOf(list.get("to_user_id")));
             User toUser = userRepository.findById(toUserId).orElse(new User());
-            Integer count = chatMessageRepository.CountMessage(String.valueOf(list.get("room_id")), user.getId());
+            Long count = chatRepositoryImpl.CountMessage(String.valueOf(list.get("room_id")), user.getId());
             return new ChatResponseDto.RoomIdResponseDto(list, toUser, count);
         }).collect(Collectors.toList()), HttpStatus.OK);
-//        return new ResponseEntity<>(roomLists.stream().map(chatRoom -> {
-//            ChatMessage chatMessage = chatMessageRepository.findTopByRoomIdOrderByIdDesc(chatRoom.getRoomId()).orElse(new ChatMessage());
-//            return new RoomIdResponseDto(chatRoom, chatMessage);
-//        }).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @Transactional
@@ -114,7 +93,7 @@ public class ChatRoomService {
 
     public ResponseEntity<?> TotalCountMessage() {
         User user = SecurityUtil.getCurrentUser();
-        Integer count = chatMessageRepository.CountTotalMessage(user.getId());
+        Long count = chatRepositoryImpl.CountTotalMessage(user.getId());
         return new ResponseEntity<>(new ChatResponseDto.TotalCountMessageDto(count), HttpStatus.OK);
     }
 }

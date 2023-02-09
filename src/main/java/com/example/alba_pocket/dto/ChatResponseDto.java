@@ -28,9 +28,9 @@ public class ChatResponseDto {
     @Getter
     @NoArgsConstructor
     public static class TotalCountMessageDto {
-        private int totalCount;
+        private Long totalCount;
 
-        public TotalCountMessageDto(Integer count) {
+        public TotalCountMessageDto(Long count) {
             this.totalCount = count;
         }
     }
@@ -48,9 +48,9 @@ public class ChatResponseDto {
 
         private String createdAt;
 
-        private int count;
+        private Long count;
 
-        public RoomIdResponseDto(Map<Object, Object> roomList, User toUser, Integer count) {
+        public RoomIdResponseDto(Map<Object, Object> roomList, User toUser, Long count) {
             this.roomId = (String) roomList.get("room_id");
             this.nickname = toUser.getNickname();
             this.profileImage = toUser.getProfileImage();
