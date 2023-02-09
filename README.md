@@ -27,17 +27,33 @@
 
 
 
-##BE 기술스택
+### BE 기술스택
 <div align=center> 
-  <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
   <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/Springjpa-4FC08D?style=for-the-badge&logo=jpa&logoColor=white"> 
   <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
   <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
   <br>
-  
-  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+ 
+  <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=for-the-badge&logo=Amazon EC2&logoColor=white">
+  <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white">
   <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white">
-    <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white">
-#2496ED
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
+</div>
 
+
+### 주요 기능
++ 근무지와 근무 일정 등록 : 아르바이트 스케줄 관리 기능
++ 통계 페이지 : 근무지별 근무 시간 / 최근 5개월 간 급여 출력
++ 게시판 서비스 : 아르바이트생들의 커뮤니티 구성
++ 채팅 서비스 : WebSocket통신을 이용한 채팅 서비스 구성
++ 실시간 알림 : SSE통신을 활용한 실시간 알림 기능 구성
++ 소셜 로그인 : Kakao 소셜 로그인 구성
+
+
+### BE서비스 아키텍처
+<img width="524" alt="image" src="https://user-images.githubusercontent.com/117805482/217735997-68278b92-74c4-48fa-920d-49d1220ed865.png">
+
+
+
+  
