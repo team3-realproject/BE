@@ -4,6 +4,18 @@
 
 ## 나만의 알바 일지와 알바생 커뮤니티
 
+## 👥 팀 소개
+#### `Frontend`
+ <a href="https://github.com/headwing" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=React&message=최유정 &color=61dafb&style=for-the-badge&>"/></a>
+ <a href="https://github.com/soomin-world" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=React&message=오수민 &color=61dafb&style=for-the-badge&>"/></a>
+
+
+#### `Backend`
+<a href="https://github.com/woooo96" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=Spring&message=최진우 &color=08CE5D&style=for-the-badge&>"/></a>
+<a href="https://github.com/wogk9854" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=Spring&message=최재하 &color=08CE5D&style=for-the-badge&>"/></a>
+<a href="https://github.com/kwon-sunghyun" target="_blank"><img height="40"  src="https://img.shields.io/static/v1?label=Spring&message=권성현 &color=08CE5D&style=for-the-badge&>"/></a>
+
+
 ## 서비스 배경
 + 알바생 중 26.9%는 한번에 2개 이상의 알바를 병행한다.
 + 알바 주기별로 보면 1년 내내 알바를 하는 알바생들의 경우 41.5%가 2개 이상의 알바를 동시에 하고 있다.
