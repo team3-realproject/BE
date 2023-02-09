@@ -64,22 +64,6 @@ public class CommentRepositoryImpl implements CommentCustomRepository {
 
     @Override
     public Page<MypageCommentResponseDto> myCommentPostPage(User user, Pageable pageable) {
-//        List<Comment> userCommentPosts = queryFactory
-//                .selectFrom(comment1)
-//                .where(
-//                        comment1.user.id.eq(user.getId())
-//                )
-//                .orderBy(comment1.id.desc())
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//
-//        List<MypageCommentResponseDto> commentList = new ArrayList<>();
-//        for ( Comment comment : userCommentPosts) {
-//            Long likeCount = commentLikesRepository.countByCommentId(comment.getId());
-//            boolean isLikeComment = commentLikesRepository.existsByUserIdAndCommentId(user.getId(), comment.getId());
-//            commentList.add(new MypageCommentResponseDto(comment, isLikeComment,likeCount) );
-//        }
         List<MypageCommentResponseDto> commentList = queryFactory
                 .select(Projections.fields(
                         MypageCommentResponseDto.class,

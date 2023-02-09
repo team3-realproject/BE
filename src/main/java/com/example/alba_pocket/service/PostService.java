@@ -83,12 +83,6 @@ public class PostService {
     public ResponseEntity<?> getPost(Long postId) {
         User user = SecurityUtil.getCurrentUser();
         PostResponseDto post = postRepositoryImpl.findPostById(user, postId);
-//        boolean isLike = false;
-//        if(user != null){
-//            isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
-//        }
-//        Long likeCount = likesRepository.countByPostId(post.getId());
-//        Long commentCount = commentRepository.countByPostId(post.getId());
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
     //수정

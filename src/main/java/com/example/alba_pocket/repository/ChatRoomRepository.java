@@ -23,10 +23,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             "        M where M.room_id = R.room_id order by created_at desc;", nativeQuery = true)
     List<Map<Object, Object>> findRoomList(@Param("user_id") Long user_id);
 
-
-    @Query(value = "select room_id from chat_room where user_id = :user_id OR user_id = :user_id2 group by room_id HAVING COUNT(room_id)>1", nativeQuery = true)
-    Optional<String> getRoomId(@Param("user_id") Long user_id, @Param("user_id2") Long user_id2);
-
     void deleteAllByRoomId(String roomId);
 
     Optional<ChatRoom> findByRoomIdAndUserId(String roomId, Long user_id);

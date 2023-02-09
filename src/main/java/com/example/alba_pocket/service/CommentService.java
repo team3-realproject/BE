@@ -19,15 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-    private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final CommentLikesRepository commentLikesRepository;
 
     private final NotificationService notificationService;
     private final CommentRepositoryImpl commentRepositoryImpl;
@@ -110,16 +107,6 @@ public class CommentService {
         User user = SecurityUtil.getCurrentUser();
         List<CommentResponseDto> commentList = commentRepositoryImpl.commentList(user, postId);
         return commentList;
-//        List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtAsc(postId);
-//        return comments.stream().map(comment -> {
-//            boolean isLike = false;
-//            if(user != null) {
-//                isLike = commentLikesRepository.existsByUserIdAndCommentId(user.getId(), comment.getId());
-//            }
-//
-//            Long likeCount = commentLikesRepository.countByCommentId(comment.getId());
-//            return new CommentResponseDto(comment, isLike, likeCount);
-//        }).collect(Collectors.toList());
     }
 
 
