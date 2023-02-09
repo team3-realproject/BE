@@ -47,8 +47,15 @@ public class UserRequestDto {
 
     @Getter
     @NoArgsConstructor
+    public static class EmailSendDto {
+        public String email;
+    }
+
+    @Getter
+    @NoArgsConstructor
     public static class EmailCheckDto {
         public String email;
+        public String code;
     }
 
 

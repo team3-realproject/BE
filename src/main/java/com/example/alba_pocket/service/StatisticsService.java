@@ -40,7 +40,7 @@ public class StatisticsService {
         for (Work work : workList) {
             LocalDate startDay = LocalDate.parse(month, DateTimeFormatter.ofPattern("yyyyMMdd"));
             LocalDate endDay = startDay.withDayOfMonth(startDay.lengthOfMonth());
-            List<Calendar> calendars = calendarRepository.workTotalPay(user.getId(), work.getId(), startDay, endDay);
+            List<Calendar> calendars = calendarRepository.findAllByUserIdAndWorkIdAndWorkDayBetween(user.getId(), work.getId(), startDay, endDay);
 
             int hour = 0;
             int minute = 0;
@@ -79,7 +79,7 @@ public class StatisticsService {
                 LocalDate startDay = early.withDayOfMonth(1);
                 LocalDate endDay = early.withDayOfMonth(early.lengthOfMonth());
 
-                List<Calendar> calendars = calendarRepository.workTotalPay(user.getId(), work.getId(), startDay, endDay);
+                List<Calendar> calendars = calendarRepository.findAllByUserIdAndWorkIdAndWorkDayBetween(user.getId(), work.getId(), startDay, endDay);
 
                 System.out.println(calendars.size());
                 AtomicInteger total = new AtomicInteger();

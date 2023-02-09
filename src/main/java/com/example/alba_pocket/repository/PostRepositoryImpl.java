@@ -40,17 +40,6 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
     private final CommentLikesRepository commentLikesRepository;
 
-
-
-//    public  List<Post> search(PostSearchKeyword keyword)  {
-//        return queryFactory
-//                .selectFrom(post)
-//                .where(      //where절의 특징으로 콤마(,)를 사용하면 and 조건으로 처리 된다. 만약 null이면 해당 조건은 제외 된다.
-//                        titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
-//                )
-//                .fetch();
-//    }
-
     //  BooleanExpression은 and, or 을 조합해서 새로운 BooleanExpression을 만들 수 있다.
    //  또한, 결과 값이 null일 경우 무시하기 때문에 npe를 방지할 수 있다
     private BooleanExpression titleContains(String title) { //title의 값이 존재하면 조건 추가, null or 빈문자("")일 경우 null 반환
@@ -65,23 +54,6 @@ public class PostRepositoryImpl implements PostCustomRepository{
     @Override
     public Slice<PostResponseDto> scrollPost(Pageable pageable, User user) {
 
-//        List<Post> result = queryFactory
-//                .selectFrom(post)
-//                .orderBy(post.createdAt.desc())
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize() + 1)
-//                .fetch();
-//
-//        List<PostResponseDto> postList = new ArrayList<>();
-//        for (Post findPost : result) {
-//            boolean isLike = false;
-//            if (user != null) {
-//                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), findPost.getId());
-//            }
-//            Long likeCount = likesRepository.countByPostId(findPost.getId());
-//            Long commentCount = commentRepository.countByPostId(findPost.getId());
-//            postList.add(new PostResponseDto(findPost, isLike, likeCount, commentCount));
-//        }
         List<PostResponseDto> postList = queryFactory
                 .select(Projections.fields(
                         PostResponseDto.class,
@@ -191,25 +163,6 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
     @Override
     public Page<PostResponseDto> searchPage(PostSearchKeyword keyword, Pageable pageable, User user) {
-//        List<Post> content = queryFactory // 페이징을 사용한 데이터 조회
-//                .selectFrom(post)
-//                .where(
-//                        titleContains(keyword.getKeyword()).or(contentContains(keyword.getKeyword()))
-//                )
-//                .orderBy(post.createdAt.desc())
-//                .offset(pageable.getOffset()) //페이지 offset(0부터 시작)
-//                .limit(pageable.getPageSize()) //페이지 limit(페이지 사이즈)
-//                .fetch();
-//
-//        List<PostResponseDto> postList = new ArrayList<>();
-//        for ( Post post : content) {
-//            boolean isLike = false;
-//            if(user!=null)
-//                isLike = likesRepository.existsByUserIdAndPostId(user.getId(),post.getId());
-//            Long likeCount = likesRepository.countByPostId(post.getId());
-//            Long commentCount = commentRepository.countByPostId(post.getId());
-//            postList.add(new PostResponseDto(post, isLike, likeCount, commentCount));
-//        }
 
         List<PostResponseDto> postList = queryFactory
                 .select(Projections.fields(
@@ -270,25 +223,7 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
     @Override
     public Page<PostResponseDto> myLikePostPage(User user, Pageable pageable) {
-//        List<Post> userLikePosts = queryFactory
-//                .select(post)
-//                .from(post)
-//                .join(likes)
-//                .on(post.id.eq(likes.post.id))
-//                .where(
-//                        likes.userId.eq(user.getId())
-//                )
-//                .orderBy(likes.id.desc())
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//
-//        List<PostResponseDto> postList = new ArrayList<>();
-//        for ( Post post : userLikePosts) {
-//        Long likeCount = likesRepository.countByPostId(post.getId());
-//        Long commentCount = commentRepository.countByPostId(post.getId());
-//        postList.add(new PostResponseDto(post, true, likeCount, commentCount));
-//        }
+
         List<PostResponseDto> postList = queryFactory
                 .select(Projections.fields(
                                 PostResponseDto.class,
@@ -355,25 +290,6 @@ public class PostRepositoryImpl implements PostCustomRepository{
 
 
     public Page<PostResponseDto> getMyPage(User user, Pageable pageable) {
-//        List<Post> getMyPost = queryFactory
-//                .selectFrom(post)
-//                .where(post.user.id.eq(user.getId()))
-//                .orderBy(post.createdAt.desc())
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//
-//        List<PostResponseDto> postList = new ArrayList<>();
-//
-//        for (Post post : getMyPost) {
-//            boolean isLike = false;
-//            if (user != null) {
-//                isLike = likesRepository.existsByUserIdAndPostId(user.getId(), post.getId());
-//            }
-//            Long likeCount = likesRepository.countByPostId(post.getId());
-//            Long commentCount = commentRepository.countByPostId(post.getId());
-//            postList.add(new PostResponseDto(post, isLike, likeCount, commentCount));
-//        }
 
         List<PostResponseDto> postList = queryFactory
                 .select(Projections.fields(

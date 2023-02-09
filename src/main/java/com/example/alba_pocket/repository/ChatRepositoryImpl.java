@@ -18,21 +18,11 @@ import static com.example.alba_pocket.entity.QChatRoom.chatRoom;
 @RequiredArgsConstructor
 public class ChatRepositoryImpl implements ChatCustomRepository{
     private final JPAQueryFactory queryFactory;
-    private final UserRepository userRepository;
+
 
 
     @Override
     public List<ChatRoomListResponseDto> chatRoomList(User user) {
-//        List<LastMessageResponseDto> lastMessageInfo = queryFactory
-//                .select(Projections.fields(
-//                        LastMessageResponseDto.class,
-//                                chatMessage.user.id.as("userId"),
-//                                chatMessage.message,
-//                                chatMessage.createdAt)
-//                        ).from(chatMessage)
-//                        .orderBy(chatMessage.createdAt.desc())
-//                        .limit(1)
-//                        .fetch();
         List<ChatRoomListResponseDto> chatRoomList = queryFactory
                 .select(Projections.fields(
                         ChatRoomListResponseDto.class,
@@ -64,4 +54,7 @@ public class ChatRepositoryImpl implements ChatCustomRepository{
                 .fetch();
         return getRoomId;
     }
+
+    @Override
+    public List<>
 }

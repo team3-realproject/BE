@@ -50,8 +50,12 @@ public class UserController {
 
     //email 인증
     @PostMapping("/email")
-    public ResponseEntity<?> emailCheck(@RequestBody UserRequestDto.EmailCheckDto emailCheckDto) throws MessagingException, UnsupportedEncodingException {
-        return userService.emailCheck(emailCheckDto);
+    public ResponseEntity<?> emailSend(@RequestBody UserRequestDto.EmailSendDto emailSendDto) throws MessagingException, UnsupportedEncodingException {
+        return userService.emailSend(emailSendDto);
     }
 
+    @PostMapping("/emailcheck")
+    public ResponseEntity<?> emailCheck(@RequestBody UserRequestDto.EmailCheckDto emailCheckDto){
+        return userService.emailCheck(emailCheckDto);
+    }
 }

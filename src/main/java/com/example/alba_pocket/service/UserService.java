@@ -1,10 +1,14 @@
 package com.example.alba_pocket.service;
 
-import com.example.alba_pocket.dto.*;
+import com.example.alba_pocket.dto.MsgResponseDto;
+import com.example.alba_pocket.dto.UserRequestDto;
+import com.example.alba_pocket.dto.UserResponseDto;
+import com.example.alba_pocket.entity.EmailCheck;
 import com.example.alba_pocket.entity.User;
 import com.example.alba_pocket.errorcode.UserStatusCode;
 import com.example.alba_pocket.exception.RestApiException;
 import com.example.alba_pocket.jwt.JwtUtil;
+import com.example.alba_pocket.repository.EmailCheckRepository;
 import com.example.alba_pocket.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +29,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final MailService emailService;
     private final JwtUtil jwtUtil;
+
+    private final EmailCheckRepository emailCheckRepository;
     @Transactional
     public ResponseEntity<?> signup(UserRequestDto.SignupRequestDto requestDto) {
         String password = passwordEncoder.encode(requestDto.getPassword());
@@ -75,8 +81,30 @@ public class UserService {
         }
     }
     //email 인증
-    public ResponseEntity<?> emailCheck(UserRequestDto.EmailCheckDto emailCheckDto) throws MessagingException, UnsupportedEncodingException {
-        String authCode = emailService.sendEmail(emailCheckDto.getEmail());
-        return new ResponseEntity<>(new MsgResponseDto(authCode), HttpStatus.OK);
+    @Transactional
+    public ResponseEntity<?> emailSend(UserRequestDto.EmailSendDto emailSendDto) throws MessagingException, UnsupportedEncodingException {
+        String authCode = emailService.sendEmail(emailSendDto.getEmail());
+        EmailCheck emailCheck = emailCheckRepository.findByEmail(emailSendDto.getEmail()).orElse(new EmailCheck());
+        if(emailCheck.getEmail() != null){
+            emailCheck.codeUpdate(authCode);
+            return new ResponseEntity<>(new MsgResponseDto("인증코드 전송완료"), HttpStatus.OK);
+        }
+        EmailCheck email = new EmailCheck(emailSendDto.getEmail(), authCode);
+        emailCheckRepository.save(email);
+
+        return new ResponseEntity<>(new MsgResponseDto("인증코드 전송완료"), HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<?> emailCheck(UserRequestDto.EmailCheckDto emailCheckDto) {
+        EmailCheck emailCheck = emailCheckRepository.findByEmail(emailCheckDto.getEmail()).orElse(new EmailCheck());
+        if(emailCheck.getEmail() == null){
+            throw new RestApiException(UserStatusCode.NOT_FOUND_EMAIL_CODE);
+        }
+        if(!emailCheck.getAuthCode().equals(emailCheckDto.getCode())){
+            throw new RestApiException(UserStatusCode.NOT_EMAIL_CODE);
+        }
+        emailCheckRepository.deleteById(emailCheck.getId());
+        return new ResponseEntity<>(new MsgResponseDto("이메일 인증완료"), HttpStatus.OK);
     }
 }

@@ -23,7 +23,14 @@ public enum UserStatusCode implements StatusCode{
     OVERLAPPED_USERID("이미 가입된 이메일 주소입니다.", HttpStatus.BAD_REQUEST.value()),
     OVERLAPPED_NICKNAME("이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST.value()),
     PASSWORD_CHECK("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST.value()),
+
+    NOT_FOUND_EMAIL_CODE("이메일 인증버튼을 한번더눌러주세요", HttpStatus.BAD_REQUEST.value()),
+
+    NOT_EMAIL_CODE("인증번호가 일치하지 않습니다 다시 확인해주세요", HttpStatus.BAD_REQUEST.value()),
+
     INVALID_TOKEN("토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST.value());
+
+
 
     private final String Msg;
     private final int statusCode;
