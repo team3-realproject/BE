@@ -57,7 +57,10 @@
   <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white">
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
   <img src="https://img.shields.io/badge/Apache JMeter-D22128?style=for-the-badge&logo=Apache JMeter&logoColor=white">
- 
+  <img src="https://img.shields.io/badge/WebSocket-F7DF1E?style=for-the-badge&logo=Apache JMeter&logoColor=white">
+  <img src="https://img.shields.io/badge/SSE-61DAFB?style=for-the-badge&logo=Apache JMeter&logoColor=white">
+  <img src="https://img.shields.io/badge/QueryDsl-339933?style=for-the-badge&logo=Apache JMeter&logoColor=white">
+  <img src="https://img.shields.io/badge/Jasypt-7952B3?style=for-the-badge&logo=Apache JMeter&logoColor=white">
  
 </div>
 <br>
