@@ -94,7 +94,7 @@
   
 <br>
 3. Jenkins Container Local 환경 구축 이유<br>
-  - Jenkins를 운영하기 위해서는 별도의 서버가 필요하지만, 사용하고 있던 ec2 프리티어 스펙으로는 운영이 불가능 -> 로컬환경에서 jenkins container를 실행 후 공유기 포트포워딩을 통해 
+  - Jenkins를 운영하기 위해서는 별도의 서버가 필요하지만, 사용하고 있던 ec2 프리티어 스펙으로는 운영이 불가능 -> 로컬환경에서 jenkins container를 실행 후 공유기 포트포워딩을 통해 jenkins container를 찾아올 수 있도록 설정
 </div>
 </details>
 
